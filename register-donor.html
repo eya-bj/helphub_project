@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Donor - HelpHub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Login</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="registerDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">Register</a>
+                        <ul class="dropdown-menu" aria-labelledby="registerDropdown">
+                            <li><a class="dropdown-item" href="register-association.html">Register as Association</a></li>
+                            <li><a class="dropdown-item active" href="register-donor.html">Register as Donor</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Form -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow">
+                        <div class="card-body p-4">
+                            <h2 class="card-title text-center mb-4">Donor Registration</h2>
+                            <form id="donorRegisterForm" class="needs-validation" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                                        <div class="invalid-feedback">
+                                            Please enter your name.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="surname" class="form-label">Surname</label>
+                                        <input type="text" class="form-control" id="surname" placeholder="Enter your surname" required>
+                                        <div class="invalid-feedback">
+                                            Please enter your surname.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid email address.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ctn" class="form-label">CTN</label>
+                                        <input type="text" class="form-control" id="ctn" placeholder="8-digit number" 
+                                               pattern="[0-9]{8}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid 8-digit CTN number.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="pseudo" class="form-label">Pseudo</label>
+                                        <input type="text" class="form-control" id="pseudo" 
+                                               placeholder="Letters only" pattern="[A-Za-z]+" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid pseudo (letters only).
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="password" 
+                                                   placeholder="Minimum 8 characters, end with $ or #" 
+                                                   pattern=".{7,}[\$#]" required>
+                                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Password must be at least 8 characters and end with $ or #.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                                    <label class="form-check-label" for="termsCheck">I agree to the Terms and Conditions</label>
+                                    <div class="invalid-feedback">
+                                        You must agree to the terms before registering.
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" type="submit">Register</button>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <span>Already have an account? </span>
+                                    <a href="index.html">Login</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023</h5>
+                    <p>Connecting hearts and resources for a better world.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-light">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-light">Terms of Use</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-light">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="index.js"></script>
+</body>
+</html>
