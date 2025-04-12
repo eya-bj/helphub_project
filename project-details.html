@@ -8,14 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
@@ -51,448 +49,368 @@
     </nav>
 
     <!-- Project Details -->
-    <section class="py-5">
-        <div class="container">
-            <div class="mb-4">
-                <a href="#" class="btn btn-outline-primary" id="backBtn">
-                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
-                </a>
-            </div>
-            
-            <!-- Project Header -->
-            <div class="card border-0 shadow-sm mb-4 overflow-hidden">
-                <div class="card-body p-0">
-                    <div class="row g-0">
-                        <div class="col-lg-6">
-                            <img src="https://images.unsplash.com/photo-1588421357574-87938a86fa28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Project Image" class="img-fluid h-100 w-100 object-fit-cover">
+    <div class="container py-4">
+        <div class="mb-3">
+            <a href="#" class="btn btn-outline-primary" id="backBtn">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+        
+        <!-- Project Header Card -->
+        <div class="card mb-4">
+            <div class="row g-0">
+                <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1588421357574-87938a86fa28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" 
+                         alt="Project Image" class="img-fluid h-100 w-100" style="object-fit: cover;">
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-info">Environment</span>
+                            <span class="badge bg-light text-dark border">Dec 31, 2023</span>
                         </div>
-                        <div class="col-lg-6 d-flex flex-column">
-                            <div class="p-4 p-lg-5">
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <span class="badge bg-info">Environment</span>
-                                    <span class="badge bg-light text-dark border">Dec 31, 2023</span>
+                        <h1 class="h2 fw-bold mb-3">Clean Water Initiative</h1>
+                        <p class="text-muted mb-3">By <a href="#" class="text-decoration-none fw-bold">Green Earth Foundation</a></p>
+                        <p class="mb-4">This project aims to provide clean water to rural communities in developing countries. Access to clean water is a fundamental human right, yet millions around the world still lack this basic necessity.</p>
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-4 mb-2">
+                                <div class="bg-light p-3 text-center rounded">
+                                    <h4 class="fw-bold text-primary mb-0">$3,200</h4>
+                                    <span class="small text-muted">Raised</span>
                                 </div>
-                                <h1 class="card-title h2 fw-bold mb-3">Clean Water Initiative</h1>
-                                <p class="text-muted mb-3">By <a href="#" class="text-decoration-none fw-bold">Green Earth Foundation</a></p>
-                                <p class="mb-4">This project aims to provide clean water to rural communities in developing countries. Access to clean water is a fundamental human right, yet millions around the world still lack this basic necessity.</p>
+                            </div>
+                            <div class="col-sm-4 mb-2">
+                                <div class="bg-light p-3 text-center rounded">
+                                    <h4 class="fw-bold mb-0">$5,000</h4>
+                                    <span class="small text-muted">Goal</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-2">
+                                <div class="bg-light p-3 text-center rounded">
+                                    <h4 class="fw-bold mb-0">20</h4>
+                                    <span class="small text-muted">Donors</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress mb-2" style="height: 10px">
+                            <div class="progress-bar" role="progressbar" style="width: 64%" 
+                                aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="text-end mb-4 small">64% Complete - $1,800 to go</p>
+                        
+                        <div class="d-grid donor-view">
+                            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#donationModal">
+                                <i class="fas fa-hand-holding-heart me-2"></i> Donate Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Details Tabs -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="projectTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" 
+                                type="button" role="tab" aria-controls="details" aria-selected="true">
+                            <i class="fas fa-info-circle me-2"></i> Details
+                        </button>
+                    </li>
+                    <li class="nav-item association-view" role="presentation" style="display: none;">
+                        <button class="nav-link" id="donors-tab" data-bs-toggle="tab" data-bs-target="#donors" 
+                                type="button" role="tab" aria-controls="donors" aria-selected="false">
+                            <i class="fas fa-users me-2"></i> Donors
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content p-3" id="projectTabContent">
+                    <!-- Details Tab -->
+                    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                        <h4 class="mb-4">About This Project</h4>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <p>Access to clean water is a fundamental human right, yet millions around the world still lack this basic necessity. Your support will help install water filtration systems and dig wells in communities that need them most.</p>
                                 
+                                <h5 class="mt-4 mb-3">Our Approach</h5>
+                                <p>The Clean Water Initiative works with local communities to:</p>
+                                <ul>
+                                    <li>Identify areas with the most critical water needs</li>
+                                    <li>Install sustainable water filtration systems</li>
+                                    <li>Dig wells in remote communities</li>
+                                    <li>Educate communities on water conservation and maintenance</li>
+                                    <li>Monitor and report on water quality improvements</li>
+                                </ul>
+                                
+                                <h5 class="mt-4 mb-3">Expected Impact</h5>
                                 <div class="row g-3 mb-4">
-                                    <div class="col-sm-4">
-                                        <div class="p-3 bg-light rounded text-center">
-                                            <h4 class="fw-bold text-primary mb-1">$3,200</h4>
-                                            <p class="text-muted small mb-0">Raised</p>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 bg-light h-100">
+                                            <div class="card-body text-center">
+                                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-tint fa-2x m-auto text-primary"></i>
+                                                </div>
+                                                <h5 class="card-title">5,000+</h5>
+                                                <p class="card-text small">People will gain access to clean water</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="p-3 bg-light rounded text-center">
-                                            <h4 class="fw-bold mb-1">$5,000</h4>
-                                            <p class="text-muted small mb-0">Goal</p>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 bg-light h-100">
+                                            <div class="card-body text-center">
+                                                <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-medkit fa-2x m-auto text-success"></i>
+                                                </div>
+                                                <h5 class="card-title">70%</h5>
+                                                <p class="card-text small">Reduction in water-borne diseases</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="p-3 bg-light rounded text-center">
-                                            <h4 class="fw-bold mb-1">20</h4>
-                                            <p class="text-muted small mb-0">Donors</p>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 bg-light h-100">
+                                            <div class="card-body text-center">
+                                                <div class="rounded-circle bg-info bg-opacity-10 p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-school fa-2x m-auto text-info"></i>
+                                                </div>
+                                                <h5 class="card-title">3</h5>
+                                                <p class="card-text small">Communities will build sustainable systems</p>
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Project Details</h5>
+                                        <ul class="list-group list-group-flush bg-transparent">
+                                            <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
+                                                <span class="text-muted">Location:</span>
+                                                <span class="fw-medium">Rural East Africa</span>
+                                            </li>
+                                            <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
+                                                <span class="text-muted">Category:</span>
+                                                <span class="fw-medium">Environment</span>
+                                            </li>
+                                            <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
+                                                <span class="text-muted">Start Date:</span>
+                                                <span class="fw-medium">October 1, 2023</span>
+                                            </li>
+                                            <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
+                                                <span class="text-muted">End Date:</span>
+                                                <span class="fw-medium">December 31, 2023</span>
+                                            </li>
+                                            <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
+                                                <span class="text-muted">Status:</span>
+                                                <span class="badge bg-info">Active</span>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                                 
-                                <div class="progress mb-2" style="height: 12px; border-radius: 10px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 64%; border-radius: 10px;" 
-                                        aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p class="text-end mb-4 small">64% Complete - $1,800 to go</p>
-                                
-                                <div class="d-grid">
-                                    <button class="btn btn-primary btn-lg donor-view" data-bs-toggle="modal" data-bs-target="#donationModal">
-                                        <i class="fas fa-hand-holding-heart me-2"></i> Donate Now
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Details Tabs -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body">
-                    <ul class="nav nav-tabs" id="projectTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="true">
-                                <i class="fas fa-info-circle me-2"></i> Details
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="updates-tab" data-bs-toggle="tab" data-bs-target="#updates" type="button" role="tab" aria-controls="updates" aria-selected="false">
-                                <i class="fas fa-newspaper me-2"></i> Updates
-                            </button>
-                        </li>
-                        <li class="nav-item association-view" role="presentation" style="display: none;">
-                            <button class="nav-link" id="donors-tab" data-bs-toggle="tab" data-bs-target="#donors" type="button" role="tab" aria-controls="donors" aria-selected="false">
-                                <i class="fas fa-users me-2"></i> Donors
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content p-4" id="projectTabContent">
-                        <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-                            <h4 class="mb-4">About This Project</h4>
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <p>Access to clean water is a fundamental human right, yet millions around the world still lack this basic necessity. Your support will help install water filtration systems and dig wells in communities that need them most.</p>
-                                    
-                                    <h5 class="mt-4 mb-3">Our Approach</h5>
-                                    <p>The Clean Water Initiative works with local communities to:</p>
-                                    <ul>
-                                        <li>Identify areas with the most critical water needs</li>
-                                        <li>Install sustainable water filtration systems</li>
-                                        <li>Dig wells in remote communities</li>
-                                        <li>Educate communities on water conservation and maintenance</li>
-                                        <li>Monitor and report on water quality improvements</li>
-                                    </ul>
-                                    
-                                    <h5 class="mt-4 mb-3">Expected Impact</h5>
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-4">
-                                            <div class="card border-0 bg-light h-100">
-                                                <div class="card-body text-center">
-                                                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
-                                                        <i class="fas fa-tint fa-2x m-auto text-primary"></i>
-                                                    </div>
-                                                    <h5 class="card-title">5,000+</h5>
-                                                    <p class="card-text small">People will gain access to clean water</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="card border-0 bg-light h-100">
-                                                <div class="card-body text-center">
-                                                    <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
-                                                        <i class="fas fa-medkit fa-2x m-auto text-success"></i>
-                                                    </div>
-                                                    <h5 class="card-title">70%</h5>
-                                                    <p class="card-text small">Reduction in water-borne diseases</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="card border-0 bg-light h-100">
-                                                <div class="card-body text-center">
-                                                    <div class="rounded-circle bg-info bg-opacity-10 p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
-                                                        <i class="fas fa-school fa-2x m-auto text-info"></i>
-                                                    </div>
-                                                    <h5 class="card-title">3</h5>
-                                                    <p class="card-text small">Communities will build sustainable systems</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <h5 class="mt-4 mb-3">Timeline</h5>
-                                    <div class="timeline">
-                                        <div class="timeline-item">
-                                            <div class="timeline-badge bg-primary"><i class="fas fa-check"></i></div>
-                                            <div class="timeline-content">
-                                                <h6 class="fw-bold">Project Planning</h6>
-                                                <p class="text-muted mb-0">Oct 2023 - Complete</p>
-                                                <p>Site surveys and community engagement completed</p>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-badge bg-primary"><i class="fas fa-wrench"></i></div>
-                                            <div class="timeline-content">
-                                                <h6 class="fw-bold">Equipment Procurement</h6>
-                                                <p class="text-muted mb-0">Nov 2023 - In Progress</p>
-                                                <p>Purchasing filtration systems and well-digging equipment</p>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-badge bg-secondary"><i class="fas fa-tools"></i></div>
-                                            <div class="timeline-content">
-                                                <h6 class="fw-bold">Implementation</h6>
-                                                <p class="text-muted mb-0">Jan 2024 - Upcoming</p>
-                                                <p>Installing systems in communities</p>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-badge bg-secondary"><i class="fas fa-graduation-cap"></i></div>
-                                            <div class="timeline-content">
-                                                <h6 class="fw-bold">Training & Handover</h6>
-                                                <p class="text-muted mb-0">March 2024 - Upcoming</p>
-                                                <p>Teaching maintenance and finalizing community ownership</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="card border-0 bg-light mb-4">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Project Details</h5>
-                                            <ul class="list-group list-group-flush bg-transparent">
-                                                <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
-                                                    <span class="text-muted">Location:</span>
-                                                    <span class="fw-medium">Rural East Africa</span>
-                                                </li>
-                                                <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
-                                                    <span class="text-muted">Category:</span>
-                                                    <span class="fw-medium">Environment</span>
-                                                </li>
-                                                <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
-                                                    <span class="text-muted">Start Date:</span>
-                                                    <span class="fw-medium">October 1, 2023</span>
-                                                </li>
-                                                <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
-                                                    <span class="text-muted">End Date:</span>
-                                                    <span class="fw-medium">December 31, 2023</span>
-                                                </li>
-                                                <li class="list-group-item bg-transparent px-0 py-2 border-0 d-flex justify-content-between">
-                                                    <span class="text-muted">Status:</span>
-                                                    <span class="badge bg-info">Active</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card border-0 bg-light">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Contact Information</h5>
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="mb-2">
-                                                    <i class="fas fa-user text-primary me-2"></i> John Doe
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="fas fa-envelope text-primary me-2"></i> contact@greenearthfoundation.org
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-globe text-primary me-2"></i> www.greenearthfoundation.org
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="updates" role="tabpanel" aria-labelledby="updates-tab">
-                            <h4 class="mb-4">Project Updates</h4>
-                            <div class="updates-timeline">
-                                <!-- Update 1 -->
-                                <div class="card border-0 shadow-sm mb-4">
+                                <div class="card bg-light">
                                     <div class="card-body">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGVudmlyb25tZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="Green Earth Foundation" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;">
-                                            <div>
-                                                <h5 class="mb-0">Green Earth Foundation</h5>
-                                                <p class="text-muted small mb-0">November 15, 2023</p>
-                                            </div>
-                                        </div>
-                                        <h5>Site Surveys Complete!</h5>
-                                        <p>We're thrilled to announce that we've completed our site surveys in all three target communities. The local teams have been incredibly supportive and enthusiastic about the project.</p>
-                                        <img src="https://images.unsplash.com/photo-1541675154750-0444c7d51e8e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHdhdGVyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60" alt="Site Survey" class="img-fluid rounded mb-3">
-                                        <p>The surveys revealed that the water situation is even more critical than initially assessed, with many families walking over 3 miles daily to access water that isn't even clean. This reinforces the importance of our work.</p>
-                                        <p>Equipment procurement is underway, and we're on track to begin installations in January. Thank you to all our donors for making this possible!</p>
-                                        <div class="text-end">
-                                            <span class="text-muted small">Posted by John Doe, Project Manager</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Update 2 -->
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGVudmlyb25tZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="Green Earth Foundation" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;">
-                                            <div>
-                                                <h5 class="mb-0">Green Earth Foundation</h5>
-                                                <p class="text-muted small mb-0">October 3, 2023</p>
-                                            </div>
-                                        </div>
-                                        <h5>Project Launch!</h5>
-                                        <p>We're excited to officially launch our Clean Water Initiative! After months of planning and coordination with local communities, we're ready to begin making a difference.</p>
-                                        <p>We've established partnerships with three communities in rural East Africa where access to clean water is severely limited. Our goal is to provide sustainable water solutions that will improve health outcomes and quality of life for over 5,000 people.</p>
-                                        <div class="text-end">
-                                            <span class="text-muted small">Posted by Sarah Johnson, Executive Director</span>
-                                        </div>
+                                        <h5 class="card-title">Contact Information</h5>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="fas fa-user text-primary me-2"></i> John Doe
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="fas fa-envelope text-primary me-2"></i> contact@greenearthfoundation.org
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-globe text-primary me-2"></i> www.greenearthfoundation.org
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade association-view" id="donors" role="tabpanel" aria-labelledby="donors-tab" style="display: none;">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h4 class="mb-0">Donor Contributions</h4>
-                                <span class="badge bg-info">20 donors</span>
-                            </div>
-                            
-                            <div class="table-responsive donor-list">
-                                <table class="table table-hover border-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Donor</th>
-                                            <th>Amount</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-user text-primary"></i>
-                                                    </div>
-                                                    <span>Jane Doe</span>
+                    </div>
+                    
+                    <!-- Donors Tab (Association View) -->
+                    <div class="tab-pane fade association-view" id="donors" role="tabpanel" aria-labelledby="donors-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="mb-0">Donor Contributions</h4>
+                            <span class="badge bg-info">20 donors</span>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-primary"></i>
                                                 </div>
-                                            </td>
-                                            <td><span class="fw-bold">$250</span></td>
-                                            <td>Oct 15, 2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-user text-primary"></i>
-                                                    </div>
-                                                    <span>John Smith</span>
+                                                <span>Jane Doe</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="fw-bold">$250</span></td>
+                                        <td>Oct 15, 2023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-primary"></i>
                                                 </div>
-                                            </td>
-                                            <td><span class="fw-bold">$500</span></td>
-                                            <td>Oct 10, 2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-user text-primary"></i>
-                                                    </div>
-                                                    <span>Alice Johnson</span>
+                                                <span>John Smith</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="fw-bold">$500</span></td>
+                                        <td>Oct 10, 2023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-primary"></i>
                                                 </div>
-                                            </td>
-                                            <td><span class="fw-bold">$100</span></td>
-                                            <td>Oct 5, 2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-secondary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-user-secret text-secondary"></i>
-                                                    </div>
-                                                    <span>Anonymous</span>
+                                                <span>Alice Johnson</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="fw-bold">$100</span></td>
+                                        <td>Oct 5, 2023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-secondary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user-secret text-secondary"></i>
                                                 </div>
-                                            </td>
-                                            <td><span class="fw-bold">$200</span></td>
-                                            <td>Oct 3, 2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-user text-primary"></i>
-                                                    </div>
-                                                    <span>Michael Brown</span>
+                                                <span>Anonymous</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="fw-bold">$200</span></td>
+                                        <td>Oct 3, 2023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-primary"></i>
                                                 </div>
-                                            </td>
-                                            <td><span class="fw-bold">$150</span></td>
-                                            <td>Sep 28, 2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-user text-primary"></i>
-                                                    </div>
-                                                    <span>Emily Wilson</span>
+                                                <span>Michael Brown</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="fw-bold">$150</span></td>
+                                        <td>Sep 28, 2023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 text-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-primary"></i>
                                                 </div>
-                                            </td>
-                                            <td><span class="fw-bold">$450</span></td>
-                                            <td>Sep 25, 2023</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-light">
-                                            <td class="fw-bold">Total</td>
-                                            <td class="fw-bold">$3,200</td>
-                                            <td></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            
-                            <div class="mt-4 d-flex gap-2">
-                                <button class="btn btn-outline-primary">
-                                    <i class="fas fa-download me-2"></i> Download Donor List
-                                </button>
-                                <button class="btn btn-outline-success">
-                                    <i class="fas fa-envelope me-2"></i> Send Thank You to All
-                                </button>
-                            </div>
+                                                <span>Emily Wilson</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="fw-bold">$450</span></td>
+                                        <td>Sep 25, 2023</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-light">
+                                        <td class="fw-bold">Total</td>
+                                        <td class="fw-bold">$3,200</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-4 d-flex gap-2">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-download me-2"></i> Download Donor List
+                            </button>
+                            <button class="btn btn-outline-success">
+                                <i class="fas fa-envelope me-2"></i> Send Thank You to All
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Share Project -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="mb-3"><i class="fas fa-share-alt me-2"></i> Share This Project</h5>
-                    <p class="text-muted">Help spread the word about this project to reach more potential donors.</p>
-                    <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-outline-primary">
-                            <i class="fab fa-facebook-f me-2"></i> Facebook
-                        </a>
-                        <a href="#" class="btn btn-outline-info">
-                            <i class="fab fa-twitter me-2"></i> Twitter
-                        </a>
-                        <a href="#" class="btn btn-outline-success">
-                            <i class="fab fa-whatsapp me-2"></i> WhatsApp
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary">
-                            <i class="fas fa-envelope me-2"></i> Email
-                        </a>
-                    </div>
+        </div>
+        
+        <!-- Share Project -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="mb-3"><i class="fas fa-share-alt me-2"></i> Share This Project</h5>
+                <p class="text-muted">Help spread the word about this project to reach more potential donors.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#" class="btn btn-outline-primary">
+                        <i class="fab fa-facebook-f me-2"></i> Facebook
+                    </a>
+                    <a href="#" class="btn btn-outline-info">
+                        <i class="fab fa-twitter me-2"></i> Twitter
+                    </a>
+                    <a href="#" class="btn btn-outline-success">
+                        <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    </a>
+                    <a href="#" class="btn btn-outline-secondary">
+                        <i class="fas fa-envelope me-2"></i> Email
+                    </a>
                 </div>
             </div>
-            
-            <!-- Similar Projects -->
-            <div class="card border-0 shadow-sm donor-view">
-                <div class="card-body">
-                    <h5 class="mb-4"><i class="fas fa-project-diagram me-2"></i> Similar Projects You May Like</h5>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="card h-100 border-0 project-card shadow-sm">
-                                <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGVkdWNhdGlvbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" class="card-img-top" style="height: 180px; object-fit: cover;" alt="Education Project">
-                                <div class="card-body">
-                                    <span class="badge bg-success mb-2">Education</span>
-                                    <h5 class="card-title">Education for All</h5>
-                                    <p class="card-text small">Supporting education in underprivileged areas through school supplies and teacher training.</p>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span class="small">$4,500 raised</span>
-                                        <span class="small">Goal: $10,000</span>
-                                    </div>
-                                    <div class="progress mb-3" style="height: 6px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">Ends on Nov 30, 2023</small>
-                                        <a href="project-details.html?id=2" class="btn btn-sm btn-primary">View Details</a>
-                                    </div>
+        </div>
+        
+        <!-- Similar Projects (Donor View) -->
+        <div class="card donor-view">
+            <div class="card-body">
+                <h5 class="mb-4"><i class="fas fa-project-diagram me-2"></i> Similar Projects You May Like</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGVkdWNhdGlvbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" 
+                                 class="card-img-top" style="height: 180px; object-fit: cover;" alt="Education Project">
+                            <div class="card-body">
+                                <span class="badge bg-success mb-2">Education</span>
+                                <h5 class="card-title">Education for All</h5>
+                                <p class="card-text small">Supporting education in underprivileged areas through school supplies and teacher training.</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="small">$4,500 raised</span>
+                                    <span class="small">Goal: $10,000</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">Ends on Nov 30, 2023</small>
+                                    <a href="project-details.html?id=2" class="btn btn-sm btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card h-100 border-0 project-card shadow-sm">
-                                <img src="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2lsZGxpZmUlMjBjb25zZXJ2YXRpb258ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60" class="card-img-top" style="height: 180px; object-fit: cover;" alt="Wildlife Conservation">
-                                <div class="card-body">
-                                    <span class="badge bg-info mb-2">Environment</span>
-                                    <h5 class="card-title">Wildlife Conservation</h5>
-                                    <p class="card-text small">Protecting endangered species and their habitats through community-led conservation efforts.</p>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span class="small">$2,800 raised</span>
-                                        <span class="small">Goal: $8,000</span>
-                                    </div>
-                                    <div class="progress mb-3" style="height: 6px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">Ends on Jan 15, 2024</small>
-                                        <a href="#" class="btn btn-sm btn-primary">View Details</a>
-                                    </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <img src="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2lsZGxpZmUlMjBjb25zZXJ2YXRpb258ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60" 
+                                 class="card-img-top" style="height: 180px; object-fit: cover;" alt="Wildlife Conservation">
+                            <div class="card-body">
+                                <span class="badge bg-info mb-2">Environment</span>
+                                <h5 class="card-title">Wildlife Conservation</h5>
+                                <p class="card-text small">Protecting endangered species and their habitats through community-led conservation efforts.</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="small">$2,800 raised</span>
+                                    <span class="small">Goal: $8,000</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">Ends on Jan 15, 2024</small>
+                                    <a href="#" class="btn btn-sm btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -500,25 +418,25 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Donation Modal -->
-    <div class="modal fade" id="donationModal" tabindex="-1" aria-labelledby="donationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="donationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header border-0 bg-primary text-white">
-                    <h5 class="modal-title" id="donationModalLabel">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
                         <i class="fas fa-hand-holding-heart me-2"></i> Make a Donation
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="row">
-                        <div class="col-md-6 mb-4 mb-md-0">
-                            <h5 class="mb-4">Clean Water Initiative</h5>
+                        <div class="col-md-5 mb-4 mb-md-0">
+                            <h5 class="mb-3">Clean Water Initiative</h5>
                             <p>Your donation will help provide clean water to rural communities. Every contribution, no matter how small, makes a difference.</p>
                             
-                            <div class="project-summary bg-light p-3 rounded mb-4">
+                            <div class="bg-light p-3 rounded mb-4">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Raised so far:</span>
                                     <span class="fw-bold">$3,200</span>
@@ -533,29 +451,26 @@
                                 </div>
                             </div>
                             
-                            <div class="suggested-amounts mb-4">
-                                <h6>Suggested Amounts</h6>
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <button type="button" class="btn btn-outline-primary amount-btn" data-amount="25">$25</button>
-                                    <button type="button" class="btn btn-outline-primary amount-btn" data-amount="50">$50</button>
-                                    <button type="button" class="btn btn-outline-primary amount-btn" data-amount="100">$100</button>
-                                    <button type="button" class="btn btn-outline-primary amount-btn" data-amount="250">$250</button>
-                                    <button type="button" class="btn btn-outline-primary amount-btn" data-amount="500">$500</button>
-                                </div>
+                            <h6>Suggested Amounts</h6>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <button type="button" class="btn btn-outline-primary amount-btn" data-amount="25">$25</button>
+                                <button type="button" class="btn btn-outline-primary amount-btn" data-amount="50">$50</button>
+                                <button type="button" class="btn btn-outline-primary amount-btn" data-amount="100">$100</button>
+                                <button type="button" class="btn btn-outline-primary amount-btn" data-amount="250">$250</button>
+                                <button type="button" class="btn btn-outline-primary amount-btn" data-amount="500">$500</button>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <form id="donationForm" class="needs-validation" novalidate>
                                 <div class="mb-3">
                                     <label for="donationAmount" class="form-label">Donation Amount ($)</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control form-control-lg" id="donationAmount" min="1" max="1800" step="1" required>
+                                        <input type="number" class="form-control" id="donationAmount" min="1" max="1800" step="1" required>
                                     </div>
                                     <div class="invalid-feedback">
-                                        Please enter a valid amount (max $1,800 - remaining amount needed).
+                                        Please enter a valid amount (max $1,800).
                                     </div>
-                                    <div class="form-text">Minimum donation: $1. Maximum: $1,800</div>
                                 </div>
 
                                 <div class="mb-3">
@@ -573,22 +488,22 @@
                                     <label class="form-check-label" for="anonymousCheck">Make donation anonymous</label>
                                 </div>
                                 
-                                <div class="mb-4">
-                                    <label for="paymentMethod" class="form-label">Payment Method</label>
-                                    <div class="payment-methods">
-                                        <div class="form-check form-check-inline">
+                                <div class="mb-3">
+                                    <label class="form-label">Payment Method</label>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
                                             <label class="form-check-label" for="creditCard">
                                                 <i class="fab fa-cc-visa me-1"></i> Credit Card
                                             </label>
                                         </div>
-                                        <div class="form-check form-check-inline">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
                                             <label class="form-check-label" for="paypal">
                                                 <i class="fab fa-paypal me-1"></i> PayPal
                                             </label>
                                         </div>
-                                        <div class="form-check form-check-inline">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
                                             <label class="form-check-label" for="bankTransfer">
                                                 <i class="fas fa-university me-1"></i> Bank Transfer
@@ -598,11 +513,11 @@
                                 </div>
 
                                 <div id="creditCardForm">
-                                    <div class="mb-3">
-                                        <label for="cardNumber" class="form-label">Card Number</label>
-                                        <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
-                                    </div>
                                     <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <label for="cardNumber" class="form-label">Card Number</label>
+                                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                                        </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="expiryDate" class="form-label">Expiry Date</label>
                                             <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
@@ -615,7 +530,7 @@
                                 </div>
                                 
                                 <div class="d-grid gap-2">
-                                    <button class="btn btn-primary btn-lg" type="submit">
+                                    <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-heart me-2"></i> Donate Now
                                     </button>
                                 </div>
@@ -629,68 +544,31 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light">
-        <div class="container py-5">
-            <div class="row g-4">
-                <div class="col-lg-6">
-                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span></h5>
-                    <p>Connecting hearts and resources for a better world.</p>
-                </div>
-                <div class="col-lg-6 text-lg-end">
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item"><a href="#" class="text-decoration-none">Privacy Policy</a></li>
-                        <li class="list-inline-item">•</li>
-                        <li class="list-inline-item"><a href="#" class="text-decoration-none">Terms of Use</a></li>
-                        <li class="list-inline-item">•</li>
-                        <li class="list-inline-item"><a href="#" class="text-decoration-none">Support</a></li>
-                    </ul>
-                </div>
-            </div>
-            <hr class="my-4 bg-light opacity-25">
-            <div class="text-center">
-                <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023. All Rights Reserved.</p>
-            </div>
+    <footer class="bg-dark text-light py-4 mt-4">
+        <div class="container text-center">
+            <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023. All Rights Reserved.</p>
         </div>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="index.js"></script>
     <script>
-        // Determine user type from URL parameter and show appropriate view
         document.addEventListener('DOMContentLoaded', function() {
+            // Determine user type from URL parameter and show appropriate view
             const urlParams = new URLSearchParams(window.location.search);
             const userType = urlParams.get('userType') || localStorage.getItem('userType') || 'donor';
             
             if (userType === 'association') {
-                document.querySelector('.donor-view').style.display = 'none';
+                document.querySelectorAll('.donor-view').forEach(el => el.style.display = 'none');
                 document.querySelectorAll('.association-view').forEach(el => el.style.display = 'block');
-                document.querySelector('.donor-nav').style.display = 'none';
                 document.querySelector('#backBtn').href = 'dashboard-association.html';
             } else {
                 document.querySelectorAll('.association-view').forEach(el => el.style.display = 'none');
-                document.querySelector('.association-nav').style.display = 'none';
                 document.querySelector('#backBtn').href = 'dashboard-donor.html';
             }
             
-            // Form validation for donation form
-            const donationForm = document.getElementById('donationForm');
-            if (donationForm) {
-                donationForm.addEventListener('submit', function(event) {
-                    if (!donationForm.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    } else {
-                        event.preventDefault();
-                        alert('Thank you for your donation!');
-                        window.location.href = 'dashboard-donor.html';
-                    }
-                    donationForm.classList.add('was-validated');
-                });
-            }
-            
-            // Handle suggested amount buttons
+            // Handle donation amount buttons
             const amountBtns = document.querySelectorAll('.amount-btn');
             const donationAmountInput = document.getElementById('donationAmount');
             
@@ -699,15 +577,29 @@
                     const amount = this.getAttribute('data-amount');
                     donationAmountInput.value = amount;
                     
-                    // Remove active class from all buttons
-                    amountBtns.forEach(b => b.classList.remove('active', 'btn-primary'));
-                    amountBtns.forEach(b => b.classList.add('btn-outline-primary'));
-                    
-                    // Add active class to clicked button
-                    this.classList.remove('btn-outline-primary');
+                    // Toggle active state
+                    amountBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.remove('btn-primary');
+                        b.classList.add('btn-outline-primary');
+                    });
                     this.classList.add('active', 'btn-primary');
+                    this.classList.remove('btn-outline-primary');
                 });
             });
+            
+            // Form validation for donation form
+            const donationForm = document.getElementById('donationForm');
+            if (donationForm) {
+                donationForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    if (donationForm.checkValidity()) {
+                        alert('Thank you for your donation!');
+                        window.location.href = 'dashboard-donor.html';
+                    }
+                    donationForm.classList.add('was-validated');
+                });
+            }
         });
     </script>
 </body>

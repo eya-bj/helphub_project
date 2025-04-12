@@ -121,7 +121,7 @@ function searchProjects(query) {
 
 // Store user type in localStorage for page transitions
 function storeUserType(userType) {
-    localStorage.setItem('userType', userType);
+    localStorage.setItem('userType', userType); 
 }
 
 // Handle donation form submission
