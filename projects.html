@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HelpHub - Connect & Donate</title>
+    <title>Projects - HelpHub</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -26,13 +26,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
+                        <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#projects">Projects</a>
+                        <a class="nav-link active" href="projects.html">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#how-it-works">How It Works</a>
+                        <a class="nav-link" href="index.html#how-it-works">How It Works</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" 
@@ -52,102 +52,48 @@
         </div>
     </nav>
 
-    <!-- Hero Section with Background Image -->
-    <section class="hero-section-bg" id="home">
-        <div class="hero-overlay"></div>
-        <div class="container position-relative">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center text-white">
-                    <div class="hero-badge mb-3">Making A Difference Together</div>
-                    <h1 class="hero-title mb-4">Connect. Donate. <span class="text-highlight">Impact.</span></h1>
-                    <p class="hero-text mb-5">Connecting generous hearts with charitable associations to create positive change in our communities, one donation at a time.</p>
-                    <div class="hero-buttons d-flex justify-content-center flex-wrap gap-3">
-                        <a href="#projects" class="btn btn-light btn-lg">
-                            <i class="fas fa-heart me-2"></i> Donate Now
-                        </a>
-                        <a href="register-association.html" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-building me-2"></i> Register Association
-                        </a>
+    <!-- Page Header -->
+    <section class="bg-primary text-white text-center py-5 mt-5">
+        <div class="container py-4">
+            <h1 class="display-4 fw-bold">Explore Projects</h1>
+            <p class="lead mb-0">Discover charitable projects from various categories and make a difference</p>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-lg-7">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search projects by keywords..." id="projectSearch">
+                                <button class="btn btn-primary" type="button" id="searchButton">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <select class="form-select" id="categoryFilter">
+                                <option value="all" selected>All Categories</option>
+                                <option value="environment">Environment</option>
+                                <option value="education">Education</option>
+                                <option value="health">Health</option>
+                                <option value="poverty">Poverty Relief</option>
+                                <option value="animals">Animal Welfare</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="py-5 bg-white" id="how-it-works">
-        <div class="container py-5">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">How HelpHub Works</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">Our platform makes charitable giving simple, transparent, and impactful</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-4">
-                                <i class="fas fa-hands-helping fa-3x text-primary"></i>
-                            </div>
-                            <h4>1. Connect</h4>
-                            <p class="text-muted">Associations create profiles and share their impactful projects with potential donors.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-4">
-                                <i class="fas fa-donate fa-3x text-success"></i>
-                            </div>
-                            <h4>2. Contribute</h4>
-                            <p class="text-muted">Donors browse projects and make secure donations to causes they care about.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-4">
-                                <i class="fas fa-chart-line fa-3x text-info"></i>
-                            </div>
-                            <h4>3. Track Progress</h4>
-                            <p class="text-muted">Watch your donations make an impact with transparent project tracking and updates.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Find Projects Section -->
-    <section class="py-5 bg-light" id="projects">
-        <div class="container py-5">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Find Projects to Support</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">Browse through our curated selection of charitable projects and make a difference today</p>
-            </div>
-            
-            <!-- Project Filters -->
-            <div class="row mb-4">
-                <div class="col-lg-6 mb-3 mb-lg-0">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search projects by keywords..." id="homeProjectSearch">
-                        <button class="btn btn-primary" type="button" id="homeSearchButton">
-                            <i class="fas fa-search me-2"></i> Search
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-6 text-lg-end">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-primary active filter-btn" data-filter="all">All</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="environment">Environment</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="education">Education</button>
-                        <button type="button" class="btn btn-outline-primary filter-btn" data-filter="health">Health</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Projects Grid -->
+    <!-- Projects Grid View -->
+    <section class="py-5" id="gridView">
+        <div class="container">
             <div class="row g-4">
                 <!-- Project Card 1 -->
                 <div class="col-lg-4 col-md-6 project-item" data-category="environment">
@@ -226,92 +172,117 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- More Projects Button -->
-            <div class="text-center mt-5">
-                <a href="register-donor.html" class="btn btn-primary btn-lg">
-                    <i class="fas fa-user-plus me-2"></i> Sign Up to Explore All Projects
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Impact Statistics -->
-    <section class="py-5 bg-white">
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    <h2 class="fw-bold mb-4">Our Impact</h2>
-                    <p class="lead mb-4">Since 2020, HelpHub has been connecting donors with causes that need support. With your help, we've made significant impacts across multiple sectors.</p>
-                    <ul class="list-unstyled mb-4">
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Transparent tracking of every donation</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> 100% of donations go directly to projects</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Verified associations and regular updates</li>
-                    </ul>
-                    <a href="register-donor.html" class="btn btn-outline-primary">
-                        <i class="fas fa-arrow-right me-2"></i> Join Our Community
-                    </a>
+                
+                <!-- Project Card 4 -->
+                <div class="col-lg-4 col-md-6 project-item" data-category="animals">
+                    <div class="card h-100 border-0 shadow">
+                        <img src="https://images.unsplash.com/photo-1550147760-44c9966d6bc7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YW5pbWFsJTIwc2hlbHRlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" 
+                            class="card-img-top" style="height: 200px; object-fit: cover;" alt="Animal Shelter Renovation">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-warning">Animals</span>
+                                <span class="badge bg-light text-dark border">25 days left</span>
+                            </div>
+                            <h5 class="card-title mb-3">Animal Shelter Renovation</h5>
+                            <p class="card-text">Upgrading an animal shelter to provide better care and adoption services for abandoned pets.</p>
+                            <div class="mt-auto pt-3">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="d-flex justify-content-between small text-muted mb-3">
+                                    <span>$7,200 raised</span>
+                                    <span>72% of $10,000</span>
+                                </div>
+                                <a href="project-details-donor.html?id=4" class="btn btn-primary w-100">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-7">
-                    <div class="row g-4">
-                        <div class="col-6">
-                            <div class="card h-100 text-center bg-primary text-white border-0 shadow">
-                                <div class="card-body p-4">
-                                    <i class="fas fa-heart fa-3x mb-3"></i>
-                                    <h3 class="fw-bold">120+</h3>
-                                    <p class="mb-0">Projects Funded</p>
+                
+                <!-- Project Card 5 -->
+                <div class="col-lg-4 col-md-6 project-item" data-category="poverty">
+                    <div class="card h-100 border-0 shadow">
+                        <img src="https://images.unsplash.com/photo-1509099652299-30938b0aeb63?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGhvbWVsZXNzJTIwc2hlbHRlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" 
+                            class="card-img-top" style="height: 200px; object-fit: cover;" alt="Homeless Shelter Support">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-secondary">Poverty</span>
+                                <span class="badge bg-light text-dark border">15 days left</span>
+                            </div>
+                            <h5 class="card-title mb-3">Homeless Shelter Support</h5>
+                            <p class="card-text">Providing meals, beds, and essential services to homeless individuals in urban areas.</p>
+                            <div class="mt-auto pt-3">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
+                                <div class="d-flex justify-content-between small text-muted mb-3">
+                                    <span>$8,900 raised</span>
+                                    <span>89% of $10,000</span>
+                                </div>
+                                <a href="project-details-donor.html?id=5" class="btn btn-primary w-100">Learn More</a>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="card h-100 text-center bg-success text-white border-0 shadow">
-                                <div class="card-body p-4">
-                                    <i class="fas fa-hand-holding-usd fa-3x mb-3"></i>
-                                    <h3 class="fw-bold">$5.2M</h3>
-                                    <p class="mb-0">Total Donations</p>
-                                </div>
+                    </div>
+                </div>
+                
+                <!-- Project Card 6 -->
+                <div class="col-lg-4 col-md-6 project-item" data-category="environment">
+                    <div class="card h-100 border-0 shadow">
+                        <img src="https://images.unsplash.com/photo-1625126590447-cb769dbc6638?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cmVjeWNsaW5nfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60" 
+                            class="card-img-top" style="height: 200px; object-fit: cover;" alt="Community Recycling Program">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-info">Environment</span>
+                                <span class="badge bg-light text-dark border">90 days left</span>
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card h-100 text-center bg-info text-white border-0 shadow">
-                                <div class="card-body p-4">
-                                    <i class="fas fa-users fa-3x mb-3"></i>
-                                    <h3 class="fw-bold">75K+</h3>
-                                    <p class="mb-0">People Helped</p>
+                            <h5 class="card-title mb-3">Community Recycling Program</h5>
+                            <p class="card-text">Establishing recycling centers in communities to reduce waste and promote environmental awareness.</p>
+                            <div class="mt-auto pt-3">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card h-100 text-center bg-warning text-white border-0 shadow">
-                                <div class="card-body p-4">
-                                    <i class="fas fa-globe-americas fa-3x mb-3"></i>
-                                    <h3 class="fw-bold">35</h3>
-                                    <p class="mb-0">Countries Reached</p>
+                                <div class="d-flex justify-content-between small text-muted mb-3">
+                                    <span>$2,800 raised</span>
+                                    <span>28% of $10,000</span>
                                 </div>
+                                <a href="project-details-donor.html?id=6" class="btn btn-primary w-100">Learn More</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <section class="py-3">
+        <div class="container">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </section>
 
     <!-- CTA Section -->
     <section class="py-5 bg-light">
-        <div class="container py-5">
-            <div class="card border-0 shadow">
-                <div class="card-body p-5 text-center">
-                    <h2 class="fw-bold mb-3">Ready to make a difference?</h2>
-                    <p class="lead text-muted mb-4">Join thousands of donors and associations already using HelpHub to create positive change.</p>
-                    <div class="d-flex justify-content-center flex-wrap gap-3">
-                        <a href="register-donor.html" class="btn btn-primary btn-lg">
-                            <i class="fas fa-user-plus me-2"></i> Sign Up as Donor
-                        </a>
-                        <a href="register-association.html" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-building me-2"></i> Register Association
-                        </a>
-                    </div>
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="mb-4">Want to Start Your Own Project?</h2>
+                    <p class="lead mb-4">If you represent a charitable organization, you can create and manage your own fundraising projects on HelpHub!</p>
+                    <a href="register-association.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-building me-2"></i> Register Your Association
+                    </a>
                 </div>
             </div>
         </div>
@@ -345,15 +316,15 @@
                             <h6 class="mb-3">Quick Links</h6>
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-2"><a href="index.html" class="text-decoration-none">Home</a></li>
-                                <li class="mb-2"><a href="#projects" class="text-decoration-none">Projects</a></li>
-                                <li class="mb-2"><a href="#how-it-works" class="text-decoration-none">How It Works</a></li>
+                                <li class="mb-2"><a href="projects.html" class="text-decoration-none">Projects</a></li>
+                                <li class="mb-2"><a href="index.html#how-it-works" class="text-decoration-none">How It Works</a></li>
                             </ul>
                         </div>
                         <div class="col-sm-4">
                             <h6 class="mb-3">For Donors</h6>
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-2"><a href="register-donor.html" class="text-decoration-none">Sign Up</a></li>
-                                <li class="mb-2"><a href="#projects" class="text-decoration-none">Browse Projects</a></li>
+                                <li class="mb-2"><a href="projects.html" class="text-decoration-none">Browse Projects</a></li>
                             </ul>
                         </div>
                         <div class="col-sm-4">
@@ -417,13 +388,6 @@
                                 <i class="fas fa-sign-in-alt me-2"></i> Login
                             </button>
                         </div>
-                        <div class="text-center mt-4">
-                            <p class="mb-0">Don't have an account?</p>
-                            <div class="mt-2">
-                                <a href="register-donor.html" class="btn btn-sm btn-outline-primary me-2">Register as Donor</a>
-                                <a href="register-association.html" class="btn btn-sm btn-outline-primary">Register as Association</a>
-                            </div>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -432,5 +396,61 @@
 
     <!-- Custom JS -->
     <script src="index.js"></script>
+    <script>
+        // Category filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', function() {
+                    const category = this.value;
+                    const projectCards = document.querySelectorAll('.col-lg-4.col-md-6');
+                    
+                    projectCards.forEach(card => {
+                        if (category === 'all') {
+                            card.style.display = '';
+                        } else {
+                            const badge = card.querySelector('.badge');
+                            if (badge && badge.textContent.toLowerCase() === category) {
+                                card.style.display = '';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Search functionality
+            const searchButton = document.getElementById('searchButton');
+            const projectSearch = document.getElementById('projectSearch');
+            
+            if (searchButton && projectSearch) {
+                searchButton.addEventListener('click', function() {
+                    searchProjects(projectSearch.value.toLowerCase());
+                });
+                
+                projectSearch.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        searchProjects(this.value.toLowerCase());
+                    }
+                });
+            }
+            
+            function searchProjects(term) {
+                const projectCards = document.querySelectorAll('.col-lg-4.col-md-6');
+                
+                projectCards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const description = card.querySelector('.card-text').textContent.toLowerCase();
+                    
+                    if (title.includes(term) || description.includes(term) || term === '') {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

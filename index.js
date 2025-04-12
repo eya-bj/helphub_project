@@ -1,5 +1,143 @@
 // Form Validation
 document.addEventListener('DOMContentLoaded', function () {
+    // Custom implementations for Bootstrap JS functionality
+    
+    // 1. Navbar toggler for mobile
+    const navbarTogglers = document.querySelectorAll('.navbar-toggler');
+    navbarTogglers.forEach(toggler => {
+        toggler.addEventListener('click', function() {
+            const target = document.querySelector(this.getAttribute('data-target')) || 
+                            this.nextElementSibling;
+            if (target) {
+                target.classList.toggle('show');
+            }
+        });
+    });
+    
+    // 2. Dropdown menus
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const dropdownMenu = this.nextElementSibling;
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                if (menu !== dropdownMenu) {
+                    menu.classList.remove('show');
+                }
+            });
+            
+            dropdownMenu.classList.toggle('show');
+        });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.matches('.dropdown-toggle') && !e.target.closest('.dropdown-menu')) {
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+    });
+    
+    // 3. Modal functionality
+    const modalTriggers = document.querySelectorAll('[data-toggle="modal"]');
+    const modalClosers = document.querySelectorAll('[data-dismiss="modal"]');
+    
+    function openModal(modalId) {
+        const modal = document.querySelector(modalId);
+        if (modal) {
+            // Create modal backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop fade show';
+            document.body.appendChild(backdrop);
+            
+            document.body.classList.add('modal-open');
+            modal.classList.add('show');
+            modal.style.display = 'block';
+        }
+    }
+    
+    function closeModal(modal) {
+        document.body.classList.remove('modal-open');
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        
+        // Remove backdrop
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+        }
+        
+        // Reset body styles
+        document.body.style.paddingRight = '';
+        document.body.style.overflow = '';
+    }
+    
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modalId = this.getAttribute('data-target');
+            openModal(modalId);
+        });
+    });
+    
+    modalClosers.forEach(closer => {
+        closer.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            closeModal(modal);
+        });
+    });
+    
+    // Close modal when clicking on backdrop
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal(this);
+            }
+        });
+    });
+    
+    // 4. Tab functionality
+    const tabLinks = document.querySelectorAll('[data-toggle="tab"]');
+    
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get target tab pane
+            const targetSelector = this.getAttribute('data-target');
+            const targetPane = document.querySelector(targetSelector);
+            
+            if (!targetPane) return;
+            
+            // Deactivate all tabs in the same group
+            const tabContainer = this.closest('.nav-tabs');
+            if (tabContainer) {
+                tabContainer.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                    navLink.setAttribute('aria-selected', 'false');
+                });
+            }
+            
+            // Deactivate all tab panes
+            const tabContentContainer = targetPane.closest('.tab-content');
+            if (tabContentContainer) {
+                tabContentContainer.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('show', 'active');
+                });
+            }
+            
+            // Activate current tab and pane
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+            targetPane.classList.add('show', 'active');
+        });
+    });
+    
+    // Existing code that doesn't depend on Bootstrap JS
+
     // Fetch all forms that need validation
     const forms = document.querySelectorAll('.needs-validation');
 
@@ -130,6 +268,32 @@ document.addEventListener('DOMContentLoaded', function () {
             const href = link.getAttribute('href');
             // Replace with the donor version
             link.setAttribute('href', href.replace('project-details.html', 'project-details-donor.html'));
+        });
+    }
+
+    // Update href references to project details and profile pages
+    if (document.querySelectorAll('[href*="profile.html"]').length > 0) {
+        const userType = localStorage.getItem('userType') || 'donor';
+        
+        document.querySelectorAll('[href*="profile.html"]').forEach(link => {
+            if (userType === 'donor') {
+                link.setAttribute('href', 'profile-donor.html');
+            } else {
+                link.setAttribute('href', 'profile-association.html');
+            }
+        });
+    }
+    
+    if (document.querySelectorAll('[href*="project-details.html"]').length > 0) {
+        const userType = localStorage.getItem('userType') || 'donor';
+        
+        document.querySelectorAll('[href*="project-details.html"]').forEach(link => {
+            const href = link.getAttribute('href');
+            if (userType === 'donor') {
+                link.setAttribute('href', href.replace('project-details.html', 'project-details-donor.html'));
+            } else {
+                link.setAttribute('href', href.replace('project-details.html', 'project-details-association.html'));
+            }
         });
     }
 
@@ -289,8 +453,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     event.preventDefault();
                     alert('Password changed successfully!');
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
-                    if (modal) modal.hide();
+                    const modal = document.getElementById('changePasswordModal');
+                    if (modal) closeModal(modal);
                 }
                 passwordForm.classList.add('was-validated');
             });
@@ -313,6 +477,43 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault();
                 alert('Account deleted successfully.');
                 window.location.href = 'index.html';
+            });
+        }
+    }
+
+    // Handle profile page functionality for both profile types
+    if (window.location.pathname.includes('profile-donor.html')) {
+        // Handle donor profile form submission
+        const donorForm = document.getElementById('donorProfileForm');
+        
+        if (donorForm) {
+            donorForm.addEventListener('submit', function(event) {
+                if (!donorForm.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    event.preventDefault();
+                    alert('Profile updated successfully!');
+                }
+                donorForm.classList.add('was-validated');
+            });
+        }
+    }
+
+    if (window.location.pathname.includes('profile-association.html')) {
+        // Handle association profile form submission
+        const associationForm = document.getElementById('associationProfileForm');
+        
+        if (associationForm) {
+            associationForm.addEventListener('submit', function(event) {
+                if (!associationForm.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    event.preventDefault();
+                    alert('Profile updated successfully!');
+                }
+                associationForm.classList.add('was-validated');
             });
         }
     }
