@@ -1,366 +1,64 @@
-// Form Validation
+// HelpHub Main JavaScript - Simplified Version
+
+// Wait for DOM to be fully loaded before attaching event handlers
 document.addEventListener('DOMContentLoaded', function () {
-    // Fetch all forms that need validation
-    const forms = document.querySelectorAll('.needs-validation');
-
-    // Loop through them and prevent submission
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                // If form is valid, handle submission
-                event.preventDefault();
-                handleFormSubmission(form);
-            }
-            form.classList.add('was-validated');
-        }, false);
-    });
-
-    // Handle login form submission
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const userType = document.getElementById('userType').value;
-            const pseudo = document.getElementById('pseudo').value;
-            const password = document.getElementById('password').value;
-            
-            // Simple validation
-            if (userType && pseudo && password) {
-                // Store user type for later use
-                localStorage.setItem('userType', userType);
-                
-                // Redirect to appropriate dashboard
-                if (userType === 'donor') {
-                    window.location.href = 'dashboard-donor.html';
-                } else if (userType === 'association') {
-                    window.location.href = 'dashboard-association.html';
-                }
-            } else {
-                alert('Please fill out all fields');
-            }
-        });
-    }
-
-    // Toggle password visibility
-    const toggleButtons = document.querySelectorAll('.toggle-password');
-    toggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const targetInput = document.querySelector(targetId);
-            
-            // Toggle type attribute
-            const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            targetInput.setAttribute('type', type);
-            
-            // Toggle eye icon
-            const icon = this.querySelector('i');
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        });
-    });
-    
-    // Handle project search
-    const searchButtons = document.querySelectorAll('[id$="SearchButton"]');
-    searchButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const searchInput = this.previousElementSibling || 
-                                document.getElementById(this.getAttribute('data-search-input')) || 
-                                this.closest('.input-group').querySelector('input');
-            if (searchInput) {
-                searchProjects(searchInput.value.toLowerCase());
-            }
-        });
-    });
-    
-    // Search on Enter key press
-    const searchInputs = document.querySelectorAll('input[id*="Search"]');
-    searchInputs.forEach(input => {
-        input.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                searchProjects(this.value.toLowerCase());
-            }
-        });
-    });
-    
-    // Category filter handling
-    const categoryFilter = document.getElementById('categoryFilter');
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
-            const category = this.value;
-            filterProjectsByCategory(category);
-        });
-    }
-    
-    // Project filtering buttons 
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    if (filterButtons.length > 0) {
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
-                this.classList.add('active');
-                
-                const filterValue = this.getAttribute('data-filter');
-                filterProjectsByCategory(filterValue);
-            });
-        });
-    }
-    
-    // Update href references to project details and profile pages
-    updatePageReferences();
-    
-    // Handle project details page functionality
-    setupProjectDetailsPage();
-    
-    // Handle profile page functionality
-    setupProfilePage();
-    
-    // Handle donation form and amount selection
-    setupDonationForm();
-    
-    // Handle password form validations
-    setupPasswordValidation();
-    
-    // Handle account deletion confirmation
-    setupAccountDeletion();
+    // Initialize all key components
+    initFormValidation();
+    initLoginSystem();
+    initPasswordToggles();
+    initSearchFunctions();
+    initFilterFunctions();
+    initProjectDetails();
+    initProfilePages();
+    initDonationSystem();
 });
 
-// Form submission handler
-function handleFormSubmission(form) {
-    // Get form ID to determine which form was submitted
-    const formId = form.getAttribute('id');
-    
-    // Handle different form submissions
-    if (formId === 'associationRegisterForm') {
-        console.log('Association registration form submitted');
-        // For demo, just redirect to login
-        alert('Registration successful! Please log in.');
-        window.location.href = 'index.html';
-    } 
-    else if (formId === 'donorRegisterForm') {
-        console.log('Donor registration form submitted');
-        // For demo, just redirect to login
-        alert('Registration successful! Please log in.');
-        window.location.href = 'index.html';
-    }
-    else if (formId === 'donationForm') {
-        handleDonation(form);
-    }
-}
+// Form Validation
+function initFormValidation() {
+    // Get all forms that need validation
+    const forms = document.querySelectorAll('.needs-validation');
 
-// Search projects function
-function searchProjects(query) {
-    query = query.toLowerCase().trim();
-    const projectItems = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
-    
-    if (projectItems.length > 0) {
-        projectItems.forEach(item => {
-            const title = item.querySelector('.card-title')?.textContent.toLowerCase() || '';
-            const description = item.querySelector('.card-text')?.textContent.toLowerCase() || '';
-            
-            if (title.includes(query) || description.includes(query) || query === '') {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-        
-        // Reset filter buttons if they exist
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        if (filterButtons.length > 0) {
-            filterButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const allButton = document.querySelector('[data-filter="all"]');
-            if (allButton) {
-                allButton.classList.add('active');
-            }
-        }
-    }
-}
-
-// Filter projects by category
-function filterProjectsByCategory(category) {
-    const projectItems = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
-    
-    projectItems.forEach(item => {
-        if (category === 'all') {
-            item.style.display = '';
-        } else {
-            const badge = item.querySelector('.badge');
-            if (badge && badge.textContent.toLowerCase() === category) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        }
-    });
-}
-
-// Update references to profile and project details pages
-function updatePageReferences() {
-    // Update href references based on user type
-    const userType = localStorage.getItem('userType') || 'donor';
-    
-    document.querySelectorAll('[href*="profile.html"]').forEach(link => {
-        if (userType === 'donor') {
-            link.setAttribute('href', 'profile-donor.html');
-        } else {
-            link.setAttribute('href', 'profile-association.html');
-        }
-    });
-    
-    document.querySelectorAll('[href*="project-details.html"]').forEach(link => {
-        const href = link.getAttribute('href');
-        if (userType === 'donor') {
-            link.setAttribute('href', href.replace('project-details.html', 'project-details-donor.html'));
-        } else {
-            link.setAttribute('href', href.replace('project-details.html', 'project-details-association.html'));
-        }
-    });
-}
-
-// Setup project details page functionality
-function setupProjectDetailsPage() {
-    if (window.location.pathname.includes('project-details')) {
-        // Determine user type
-        const urlParams = new URLSearchParams(window.location.search);
-        const userType = urlParams.get('userType') || localStorage.getItem('userType') || 'donor';
-        
-        // Show/hide appropriate views
-        if (userType === 'association') {
-            document.querySelectorAll('.donor-view').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.association-view').forEach(el => el.style.display = 'block');
-            if (document.querySelector('#backBtn')) {
-                document.querySelector('#backBtn').href = 'dashboard-association.html';
-            }
-        } else {
-            document.querySelectorAll('.association-view').forEach(el => el.style.display = 'none');
-            if (document.querySelector('#backBtn')) {
-                document.querySelector('#backBtn').href = 'dashboard-donor.html';
-            }
-        }
-    }
-}
-
-// Setup profile page functionality
-function setupProfilePage() {
-    if (window.location.pathname.includes('profile.html')) {
-        // Determine user type
-        const userType = localStorage.getItem('userType') || 'association';
-        
-        if (userType === 'donor') {
-            document.querySelector('.association-view').style.display = 'none';
-            document.querySelector('.donor-view').style.display = 'block';
-            document.querySelector('.association-nav').style.display = 'none';
-        } else {
-            document.querySelector('.donor-view').style.display = 'none';
-            document.querySelector('.donor-nav').style.display = 'none';
-        }
-    }
-    
-    // Handle profile form submission
-    const associationForm = document.getElementById('associationProfileForm');
-    if (associationForm) {
-        associationForm.addEventListener('submit', function(event) {
-            if (!associationForm.checkValidity()) {
+    forms.forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                // Form is invalid
                 event.preventDefault();
                 event.stopPropagation();
             } else {
+                // Form is valid - handle submission
                 event.preventDefault();
-                alert('Profile updated successfully!');
-            }
-            associationForm.classList.add('was-validated');
-        });
-    }
-    
-    const donorForm = document.getElementById('donorProfileForm');
-    if (donorForm) {
-        donorForm.addEventListener('submit', function(event) {
-            if (!donorForm.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                event.preventDefault();
-                alert('Profile updated successfully!');
-            }
-            donorForm.classList.add('was-validated');
-        });
-    }
-}
-
-// Setup donation form and amount selection
-function setupDonationForm() {
-    // Handle donation amount buttons on project details page
-    const amountBtns = document.querySelectorAll('.amount-btn');
-    const donationAmountInput = document.getElementById('donationAmount');
-    
-    if (amountBtns.length > 0 && donationAmountInput) {
-        amountBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const amount = this.getAttribute('data-amount');
-                donationAmountInput.value = amount;
+                const formId = form.getAttribute('id');
                 
-                // Toggle active state
-                amountBtns.forEach(b => {
-                    b.classList.remove('active');
-                    b.classList.remove('btn-primary');
-                    b.classList.add('btn-outline-primary');
-                });
-                this.classList.add('active', 'btn-primary');
-                this.classList.remove('btn-outline-primary');
-            });
-        });
-    }
-    
-    // Form validation for donation form
-    const donationForm = document.getElementById('donationForm');
-    if (donationForm) {
-        donationForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            if (donationForm.checkValidity()) {
-                handleDonation(donationForm);
-            }
-            donationForm.classList.add('was-validated');
-        });
-    }
-}
-
-// Setup password validation
-function setupPasswordValidation() {
-    const passwordForm = document.getElementById('changePasswordForm');
-    const newPassword = document.getElementById('newPassword');
-    const confirmPassword = document.getElementById('confirmPassword');
-    
-    if (passwordForm && newPassword && confirmPassword) {
-        passwordForm.addEventListener('submit', function(event) {
-            if (newPassword.value !== confirmPassword.value) {
-                confirmPassword.setCustomValidity('Passwords do not match');
-            } else {
-                confirmPassword.setCustomValidity('');
+                // Handle different form types
+                if (formId === 'associationRegisterForm' || formId === 'donorRegisterForm') {
+                    alert('Registration successful! Please log in.');
+                    window.location.href = 'index.html';
+                } else if (formId === 'donationForm') {
+                    const amount = form.querySelector('#donationAmount').value;
+                    alert(`Thank you for your donation of $${amount}!`);
+                    window.location.href = 'dashboard-donor.html';
+                } else if (formId.includes('ProfileForm')) {
+                    alert('Profile updated successfully!');
+                } else if (formId === 'changePasswordForm') {
+                    const newPassword = document.getElementById('newPassword');
+                    const confirmPassword = document.getElementById('confirmPassword');
+                    
+                    if (newPassword.value !== confirmPassword.value) {
+                        confirmPassword.setCustomValidity('Passwords do not match');
+                        event.preventDefault();
+                        event.stopPropagation();
+                    } else {
+                        confirmPassword.setCustomValidity('');
+                        alert('Password changed successfully!');
+                    }
+                }
             }
             
-            if (!passwordForm.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                event.preventDefault();
-                alert('Password changed successfully!');
-                // The modal will be closed by Bootstrap's dismiss attribute
-            }
-            passwordForm.classList.add('was-validated');
+            form.classList.add('was-validated');
         });
-    }
-}
-
-// Setup account deletion confirmation
-function setupAccountDeletion() {
+    });
+    
+    // Setup account deletion confirmation
     const deleteConfirm = document.getElementById('deleteConfirm');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
     
@@ -377,13 +75,221 @@ function setupAccountDeletion() {
     }
 }
 
-// Handle donation form submission
-function handleDonation(form) {
-    const amount = form.querySelector('#donationAmount').value;
-    const method = form.querySelector('#paymentMethod')?.value || 'creditCard';
-    const anonymous = form.querySelector('#anonymousCheck')?.checked || false;
+// Login System
+function initLoginSystem() {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userType = document.getElementById('userType').value;
+            const pseudo = document.getElementById('pseudo').value;
+            const password = document.getElementById('password').value;
+            
+            if (userType && pseudo && password) {
+                // Store user type and redirect to appropriate dashboard
+                localStorage.setItem('userType', userType);
+                window.location.href = `dashboard-${userType}.html`;
+            } else {
+                alert('Please fill out all fields');
+            }
+        });
+    }
     
-    // For demo, just show success message
-    alert(`Thank you for your donation of $${amount}!`);
-    window.location.href = 'dashboard-donor.html';
+    // Update page references based on user type
+    const userType = localStorage.getItem('userType') || 'donor';
+    
+    document.querySelectorAll('[href*="profile.html"]').forEach(link => {
+        link.setAttribute('href', `profile-${userType}.html`);
+    });
+    
+    document.querySelectorAll('[href*="project-details.html"]').forEach(link => {
+        const href = link.getAttribute('href');
+        link.setAttribute('href', href.replace('project-details.html', `project-details-${userType}.html`));
+    });
+}
+
+// Password Toggle Visibility
+function initPasswordToggles() {
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const targetInput = document.querySelector(targetId);
+            
+            // Toggle between password and text type
+            const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            targetInput.setAttribute('type', type);
+            
+            // Toggle eye icon
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    });
+}
+
+// Search Functions
+function initSearchFunctions() {
+    // Handle search button clicks
+    const searchButtons = document.querySelectorAll('[id$="SearchButton"]');
+    searchButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Find the associated input element
+            const searchInput = this.previousElementSibling || 
+                              document.getElementById(this.getAttribute('data-search-input')) || 
+                              this.closest('.input-group').querySelector('input');
+            
+            if (searchInput) {
+                performSearch(searchInput.value.toLowerCase());
+            }
+        });
+    });
+    
+    // Handle search on enter key press
+    const searchInputs = document.querySelectorAll('input[id*="Search"]');
+    searchInputs.forEach(input => {
+        input.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                performSearch(this.value.toLowerCase());
+            }
+        });
+    });
+}
+
+// Perform search across project items
+function performSearch(query) {
+    query = query.trim();
+    const projectItems = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
+    
+    projectItems.forEach(item => {
+        const title = item.querySelector('.card-title')?.textContent.toLowerCase() || '';
+        const description = item.querySelector('.card-text')?.textContent.toLowerCase() || '';
+        
+        // Show or hide based on search match
+        if (query === '' || title.includes(query) || description.includes(query)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    // Reset filter buttons if they exist
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    if (filterButtons.length > 0) {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        const allButton = document.querySelector('[data-filter="all"]');
+        if (allButton) allButton.classList.add('active');
+    }
+}
+
+// Filter Functions
+function initFilterFunctions() {
+    // Category filter dropdown
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', function() {
+            filterByCategory(this.value);
+        });
+    }
+    
+    // Filter buttons (e.g., All, Environment, Education...)
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    if (filterButtons.length > 0) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active state visually
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter projects
+                filterByCategory(this.getAttribute('data-filter'));
+            });
+        });
+    }
+}
+
+// Filter projects by selected category
+function filterByCategory(category) {
+    const projectItems = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
+    
+    projectItems.forEach(item => {
+        if (category === 'all') {
+            item.style.display = '';
+        } else {
+            const badge = item.querySelector('.badge');
+            if (badge && badge.textContent.toLowerCase() === category) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        }
+    });
+}
+
+// Project Detail Page Setup
+function initProjectDetails() {
+    if (!window.location.pathname.includes('project-details')) return;
+    
+    // Determine user type to show appropriate view
+    const urlParams = new URLSearchParams(window.location.search);
+    const userType = urlParams.get('userType') || localStorage.getItem('userType') || 'donor';
+    
+    // Show appropriate view based on user type
+    if (userType === 'association') {
+        document.querySelectorAll('.donor-view').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.association-view').forEach(el => el.style.display = 'block');
+        if (document.querySelector('#backBtn')) {
+            document.querySelector('#backBtn').href = 'dashboard-association.html';
+        }
+    } else {
+        document.querySelectorAll('.association-view').forEach(el => el.style.display = 'none');
+        if (document.querySelector('#backBtn')) {
+            document.querySelector('#backBtn').href = 'dashboard-donor.html';
+        }
+    }
+}
+
+// Profile Pages Setup
+function initProfilePages() {
+    if (!window.location.pathname.includes('profile')) return;
+    
+    // Show appropriate view based on user type for profile.html page
+    if (window.location.pathname.includes('profile.html')) {
+        const userType = localStorage.getItem('userType') || 'association';
+        
+        if (userType === 'donor') {
+            document.querySelector('.association-view').style.display = 'none';
+            document.querySelector('.donor-view').style.display = 'block';
+            document.querySelector('.association-nav').style.display = 'none';
+        } else {
+            document.querySelector('.donor-view').style.display = 'none';
+            document.querySelector('.donor-nav').style.display = 'none';
+        }
+    }
+}
+
+// Donation System
+function initDonationSystem() {
+    // Donation amount button selection
+    const amountBtns = document.querySelectorAll('.amount-btn');
+    const donationAmountInput = document.getElementById('donationAmount');
+    
+    if (!amountBtns.length || !donationAmountInput) return;
+    
+    amountBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const amount = this.getAttribute('data-amount');
+            donationAmountInput.value = amount;
+            
+            // Update visual state
+            amountBtns.forEach(b => {
+                b.classList.remove('active', 'btn-primary');
+                b.classList.add('btn-outline-primary');
+            });
+            
+            this.classList.add('active', 'btn-primary');
+            this.classList.remove('btn-outline-primary');
+        });
+    });
 }
