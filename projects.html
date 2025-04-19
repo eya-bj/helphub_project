@@ -14,44 +14,33 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="projects.html">Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#how-it-works">How It Works</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" 
-                           data-toggle="dropdown">Register</a>
-                        <ul class="dropdown-menu" aria-labelledby="registerDropdown">
-                            <li><a class="dropdown-item" href="register-association.html">Register as Association</a></li>
-                            <li><a class="dropdown-item" href="register-donor.html">Register as Donor</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="fas fa-sign-in-alt me-2"></i> Login
-                        </button>
-                    </li>
-                </ul>
-            </div>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="dashboard-donor.html">
+            <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard-donor.html">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="projects.html">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile-donor.html">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Logout</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Page Header -->
     <section class="bg-primary text-white text-center py-5 mt-5">
@@ -274,126 +263,27 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-5 bg-light">
-        <div class="container py-4">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h2 class="mb-4">Want to Start Your Own Project?</h2>
-                    <p class="lead mb-4">If you represent a charitable organization, you can create and manage your own fundraising projects on HelpHub!</p>
-                    <a href="register-association.html" class="btn btn-primary btn-lg">
-                        <i class="fas fa-building me-2"></i> Register Your Association
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light">
-        <div class="container py-5">
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <h5 class="mb-3"><span class="text-primary">Help</span><span class="text-light">Hub</span></h5>
-                    <p class="mb-3">Connecting hearts and resources for a better world.</p>
-                    <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <h6 class="mb-3">Quick Links</h6>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><a href="index.html" class="text-decoration-none">Home</a></li>
-                                <li class="mb-2"><a href="projects.html" class="text-decoration-none">Projects</a></li>
-                                <li class="mb-2"><a href="index.html#how-it-works" class="text-decoration-none">How It Works</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-4">
-                            <h6 class="mb-3">For Donors</h6>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><a href="register-donor.html" class="text-decoration-none">Sign Up</a></li>
-                                <li class="mb-2"><a href="projects.html" class="text-decoration-none">Browse Projects</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-4">
-                            <h6 class="mb-3">For Associations</h6>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><a href="register-association.html" class="text-decoration-none">Register</a></li>
-                                <li class="mb-2"><a href="#" class="text-decoration-none">Create Projects</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+<!-- Footer -->
+<footer class="bg-dark text-light py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023</h5>
+                <p>Connecting hearts and resources for a better world.</p>
             </div>
-            <hr class="my-4 bg-light opacity-25">
-            <div class="text-center">
-                <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="loginModalLabel">Login to HelpHub</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label for="userType" class="form-label">I am a:</label>
-                            <select class="form-select" id="userType" required>
-                                <option value="" selected disabled>Select user type</option>
-                                <option value="donor">Donor</option>
-                                <option value="association">Association Representative</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="pseudo" class="form-label">Pseudo</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" id="pseudo" placeholder="Enter your pseudo" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
-                                    <i class="fa fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mb-4 form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-sign-in-alt me-2"></i> Login
-                            </button>
-                        </div>
-                    </form>
-                </div>
+            <div class="col-md-6 text-md-end">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
+                    <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
+                    <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
+                </ul>
             </div>
         </div>
     </div>
+</footer>
+
 
     <!-- Bootstrap JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

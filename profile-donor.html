@@ -18,13 +18,16 @@
             <a class="navbar-brand" href="#">
                 <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
             </a>
-            <button class="navbar-toggler" type="button" data-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard-donor.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">Projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="profile-donor.html">Profile</a>
@@ -90,10 +93,10 @@
                         </div>
                         <div class="card-body">
                             <div class="d-grid gap-2">
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#changePasswordModal">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                     <i class="fas fa-key me-2"></i>Change Password
                                 </button>
-                                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteAccountModal">
+                                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
                                     <i class="fas fa-trash-alt me-2"></i>Delete Account
                                 </button>
                             </div>
@@ -109,20 +112,20 @@
                         </div>
                         <div class="card-body">
                             <!-- Donor Form -->
-                            <form id="donorProfileForm" class="needs-validation" novalidate>
+                            <form id="donorProfileForm">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="donorName" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="donorName" value="Jane" required>
-                                        <div class="invalid-feedback">
-                                            Please enter your name.
+                                        <input type="text" class="form-control" id="donorName" value="Jane" required aria-required="true">
+                                        <div class="invalid-feedback" id="donorNameFeedback">
+                                            Please enter your name (minimum 2 characters).
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="donorSurname" class="form-label">Surname</label>
-                                        <input type="text" class="form-control" id="donorSurname" value="Doe" required>
-                                        <div class="invalid-feedback">
-                                            Please enter your surname.
+                                        <input type="text" class="form-control" id="donorSurname" value="Doe" required aria-required="true">
+                                        <div class="invalid-feedback" id="donorSurnameFeedback">
+                                            Please enter your surname (minimum 2 characters).
                                         </div>
                                     </div>
                                 </div>
@@ -130,14 +133,14 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="donorEmail" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="donorEmail" value="jane.doe@example.com" required>
-                                        <div class="invalid-feedback">
+                                        <input type="email" class="form-control" id="donorEmail" value="jane.doe@example.com" required aria-required="true">
+                                        <div class="invalid-feedback" id="donorEmailFeedback">
                                             Please enter a valid email address.
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="ctn" class="form-label">CTN</label>
-                                        <input type="text" class="form-control" id="ctn" value="87654321" pattern="[0-9]{8}" readonly>
+                                        <input type="text" class="form-control" id="ctn" value="87654321" readonly>
                                         <div class="form-text text-muted">CTN cannot be changed.</div>
                                     </div>
                                 </div>
@@ -165,37 +168,36 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Change Password</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="changePasswordForm" class="needs-validation" novalidate>
+                    <form id="changePasswordForm">
                         <div class="mb-3">
                             <label for="currentPassword" class="form-label">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword" required>
-                            <div class="invalid-feedback">
+                            <input type="password" class="form-control" id="currentPassword" required aria-required="true">
+                            <div class="invalid-feedback" id="currentPasswordFeedback">
                                 Please enter your current password.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" 
-                                   pattern=".{7,}[\$#]" required>
-                            <div class="invalid-feedback">
+                            <input type="password" class="form-control" id="newPassword" required aria-required="true">
+                            <div class="invalid-feedback" id="newPasswordFeedback">
                                 Password must be at least 8 characters and end with $ or #.
                             </div>
                             <div class="form-text">At least 8 characters, must end with $ or #</div>
                         </div>
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" required>
-                            <div class="invalid-feedback">
+                            <input type="password" class="form-control" id="confirmPassword" required aria-required="true">
+                            <div class="invalid-feedback" id="confirmPasswordFeedback">
                                 Passwords do not match.
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" form="changePasswordForm" class="btn btn-primary">Save New Password</button>
                 </div>
             </div>
@@ -208,7 +210,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title text-danger">Delete Account</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger">
@@ -218,12 +220,15 @@
                     <form id="deleteAccountForm">
                         <div class="mb-3">
                             <label for="deleteConfirm" class="form-label">Type "DELETE" to confirm</label>
-                            <input type="text" class="form-control" id="deleteConfirm" required>
+                            <input type="text" class="form-control" id="deleteConfirm" required aria-required="true">
+                            <div class="invalid-feedback" id="deleteConfirmFeedback">
+                                Please type "DELETE" to confirm.
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" form="deleteAccountForm" class="btn btn-danger" disabled id="confirmDeleteBtn">Delete Account</button>
                 </div>
             </div>
@@ -240,16 +245,17 @@
                 </div>
                 <div class="col-md-6 text-md-end">
                     <ul class="list-inline mb-0">
-                        <li class="list-inline-item"><a href="#" class="text-light">Privacy Policy</a></li>
-                        <li class="list-inline-item"><a href="#" class="text-light">Terms of Use</a></li>
-                        <li class="list-inline-item"><a href="#" class="text-light">Contact Us</a></li>
+                        <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
+                        <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </footer>
-
+    <!-- Bootstrap JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="index.js"></script>
+    <script src="profile.js"></script>
 </body>
 </html>
