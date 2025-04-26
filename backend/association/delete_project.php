@@ -2,7 +2,7 @@
 /**
  * Delete Project Endpoint
  * 
- * Allows associations to delete their projects
+ * Allows associations to delete or deactivate their projects
  * Method: POST
  * Data: project_id
  */
@@ -10,108 +10,90 @@
 // Start session
 session_start();
 
-// Set JSON content type
-header('Content-Type: application/json');
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Log attempts
+$log_file = '../project_ops_debug.log';
+file_put_contents($log_file, date('Y-m-d H:i:s') . " - Delete Project attempt\n" . "POST data: " . print_r($_POST, true) . "\nSession: " . print_r($_SESSION, true) . "\n\n", FILE_APPEND);
 
 // Check if user is logged in as association
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'association') {
-    echo json_encode(['error' => 'Unauthorized access. Please login as an association']);
+    header('Location: ../../index.html?error=unauthorized');
     exit;
 }
 
 // Allow only POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['error' => 'Only POST method is allowed']);
+    header('Location: ../../dashboard-association.html?error=invalid_method');
     exit;
 }
 
-// Get database connection
+// Connect to database
 require_once '../db.php';
 
-// Get POST data directly - removed JSON handling
-$data = $_POST;
-
 // Validate project_id
-if (!isset($data['project_id']) || !is_numeric($data['project_id'])) {
-    echo json_encode(['error' => 'Valid project_id is required']);
+if (!isset($_POST['project_id']) || !is_numeric($_POST['project_id'])) {
+    header('Location: ../../dashboard-association.html?error=missing_fields');
     exit;
 }
 
+$project_id = $_POST['project_id'];
+$assoc_id = $_SESSION['user_id'];
+
 try {
-    $assoc_id = $_SESSION['user_id'];
-    $project_id = $data['project_id'];
-    
     // Check if project exists and belongs to the association
-    $stmt = $pdo->prepare("
-        SELECT * FROM project 
-        WHERE project_id = ? AND assoc_id = ?
-    ");
+    $stmt = $pdo->prepare("SELECT project_id, image_path FROM project WHERE project_id = ? AND assoc_id = ?");
     $stmt->execute([$project_id, $assoc_id]);
-    $project = $stmt->fetch();
+    $project = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$project) {
-        echo json_encode(['error' => 'Project not found or does not belong to your association']);
+        header('Location: ../../dashboard-association.html?error=project_not_found');
         exit;
     }
     
-    // Optional: Check if project has donations
-    $stmt = $pdo->prepare("
-        SELECT COUNT(*) as donation_count
-        FROM donation
-        WHERE project_id = ?
-    ");
+    // Check if project has donations
+    $stmt = $pdo->prepare("SELECT COUNT(*) as donation_count FROM donation WHERE project_id = ?");
     $stmt->execute([$project_id]);
-    $result = $stmt->fetch();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($result['donation_count'] > 0) {
-        // Option 1: Don't allow deletion if project has donations
-        // echo json_encode(['error' => 'Cannot delete project with existing donations']);
-        // exit;
-        
-        // Option 2: Set status to inactive instead of deleting
-        $stmt = $pdo->prepare("
-            UPDATE project
-            SET status = 'inactive'
-            WHERE project_id = ?
-        ");
+        // Deactivate instead of deleting
+        $stmt = $pdo->prepare("UPDATE project SET status = 'inactive' WHERE project_id = ?");
         $stmt->execute([$project_id]);
-        
-        echo json_encode([
-            'success' => true,
-            'data' => [
-                'message' => 'Project marked as inactive (has existing donations)',
-                'project_id' => $project_id
-            ]
-        ]);
+        file_put_contents($log_file, date('Y-m-d H:i:s') . " - Project deactivated (had donations): ID=" . $project_id . "\n\n", FILE_APPEND);
+        header('Location: ../../dashboard-association.html?success=project_deactivated');
         exit;
-    }
-    
-    // Delete project (this will cascade to donations due to foreign key constraints)
-    $stmt = $pdo->prepare("
-        DELETE FROM project
-        WHERE project_id = ?
-    ");
-    $stmt->execute([$project_id]);
-    
-    // Delete project image if exists
-    if (!empty($project['image_path'])) {
-        $image_file = '../../' . $project['image_path'];
-        if (file_exists($image_file)) {
-            unlink($image_file);
+    } else {
+        // Delete project (donations table constraint should be ON DELETE CASCADE or handle manually)
+        // Assuming ON DELETE CASCADE is set
+        $stmt = $pdo->prepare("DELETE FROM project WHERE project_id = ?");
+        $success = $stmt->execute([$project_id]);
+
+        if ($success) {
+            // Delete project image if exists
+            if (!empty($project['image_path'])) {
+                $image_file = '../../' . $project['image_path'];
+                if (file_exists($image_file)) {
+                    unlink($image_file);
+                }
+            }
+            file_put_contents($log_file, date('Y-m-d H:i:s') . " - Project deleted successfully: ID=" . $project_id . "\n\n", FILE_APPEND);
+            header('Location: ../../dashboard-association.html?success=project_deleted');
+            exit;
+        } else {
+             $errorInfo = $stmt->errorInfo();
+             file_put_contents($log_file, date('Y-m-d H:i:s') . " - Project delete failed: " . print_r($errorInfo, true) . "\n\n", FILE_APPEND);
+             header('Location: ../../dashboard-association.html?error=database_error&code=' . $errorInfo[1]);
+             exit;
         }
     }
-    
-    // Return success
-    echo json_encode([
-        'success' => true,
-        'data' => [
-            'message' => 'Project deleted successfully',
-            'project_id' => $project_id
-        ]
-    ]);
 
 } catch (PDOException $e) {
-    echo json_encode(['error' => 'Failed to delete project: ' . $e->getMessage()]);
+    file_put_contents($log_file, date('Y-m-d H:i:s') . " - PDO Exception: " . $e->getMessage() . "\n\n", FILE_APPEND);
+    header('Location: ../../dashboard-association.html?error=database_error&msg=' . urlencode($e->getCode()));
     exit;
 }
 ?>

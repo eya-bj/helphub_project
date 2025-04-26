@@ -1,0 +1,36 @@
+2025-04-26 18:16:13 - Donation attempt
+POST data: Array
+(
+    [project_id] => 1
+    [amount] => 250
+    [full_name] => Jane Doe
+    [email] => jane.doe@example.com
+    [paymentMethod] => creditCard
+)
+
+Session: Array
+(
+    [user_id] => 2
+    [user_type] => donor
+    [pseudo] => mrsquarel
+)
+
+
+2025-04-26 18:16:18 - Donation attempt
+POST data: Array
+(
+    [project_id] => 1
+    [amount] => 50
+    [full_name] => Jane Doe
+    [email] => jane.doe@example.com
+    [paymentMethod] => creditCard
+)
+
+Session: Array
+(
+    [user_id] => 2
+    [user_type] => donor
+    [pseudo] => mrsquarel
+)
+
+

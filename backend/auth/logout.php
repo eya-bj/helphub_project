@@ -2,34 +2,28 @@
 /**
  * Logout Endpoint
  * 
- * Handles user logout by destroying the session
- * Method: POST
+ * Destroys the user session and redirects to the homepage.
  */
 
 // Start session
 session_start();
 
-// Set JSON content type
-header('Content-Type: application/json');
+// Unset all session variables
+$_SESSION = array();
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type'])) {
-    echo json_encode(['error' => 'No active session found']);
-    exit;
+// Destroy the session cookie
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
 }
 
-// Get user info before destroying session
-$user_type = $_SESSION['user_type'];
-
-// Destroy session
+// Destroy the session
 session_destroy();
 
-// Return success
-echo json_encode([
-    'success' => true,
-    'data' => [
-        'message' => 'Successfully logged out',
-        'user_type' => $user_type
-    ]
-]);
+// Redirect to homepage with success message
+header('Location: ../../index.html?success=logged_out');
+exit;
 ?>

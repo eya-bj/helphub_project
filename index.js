@@ -1,59 +1,32 @@
-// Handles login, password toggle, search/filter triggers, project search/filter, and contact form
+// Handles password toggle, search/filter triggers, project search/filter
 
 // Wait for page to load before running code
 document.addEventListener('DOMContentLoaded', function() {
     // --- LOGIN SYSTEM ---
 
-    // Handle login form
-    var loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            var userType = document.getElementById('userType').value;
-            var username = document.getElementById('pseudo').value;
-            var password = document.getElementById('password').value;
-
-            // Check if all fields are filled
-            if (!userType || !username || !password) {
-                alert('Please fill out all fields');
-                return;
-            }
-
-            // Create form data for POST submission
-            var formData = new FormData();
-            formData.append('user_type', userType);
-            formData.append('pseudo', username);
-            formData.append('password', password);
-            
-            // Send POST request to backend
-            fetch('backend/auth/login.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Store user data and redirect
-                    localStorage.setItem('userType', userType);
-                    window.location.href = `dashboard-${userType}.html`;
-                } else {
-                    alert(data.error || 'Login failed');
-                }
-            })
-            .catch(error => {
-                console.error('Login error:', error);
-                alert('Login failed. Please try again.');
-            });
-        });
-    }
+    // Login form submission is now handled by standard form POST
+    // var loginForm = document.getElementById('loginForm');
+    // if (loginForm) {
+    //     loginForm.addEventListener('submit', function(event) {
+    //         event.preventDefault(); // REMOVED - Let the form submit normally
+    //         // ... fetch logic removed ...
+    //     });
+    // }
 
     // --- UI HELPERS ---
 
-    // Show/hide password toggles
+    // Show/hide password toggles (Keep this)
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
-            // Find the password field
-            var passField = document.querySelector(this.getAttribute('data-target'));
+            // Find the password field using data-target attribute
+            var targetSelector = this.getAttribute('data-target'); 
+            var passField = targetSelector ? document.querySelector(targetSelector) : null;
+            
+            // Fallback: try finding input within the same input-group
+            if (!passField && this.closest('.input-group')) {
+                 passField = this.closest('.input-group').querySelector('input[type="password"], input[type="text"]');
+            }
+
             if (!passField) return;
 
             // Toggle between password and text
@@ -67,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Handle search buttons
+    // Handle search buttons (Keep this)
     document.querySelectorAll('[id$="SearchButton"]').forEach(button => {
         button.addEventListener('click', function() {
             var input = this.previousElementSibling || 
@@ -78,14 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Search on Enter key
+    // Search on Enter key (Keep this)
     document.querySelectorAll('input[id*="Search"]').forEach(input => {
         input.addEventListener('keyup', function(event) {
             if (event.key === 'Enter') searchProjects(this.value);
         });
     });
 
-    // Filter category buttons
+    // Filter category buttons (Keep this)
     document.querySelectorAll('.filter-btn').forEach(button => {
         button.addEventListener('click', function() {
             // Update active button
@@ -99,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Category dropdown filter
+    // Category dropdown filter (Keep this)
     var categoryFilter = document.getElementById('categoryFilter');
     if (categoryFilter) {
         categoryFilter.addEventListener('change', function() {
@@ -109,125 +82,136 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- CONTACT FORM ---
 
-    // Handle contact form
-    var contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+    // Contact form submission is now handled by standard form POST
+    // var contactForm = document.getElementById('contactForm');
+    // if (contactForm) {
+    //     contactForm.addEventListener('submit', function(event) {
+    //         event.preventDefault(); // REMOVED - Let the form submit normally
+    //         // ... validation and fetch logic removed ...
+    //     });
+    // }
 
-            // Validate form
-            if (!contactForm.checkValidity()) {
-                event.stopPropagation();
-                contactForm.classList.add('was-validated');
-                return;
-            }
+    // --- DONATION FORM --- (in project-details-donor.html, might be handled here or separate file)
 
-            // Get form values
-            var name = document.getElementById('contactName').value;
-            var email = document.getElementById('contactEmail').value;
-            var message = document.getElementById('contactMessage').value;
-
-            // Simulate submission
-            alert('Thank you, ' + name + '! Your message has been sent.');
-            contactForm.reset();
-            contactForm.classList.remove('was-validated');
-            window.location.href = 'index.html';
-        });
-    }
-
-    // Handle donation modal amount buttons
+    // Handle donation modal amount buttons (Keep this)
     const amountButtons = document.querySelectorAll('.amount-btn');
-    const donationAmount = document.getElementById('donationAmount');
+    const donationAmountInput = document.getElementById('donationAmount'); // Renamed variable
     
-    if (amountButtons.length > 0 && donationAmount) {
+    if (amountButtons.length > 0 && donationAmountInput) {
         amountButtons.forEach(button => {
             button.addEventListener('click', function() {
                 // Set the donation amount input value to the clicked button amount
                 const amount = this.getAttribute('data-amount');
-                donationAmount.value = amount;
+                donationAmountInput.value = amount;
                 
                 // Update active state on buttons
                 amountButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
+                
+                // Remove invalid state if amount is valid now
+                if (amount > 0 && amount <= 1800) {
+                     donationAmountInput.classList.remove('is-invalid');
+                }
             });
+        });
+        
+        // Also validate on manual input change
+        donationAmountInput.addEventListener('input', function() {
+             const amount = parseFloat(this.value);
+             if (!isNaN(amount) && amount > 0 && amount <= 1800) {
+                 this.classList.remove('is-invalid');
+             }
+             // Deactivate preset buttons if manual input doesn't match
+             let matchFound = false;
+             amountButtons.forEach(btn => {
+                 if (btn.getAttribute('data-amount') == amount) {
+                     btn.classList.add('active');
+                     matchFound = true;
+                 } else {
+                     btn.classList.remove('active');
+                 }
+             });
         });
     }
     
-    // Handle donation form submission
-    const donationForm = document.getElementById('donationForm');
-    if (donationForm) {
-        donationForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            // Validate form fields
-            let isValid = true;
-            const amount = document.getElementById('donationAmount').value;
-            
-            // Check for valid amount
-            if (!amount || isNaN(amount) || amount <= 0 || amount > 1800) {
-                document.getElementById('donationAmount').classList.add('is-invalid');
-                isValid = false;
-            } else {
-                document.getElementById('donationAmount').classList.remove('is-invalid');
-            }
-            
-            if (isValid) {
-                // Display success message
-                alert('Thank you for your donation of $' + amount + '!');
-                
-                // Close modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('donationModal'));
-                modal.hide();
-                
-                // Refresh page or update UI as needed
-                // For demo purposes, we'll just reset the form
-                donationForm.reset();
-            }
-        });
+    // Donation form submission is now handled by standard form POST
+    // const donationForm = document.getElementById('donationForm');
+    // if (donationForm) {
+    //     donationForm.addEventListener('submit', function(event) {
+    //         event.preventDefault(); // REMOVED - Let the form submit normally
+    //         // ... validation and fetch logic removed ...
+    //     });
+    // }
+
+    // --- ADD PROJECT FORM --- (in dashboard-association.html)
+    // Add project form submission is now handled by standard form POST
+    // const addProjectForm = document.getElementById('addProjectForm');
+    // if (addProjectForm) {
+         // Add event listener for setting start_date just before submission if needed
+         // addProjectForm.addEventListener('submit', function(event) {
+         //    const startDateInput = document.getElementById('projectStartDate');
+         //    if (startDateInput) {
+         //        startDateInput.value = new Date().toISOString().split('T')[0]; // Set to today
+         //    }
+             // No preventDefault needed
+         // });
+         // Basic Bootstrap validation can be added via 'needs-validation' and 'novalidate' attributes in HTML
+    // }
+    
+    // Set start date for new projects automatically (if field exists)
+    const startDateInput = document.getElementById('projectStartDate');
+    if (startDateInput) {
+        startDateInput.value = new Date().toISOString().split('T')[0]; // Set to today
     }
+
 });
 
-// Search projects by keywords
+// Search projects by keywords (Keep this)
 function searchProjects(query) {
     query = query.toLowerCase().trim();
 
     // Find all project cards/items
-    var projects = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
+    var projects = document.querySelectorAll('.project-item'); // More specific selector
 
     projects.forEach(item => {
         var title = item.querySelector('.card-title')?.textContent.toLowerCase() || '';
         var desc = item.querySelector('.card-text')?.textContent.toLowerCase() || '';
+        var category = item.getAttribute('data-category')?.toLowerCase() || '';
 
-        // Show or hide based on search match
-        if (query === '' || title.includes(query) || desc.includes(query)) {
+        // Show or hide based on search match in title, description, or category
+        if (query === '' || title.includes(query) || desc.includes(query) || category.includes(query)) {
             item.style.display = '';
         } else {
             item.style.display = 'none';
         }
     });
 
-    // Reset filter buttons
-    var allButton = document.querySelector('[data-filter="all"]');
+    // Reset filter buttons/dropdown if a search is performed
+    var allButton = document.querySelector('.filter-btn[data-filter="all"]');
     if (allButton) {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         allButton.classList.add('active');
     }
+    var categoryDropdown = document.getElementById('categoryFilter');
+     if (categoryDropdown) {
+         categoryDropdown.value = 'all';
+     }
 }
 
-// Filter projects by category
+// Filter projects by category (Keep this)
 function filterProjects(category) {
-    var projects = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
+    var projects = document.querySelectorAll('.project-item'); // More specific selector
 
     projects.forEach(item => {
-        if (category === 'all') {
+        var itemCategory = item.getAttribute('data-category')?.toLowerCase();
+        
+        if (category === 'all' || category === itemCategory) {
             item.style.display = '';
         } else {
-            var badge = item.querySelector('.badge');
-            if (badge && badge.textContent.toLowerCase() === category.toLowerCase()) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
+            item.style.display = 'none';
         }
     });
+    
+    // Clear search input if a filter is applied
+    document.querySelectorAll('input[id*="Search"]').forEach(input => input.value = '');
 }
