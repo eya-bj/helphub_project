@@ -1,0 +1,33 @@
+2025-04-26 18:16:52 - Login attempt
+POST data: Array
+(
+    [user_type] => association
+    [pseudo] => ayouta
+    [password] => ayouta$
+)
+
+
+2025-04-26 18:16:52 - Login failed: Invalid password (Pseudo: ayouta, Type: association)
+
+2025-04-26 18:32:27 - Login attempt
+POST data: Array
+(
+    [user_type] => donor
+    [pseudo] => mrsquarel
+    [password] => azerty123$
+)
+
+
+2025-04-26 18:32:28 - Login successful: User ID=2, Type=donor, Pseudo=mrsquarel
+
+2025-04-26 21:00:16 - Login attempt
+POST data: Array
+(
+    [user_type] => association
+    [pseudo] => eya
+    [password] => azerty123$
+)
+
+
+2025-04-26 21:00:16 - Login successful: User ID=4, Type=association, Pseudo=eya
+

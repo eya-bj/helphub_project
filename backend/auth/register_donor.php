@@ -26,11 +26,62 @@ $data = $_POST;
 $required_fields = ['name', 'surname', 'ctn', 'pseudo', 'password', 'email'];
 foreach ($required_fields as $field) {
     if (empty($data[$field])) {
-        echo json_encode(['error' => "Field '$field' is required"]);
+        // Redirect back with error if fields are missing from POST
+        header('Location: ../../register-donor.html?error=missing_fields&field=' . $field);
         exit;
+        // echo json_encode(['error' => "Field '$field' is required"]); // Use redirect instead
+        // exit;
     }
 }
 
+<<<<<<< Updated upstream
+=======
+// Assign variables AFTER validation
+$name = trim($data['name']);
+$surname = trim($data['surname']);
+$ctn = trim($data['ctn']);
+$pseudo = trim($data['pseudo']);
+$password = $data['password']; // Don't trim password
+$email = trim($data['email']);
+
+
+// Validate CTN (8 digits)
+if (!preg_match('/^[0-9]{8}$/', $ctn)) {
+    // Redirect back with error
+    header('Location: ../../register-donor.html?error=invalid_ctn');
+    exit;
+    // echo json_encode(['error' => 'Invalid CTN format. Must be 8 digits']);
+    // exit;
+}
+
+// Validate pseudo (letters and numbers, min 3 chars - consistent with JS)
+if (!preg_match('/^[a-zA-Z0-9]{3,}$/', $pseudo)) {
+    // Redirect back with error
+    header('Location: ../../register-donor.html?error=invalid_pseudo');
+    exit;
+    // echo json_encode(['error' => 'Invalid pseudo format. Must contain only letters']); // Updated rule
+    // exit;
+}
+
+// Validate password (≥ 8 chars and ends with $ or #)
+if (strlen($password) < 8 || !(substr($password, -1) === '$' || substr($password, -1) === '#')) {
+    // Redirect back with error
+    header('Location: ../../register-donor.html?error=invalid_password');
+    exit;
+    // echo json_encode(['error' => 'Invalid password. Must be at least 8 characters and end with $ or #']);
+    // exit;
+}
+
+// Validate email
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    // Redirect back with error
+    header('Location: ../../register-donor.html?error=invalid_email');
+    exit;
+    // echo json_encode(['error' => 'Invalid email address']);
+    // exit;
+}
+
+>>>>>>> Stashed changes
 try {
     // Check if email already exists
     $stmt = $pdo->prepare("SELECT * FROM donor WHERE email = ?");

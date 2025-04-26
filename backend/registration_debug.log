@@ -1,0 +1,396 @@
+2025-04-26 18:10:02 - Donor Registration attempt
+POST data: Array
+(
+    [name] => amine
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 12345678
+    [pseudo] => mrsquarel
+    [password] => azerty123$
+)
+
+
+2025-04-26 18:10:03 - Donor registered successfully: Pseudo=mrsquarel
+
+2025-04-26 18:18:30 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayouta
+    [representative_surname] => eya
+    [cin] => 14785236
+    [email] => eyabenjemia@gmail.com
+    [name] => eya
+    [address] => adress
+    [fiscal_id] => $ABC13
+    [pseudo] => ayouta
+    [password] => azerty123$
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 468656778_2350108311990316_8171368706227937374_n.jpg
+            [full_path] => 468656778_2350108311990316_8171368706227937374_n.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\wamp64\tmp\php130.tmp
+            [error] => 0
+            [size] => 117622
+        )
+
+)
+
+
+2025-04-26 18:21:41 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayouta
+    [representative_surname] => eya
+    [cin] => 14785236
+    [email] => eyabenjemia@gmail.com
+    [name] => eya
+    [address] => adress
+    [fiscal_id] => $ABC13
+    [pseudo] => ayouta
+    [password] => azerty123$
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => wapple_hd.JPEG
+            [full_path] => wapple_hd.JPEG
+            [type] => image/jpeg
+            [tmp_name] => C:\wamp64\tmp\phpEB2A.tmp
+            [error] => 0
+            [size] => 377917
+        )
+
+)
+
+
+2025-04-26 18:28:28 - Donor Registration attempt
+POST data: Array
+(
+)
+
+
+2025-04-26 18:31:08 - Donor Registration attempt
+POST data: Array
+(
+    [name] => amine
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 15698756
+    [pseudo] => aii
+    [password] => azerty123$
+)
+
+
+2025-04-26 18:35:50 - Donor Registration attempt
+POST data: Array
+(
+    [name] => eya
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 12345676
+    [pseudo] => aii
+    [password] => azerty123$
+)
+
+
+2025-04-26 18:41:43 - Donor Registration attempt
+POST data: Array
+(
+    [name] => amine
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 12345678
+    [pseudo] => mrsquarel
+    [password] => azerty123$
+)
+
+
+2025-04-26 18:41:43 - PDO Exception
+Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null
+
+2025-04-26 19:03:03 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => amine
+    [representative_surname] => gharsallah
+    [cin] => 15975365
+    [email] => amine@gmail.com
+    [name] => amine
+    [address] => amine
+    [fiscal_id] => adza
+    [pseudo] => az
+    [password] => az
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+
+2025-04-26 19:03:30 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayoutaaz
+    [representative_surname] => az
+    [cin] => az
+    [email] => amine.gharsallah@yahoo.fr
+    [name] => az
+    [address] => az
+    [fiscal_id] => za
+    [pseudo] => za
+    [password] => azerty123$
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+
+2025-04-26 19:07:24 - Donor Registration attempt
+POST data: Array
+(
+    [name] => eya
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 15698755
+    [pseudo] => ayouta
+    [password] => azerty123$
+)
+
+
+2025-04-26 19:11:03 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayoutaaz
+    [representative_surname] => aaaa
+    [cin] => aa
+    [email] => amine.gharsallah@yahoo.fr
+    [name] => a
+    [address] => a
+    [fiscal_id] => a
+    [pseudo] => a
+    [password] => azerty123$
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+
+2025-04-26 19:11:19 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayoutaaz
+    [representative_surname] => aaaa
+    [cin] => aa
+    [email] => amine.gharsallah@yahoo.fr
+    [name] => a
+    [address] => a
+    [fiscal_id] => $ABC13
+    [pseudo] => a
+    [password] => azerty123$
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+
+2025-04-26 19:11:31 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayoutaaz
+    [representative_surname] => aaaa
+    [cin] => 1467895
+    [email] => amine.gharsallah@yahoo.fr
+    [name] => a
+    [address] => a
+    [fiscal_id] => $ABC13
+    [pseudo] => a
+    [password] => azerty123$
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+
+2025-04-26 19:11:42 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayoutaaz
+    [representative_surname] => aaaa
+    [cin] => 14678957
+    [email] => amine.gharsallah@yahoo.fr
+    [name] => a
+    [address] => a
+    [fiscal_id] => $ABC13
+    [pseudo] => a
+    [password] => azerty123$
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+
+2025-04-26 19:11:42 - PDO Exception: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null
+
+2025-04-26 19:25:40 - Donor Registration attempt
+POST data: Array
+(
+    [name] => eya
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 12345644
+    [pseudo] => ayouta
+    [password] => azerty123$
+)
+
+
+2025-04-26 19:25:40 - PDO Exception
+Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null
+
+2025-04-26 19:42:17 - Donor Registration attempt
+POST data: Array
+(
+    [name] => eya
+    [surname] => gharsallah
+    [email] => amine.harsallah@yahoo.fr
+    [ctn] => 12345663
+    [pseudo] => a
+    [password] => azerty123$
+)
+
+
+2025-04-26 19:42:52 - Donor Registration attempt
+POST data: Array
+(
+    [name] => eya
+    [surname] => gharsallah
+    [email] => amine.gharsallah@yahoo.fr
+    [ctn] => 15698756
+    [pseudo] => aaaa
+    [password] => azerty123$
+)
+
+
+2025-04-26 19:43:15 - Donor Registration attempt
+POST data: Array
+(
+    [name] => eya
+    [surname] => gharsallah
+    [email] => amine.harsallah@yahoo.fr
+    [ctn] => 15698756
+    [pseudo] => aii
+    [password] => azerty123$
+)
+
+
+2025-04-26 19:43:16 - Donor registered successfully: Pseudo=aii
+
+2025-04-26 20:59:14 - Association Registration attempt
+POST data: Array
+(
+    [representative_name] => ayouta
+    [representative_surname] => eya
+    [cin] => 14678954
+    [email] => amine.gharsallah@yahoo.fr
+    [name] => boulila
+    [address] => azerty
+    [fiscal_id] => $ABC14
+    [pseudo] => eya
+    [password] => azerty123$
+    [termsCheck] => on
+)
+
+FILES data: Array
+(
+    [logo] => Array
+        (
+            [name] => Screenshot 2022-11-29 152729.png
+            [full_path] => Screenshot 2022-11-29 152729.png
+            [type] => image/png
+            [tmp_name] => C:\wamp64\tmp\php2691.tmp
+            [error] => 0
+            [size] => 323386
+        )
+
+)
+
+
+2025-04-26 20:59:14 - Association registered successfully: Pseudo=eya
+

@@ -28,12 +28,25 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
+<<<<<<< Updated upstream
 // Get POST data directly - removed JSON handling
 $data = $_POST;
 
 // Check for required fields (keeping this basic validation for security)
+=======
+// Get POST data - Use $_POST directly for forms with enctype="multipart/form-data"
+// $data = json_decode(file_get_contents('php://input'), true);
+// if (!$data) {
+//     $data = $_POST;
+// }
+// Use $_POST instead of $data below
+
+// Validate required fields
+>>>>>>> Stashed changes
 $required_fields = ['title', 'description', 'category', 'goal_amount', 'start_date', 'end_date'];
+$missing_fields = []; // Initialize array
 foreach ($required_fields as $field) {
+<<<<<<< Updated upstream
     if (empty($data[$field])) {
         echo json_encode(['error' => "Field '$field' is required"]);
         exit;
@@ -43,15 +56,66 @@ foreach ($required_fields as $field) {
 // Basic amount check (security check to prevent negative amounts)
 if (!is_numeric($data['goal_amount']) || $data['goal_amount'] <= 0) {
     echo json_encode(['error' => 'Goal amount must be a positive number']);
+=======
+    // Check POST data for field names matching the required fields
+    if (empty($_POST[$field])) {
+        $missing_fields[] = $field;
+    }
+}
+
+if (!empty($missing_fields)) {
+    header('Location: ../../dashboard-association.html?error=missing_fields&fields=' . implode(',', $missing_fields) . '#addProjectModal');
     exit;
 }
 
+// Assign variables AFTER validation
+$title = trim($_POST['title']);
+$description = trim($_POST['description']);
+$category = trim($_POST['category']);
+$goal_amount = $_POST['goal_amount'];
+$start_date_str = $_POST['start_date'];
+$end_date_str = $_POST['end_date'];
+
+
+// Validate goal_amount
+if (!is_numeric($goal_amount) || $goal_amount <= 0) {
+    // Redirect back with error
+    header('Location: ../../dashboard-association.html?error=invalid_goal#addProjectModal');
+>>>>>>> Stashed changes
+    exit;
+    // echo json_encode(['error' => 'Goal amount must be a positive number']);
+    // exit;
+}
+
+<<<<<<< Updated upstream
 // Basic date check (critical to prevent logical errors)
 $start_date = new DateTime($data['start_date']);
 $end_date = new DateTime($data['end_date']);
+=======
+// Validate dates
+try {
+    $start_date = new DateTime($start_date_str);
+    $end_date = new DateTime($end_date_str);
+    $today = new DateTime(); // Consider timezone if necessary
+    $today->setTime(0, 0, 0); // Set time to midnight for comparison
+>>>>>>> Stashed changes
 
-if ($end_date < $start_date) {
-    echo json_encode(['error' => 'End date must be after start date']);
+    // Optional: Check if start date is not in the past (unless allowed)
+    // if ($start_date < $today) {
+    //     header('Location: ../../dashboard-association.html?error=invalid_start_date_past#addProjectModal');
+    //     exit;
+    // }
+
+    if ($end_date < $start_date) {
+        // Redirect back with error
+        header('Location: ../../dashboard-association.html?error=invalid_end_date#addProjectModal');
+        exit;
+        // echo json_encode(['error' => 'End date must be after start date']);
+        // exit;
+    }
+} catch (Exception $e) {
+    // Handle invalid date formats
+    header('Location: ../../dashboard-association.html?error=invalid_date_format#addProjectModal');
     exit;
 }
 

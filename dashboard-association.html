@@ -217,97 +217,104 @@
                     <h5 class="modal-title" id="addProjectModalLabel">
                         <i class="fas fa-plus-circle me-2 text-primary"></i> Add New Project
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>le" required>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form id="addProjectForm" class="needs-validation" action="backend/association/add_project.php" method="post" enctype="multipart/form-data" novalidate>
+                        <!-- Add hidden input for start_date -->
+                        <input type="hidden" name="start_date" id="projectStartDate" value="">
+
                         <div class="mb-3">
                             <label for="projectTitle" class="form-label">Project Title</label>
-                            <input type="text" class="form-control" id="projectTitle" required>
-                            <div class="invalid-feedback">equired></textarea>
+                            <!-- Add name="title" -->
+                            <input type="text" class="form-control" id="projectTitle" name="title" required>
+                            <div class="invalid-feedback">
                                 Please enter a project title.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="projectDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="projectDescription" rows="4" required></textarea>
+                            <!-- Add name="description" -->
+                            <textarea class="form-control" id="projectDescription" name="description" rows="4" required></textarea>
                             <div class="invalid-feedback">
                                 Please enter a project description.
                             </div>
-                        </div>min="100" required>
+                        </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="projectAmount" class="form-label">Total Amount ($)</label>
+                                <label for="projectAmount" class="form-label">Goal Amount ($)</label> <!-- Changed label -->
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" id="projectAmount" min="100" required>
+                                    <!-- Add name="goal_amount" -->
+                                    <input type="number" class="form-control" id="projectAmount" name="goal_amount" min="1" step="0.01" required> <!-- Allow smaller amounts, step for cents -->
                                 </div>
-                                <div class="invalid-feedback">_date" required>
-                                    Please enter a valid amount (minimum $100).
+                                <div class="invalid-feedback">
+                                    Please enter a valid goal amount (e.g., 100.00). <!-- Updated message -->
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="projectDeadline" class="form-label">Deadline</label>
-                                <input type="date" class="form-control" id="projectDeadline" required>
+                                <label for="projectDeadline" class="form-label">End Date</label> <!-- Changed label -->
+                                <!-- Add name="end_date" -->
+                                <input type="date" class="form-control" id="projectDeadline" name="end_date" required>
                                 <div class="invalid-feedback">
-                                    Please select a deadline.pt="image/*">
+                                    Please select an end date. <!-- Updated message -->
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">egory" required>
+                        <div class="mb-3">
                             <label for="projectImage" class="form-label">Project Image</label>
-                            <input type="file" class="form-control" id="projectImage" accept="image/*">
+                            <!-- Add name="image" -->
+                            <input type="file" class="form-control" id="projectImage" name="image" accept="image/*">
+                            <!-- Image might be optional, so no 'required' -->
                         </div>
                         <div class="mb-3">
                             <label for="projectCategory" class="form-label">Category</label>
-                            <select class="form-select" id="projectCategory" required>
+                            <!-- Add name="category" -->
+                            <select class="form-select" id="projectCategory" name="category" required>
                                 <option value="" selected disabled>Select a category</option>
                                 <option value="education">Education</option>
                                 <option value="environment">Environment</option>
                                 <option value="health">Health</option>
                                 <option value="poverty">Poverty Relief</option>
                                 <option value="animals">Animal Welfare</option>
-                                <option value="other">Other</option>put type="hidden" name="start_date" id="projectStartDate" value="">
-                            </select>form>
+                                <option value="other">Other</option>
+                            </select>
                             <div class="invalid-feedback">
                                 Please select a category.
-                            </div>al">Cancel</button>
-                        </div>="btn btn-primary">
-                    </form>ass="fas fa-save me-2"></i> Save Project
-                </div>button>
-                <div class="modal-footer">div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>div>
-                    <button type="submit" form="addProjectForm" class="btn btn-primary">div>
-                        <i class="fas fa-save me-2"></i> Save Project    </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="addProjectForm" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i> Save Project
                     </button>
                 </div>
-            </div>-light py-4 mt-5">
-        </div>">
+            </div>
+        </div>
     </div>
 
-    <!-- Footer -->t-light">Hub</span> © 2023</h5>
-    <footer class="bg-dark text-light py-4 mt-5">>Connecting hearts and resources for a better world.</p>
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
-            <div class="row">>
+            <div class="row">
                 <div class="col-md-6">
-                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023</h5>/li>
-                    <p>Connecting hearts and resources for a better world.</p>a></li>
-                </div>li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
-                <div class="col-md-6 text-md-end">ul>
-                    <ul class="list-inline mb-0">div>
-                        <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>div>
-                        <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>>
+                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023</h5>
+                    <p>Connecting hearts and resources for a better world.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
                         <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
                     </ul>
-                </div>://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                </div>
             </div>
-        </div>ript src="index.js"></script>
+        </div>
+        <script src="index.js"></script>
+        <!-- Custom JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </footer>
-    <!-- Bootstrap JS Bundle (includes Popper) --></html>
-
-
-
-
-
-
-</html></body>    <script src="index.js"></script>    <!-- Custom JS -->    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

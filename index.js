@@ -8,17 +8,19 @@ document.addEventListener('DOMContentLoaded', function() {
     var loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            // event.preventDefault(); // REMOVED - Let the form submit normally
             var userType = document.getElementById('userType').value;
             var username = document.getElementById('pseudo').value;
             var password = document.getElementById('password').value;
 
-            // Check if all fields are filled
+            // Basic client-side validation (optional, server should always validate)
             if (!userType || !username || !password) {
                 alert('Please fill out all fields');
+                event.preventDefault(); // Prevent submission if fields are empty
                 return;
             }
 
+<<<<<<< Updated upstream
             // Create form data for POST submission
             var formData = new FormData();
             formData.append('user_type', userType);
@@ -44,6 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Login error:', error);
                 alert('Login failed. Please try again.');
             });
+=======
+            // Form will now submit to the action specified in the HTML
+            // Remove client-side redirection:
+            // localStorage.setItem('userType', userType);
+            // window.location.href = `dashboard-${userType}.html`;
+>>>>>>> Stashed changes
         });
     }
 
