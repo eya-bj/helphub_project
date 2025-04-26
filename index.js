@@ -112,6 +112,57 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'index.html';
         });
     }
+
+    // Handle donation modal amount buttons
+    const amountButtons = document.querySelectorAll('.amount-btn');
+    const donationAmount = document.getElementById('donationAmount');
+    
+    if (amountButtons.length > 0 && donationAmount) {
+        amountButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Set the donation amount input value to the clicked button amount
+                const amount = this.getAttribute('data-amount');
+                donationAmount.value = amount;
+                
+                // Update active state on buttons
+                amountButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    }
+    
+    // Handle donation form submission
+    const donationForm = document.getElementById('donationForm');
+    if (donationForm) {
+        donationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Validate form fields
+            let isValid = true;
+            const amount = document.getElementById('donationAmount').value;
+            
+            // Check for valid amount
+            if (!amount || isNaN(amount) || amount <= 0 || amount > 1800) {
+                document.getElementById('donationAmount').classList.add('is-invalid');
+                isValid = false;
+            } else {
+                document.getElementById('donationAmount').classList.remove('is-invalid');
+            }
+            
+            if (isValid) {
+                // Display success message
+                alert('Thank you for your donation of $' + amount + '!');
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('donationModal'));
+                modal.hide();
+                
+                // Refresh page or update UI as needed
+                // For demo purposes, we'll just reset the form
+                donationForm.reset();
+            }
+        });
+    }
 });
 
 // Search projects by keywords
