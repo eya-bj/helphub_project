@@ -4,14 +4,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     // --- LOGIN SYSTEM ---
 
-    // Login form submission is now handled by standard form POST
-    // var loginForm = document.getElementById('loginForm');
-    // if (loginForm) {
-    //     loginForm.addEventListener('submit', function(event) {
-    //         event.preventDefault(); // REMOVED - Let the form submit normally
-    //         // ... fetch logic removed ...
-    //     });
-    // }
+    // Handle login form
+    var loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var userType = document.getElementById('userType').value;
+            var username = document.getElementById('pseudo').value;
+            var password = document.getElementById('password').value;
+
+            // Check if all fields are filled
+            if (!userType || !username || !password) {
+                alert('Please fill out all fields');
+                return;
+            }
+
+            // Store user type and redirect to dashboard
+            localStorage.setItem('userType', userType);
+            window.location.href = `dashboard-${userType}.html`;
+        });
+    }
 
     // --- UI HELPERS ---
 

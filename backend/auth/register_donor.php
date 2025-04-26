@@ -32,35 +32,47 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Connect to database
 require_once '../db.php'; // Ensure this path is correct
 
-// Check for required fields
+// Get POST data
+$data = json_decode(file_get_contents('php://input'), true);
+
+// If no data was received through JSON, try regular POST
+if (!$data) {
+    $data = $_POST;
+}
+
+// Validate required fields
 $required_fields = ['name', 'surname', 'ctn', 'pseudo', 'password', 'email'];
 $missing_fields = [];
 foreach ($required_fields as $field) {
-    if (empty($_POST[$field])) {
-        $missing_fields[] = $field;
+    if (empty($data[$field])) {
+        echo json_encode(['error' => "Field '$field' is required"]);
+        exit;
     }
 }
 
-if (!empty($missing_fields)) {
-    // Redirect back with error
-    header('Location: ../../register-donor.html?error=missing_fields&fields=' . implode(',', $missing_fields));
+// Validate CTN (8 digits)
+if (!preg_match('/^[0-9]{8}$/', $data['ctn'])) {
+    echo json_encode(['error' => 'Invalid CTN format. Must be 8 digits']);
     exit;
 }
 
-// --- Basic Server-Side Validation (Example) ---
-// You should add more robust validation here matching JS rules
-$name = trim($_POST['name']);
-$surname = trim($_POST['surname']);
-$ctn = trim($_POST['ctn']);
-$pseudo = trim($_POST['pseudo']);
-$password = $_POST['password']; // Keep original for hashing
-$email = trim($_POST['email']);
-
-if (strlen($name) < 2 || strlen($surname) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{8}$/', $ctn) || !preg_match('/^[a-zA-Z0-9]{3,}$/', $pseudo) || !(strlen($password) >= 8 && (str_ends_with($password, '$') || str_ends_with($password, '#')))) {
-     header('Location: ../../register-donor.html?error=validation_failed');
-     exit;
+// Validate pseudo (letters only)
+if (!preg_match('/^[a-zA-Z]+$/', $data['pseudo'])) {
+    echo json_encode(['error' => 'Invalid pseudo format. Must contain only letters']);
+    exit;
 }
 
+// Validate password (≥ 8 chars and ends with $ or #)
+if (strlen($data['password']) < 8 || !(substr($data['password'], -1) === '$' || substr($data['password'], -1) === '#')) {
+    echo json_encode(['error' => 'Invalid password. Must be at least 8 characters and end with $ or #']);
+    exit;
+}
+
+// Validate email
+if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(['error' => 'Invalid email address']);
+    exit;
+}
 
 try {
     // Check if email already exists

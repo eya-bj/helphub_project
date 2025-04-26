@@ -38,19 +38,23 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Connect to database
 require_once '../db.php';
 
-// Check for required fields
-if (!isset($_POST['project_id']) || !isset($_POST['amount'])) {
-    $project_id = $_POST['project_id'] ?? 'unknown';
-    header('Location: ../../project-details-donor.html?id=' . $project_id . '&error=missing_fields#donationModal');
+// Get POST data
+$data = json_decode(file_get_contents('php://input'), true);
+
+// If no data was received through JSON, try regular POST
+if (!$data) {
+    $data = $_POST;
+}
+
+// Validate required fields
+if (!isset($data['project_id']) || !isset($data['amount'])) {
+    echo json_encode(['error' => 'Project ID and amount are required']);
     exit;
 }
 
-$project_id = $_POST['project_id'];
-$amount = $_POST['amount'];
-
-// Validate amount (e.g., positive, within limits if any)
-if (!is_numeric($amount) || $amount <= 0 || $amount > 1800) { // Assuming max 1800 from HTML
-    header('Location: ../../project-details-donor.html?id=' . $project_id . '&error=invalid_amount#donationModal');
+// Validate amount
+if (!is_numeric($data['amount']) || $data['amount'] <= 0) {
+    echo json_encode(['error' => 'Amount must be a positive number']);
     exit;
 }
 

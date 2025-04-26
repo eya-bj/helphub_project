@@ -36,9 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Connect to database
 require_once '../db.php';
 
-// Check for required fields
-$required_fields = ['title', 'description', 'category', 'goal_amount', 'start_date', 'end_date']; // Removed name attributes from HTML, need to add them back
-$missing_fields = [];
+// Get POST data
+$data = json_decode(file_get_contents('php://input'), true);
+
+// If no data was received through JSON, try regular POST
+if (!$data) {
+    $data = $_POST;
+}
+
+// Validate required fields
+$required_fields = ['title', 'description', 'category', 'goal_amount', 'start_date', 'end_date'];
 foreach ($required_fields as $field) {
     // Check POST data for field names matching the required fields
     if (empty($_POST[$field])) { 
@@ -51,32 +58,19 @@ if (!empty($missing_fields)) {
     exit;
 }
 
-// --- Basic Server-Side Validation ---
-$title = trim($_POST['title']);
-$description = trim($_POST['description']);
-$category = trim($_POST['category']);
-$goal_amount = $_POST['goal_amount'];
-$start_date_str = $_POST['start_date'];
-$end_date_str = $_POST['end_date'];
-
-// Validate amount
-if (!is_numeric($goal_amount) || $goal_amount < 100) { // Assuming min goal is 100
-    header('Location: ../../dashboard-association.html?error=invalid_amount#addProjectModal');
+// Validate goal_amount
+if (!is_numeric($data['goal_amount']) || $data['goal_amount'] <= 0) {
+    echo json_encode(['error' => 'Goal amount must be a positive number']);
     exit;
 }
 
 // Validate dates
-try {
-    $start_date = new DateTime($start_date_str);
-    $end_date = new DateTime($end_date_str);
-    $today = new DateTime(); // Today's date without time
+$start_date = new DateTime($data['start_date']);
+$end_date = new DateTime($data['end_date']);
+$today = new DateTime();
 
-    if ($end_date < $start_date || $start_date < $today->setTime(0,0,0)) {
-        header('Location: ../../dashboard-association.html?error=invalid_dates#addProjectModal');
-        exit;
-    }
-} catch (Exception $e) {
-    header('Location: ../../dashboard-association.html?error=invalid_dates#addProjectModal');
+if ($end_date < $start_date) {
+    echo json_encode(['error' => 'End date must be after start date']);
     exit;
 }
 

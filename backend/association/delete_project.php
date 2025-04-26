@@ -34,6 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Connect to database
 require_once '../db.php';
 
+// Get POST data
+$data = json_decode(file_get_contents('php://input'), true);
+
+// If no data was received through JSON, try regular POST
+if (!$data) {
+    $data = $_POST;
+}
+
 // Validate project_id
 if (!isset($_POST['project_id']) || !is_numeric($_POST['project_id'])) {
     header('Location: ../../dashboard-association.html?error=missing_fields');

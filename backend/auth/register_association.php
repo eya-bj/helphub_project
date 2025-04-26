@@ -32,56 +32,85 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Connect to database
 require_once '../db.php';
 
-// Check for required fields
+// Get POST data
+$data = json_decode(file_get_contents('php://input'), true);
+
+// If no data was received through JSON, try regular POST
+if (!$data) {
+    $data = $_POST;
+}
+
+// Validate required fields
 $required_fields = ['name', 'address', 'fiscal_id', 'pseudo', 'password', 'email', 'representative_name', 'representative_surname', 'cin'];
 $missing_fields = [];
 foreach ($required_fields as $field) {
-    if (empty($_POST[$field])) {
-        $missing_fields[] = $field;
+    if (empty($data[$field])) {
+        echo json_encode(['error' => "Field '$field' is required"]);
+        exit;
     }
 }
 
-if (!empty($missing_fields)) {
-    header('Location: ../../register-association.html?error=missing_fields&fields=' . implode(',', $missing_fields));
+// Validate fiscal_id (format: $AAA12)
+if (!preg_match('/^\$[A-Z]{3}[0-9]{2}$/', $data['fiscal_id'])) {
+    echo json_encode(['error' => 'Invalid fiscal ID format. Must be $ followed by 3 uppercase letters and 2 digits']);
     exit;
 }
 
-// --- Basic Server-Side Validation ---
-$name = trim($_POST['name']);
-$address = trim($_POST['address']);
-$fiscal_id = trim($_POST['fiscal_id']);
-$pseudo = trim($_POST['pseudo']);
-$password = $_POST['password'];
-$email = trim($_POST['email']);
-$rep_name = trim($_POST['representative_name']);
-$rep_surname = trim($_POST['representative_surname']);
-$cin = trim($_POST['cin']);
-
-// Add validation rules similar to JS if needed
-if (strlen($name) < 3 || strlen($address) < 5 || !preg_match('/^\$[A-Z]{3}\d{2}$/', $fiscal_id) || !preg_match('/^[a-zA-Z0-9]{3,}$/', $pseudo) || !(strlen($password) >= 8 && (str_ends_with($password, '$') || str_ends_with($password, '#'))) || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($rep_name) < 2 || strlen($rep_surname) < 2 || !preg_match('/^\d{8}$/', $cin)) {
-    header('Location: ../../register-association.html?error=validation_failed');
+// Validate CIN (8 digits)
+if (!preg_match('/^[0-9]{8}$/', $data['cin'])) {
+    echo json_encode(['error' => 'Invalid CIN format. Must be 8 digits']);
     exit;
 }
 
+// Validate pseudo (letters only)
+if (!preg_match('/^[a-zA-Z]+$/', $data['pseudo'])) {
+    echo json_encode(['error' => 'Invalid pseudo format. Must contain only letters']);
+    exit;
+}
+
+// Validate password (≥ 8 chars and ends with $ or #)
+if (strlen($data['password']) < 8 || !(substr($data['password'], -1) === '$' || substr($data['password'], -1) === '#')) {
+    echo json_encode(['error' => 'Invalid password. Must be at least 8 characters and end with $ or #']);
+    exit;
+}
+
+// Validate email
+if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(['error' => 'Invalid email address']);
+    exit;
+}
 
 try {
-    // Check for existing unique fields
-    $checks = [
-        'email' => [$email, 'email_exists'],
-        'pseudo' => [$pseudo, 'pseudo_exists'],
-        'cin' => [$cin, 'cin_exists'],
-        'fiscal_id' => [$fiscal_id, 'fiscal_id_exists']
-    ];
+    // Check if email already exists
+    $stmt = $pdo->prepare("SELECT * FROM association WHERE email = ?");
+    $stmt->execute([$data['email']]);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['error' => 'Email already registered']);
+        exit;
+    }
 
-    foreach ($checks as $field => $details) {
-        $value = $details[0];
-        $error_code = $details[1];
-        $stmt = $pdo->prepare("SELECT assoc_id FROM association WHERE $field = ?");
-        $stmt->execute([$value]);
-        if ($stmt->fetch()) {
-            header('Location: ../../register-association.html?error=' . $error_code);
-            exit;
-        }
+    // Check if pseudo already exists
+    $stmt = $pdo->prepare("SELECT * FROM association WHERE pseudo = ?");
+    $stmt->execute([$data['pseudo']]);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['error' => 'Pseudo already taken']);
+        exit;
+    }
+
+    // Check if CIN already exists
+    $stmt = $pdo->prepare("SELECT * FROM association WHERE cin = ?");
+    $stmt->execute([$data['cin']]);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['error' => 'CIN already registered']);
+        exit;
+    }
+
+    // Check if fiscal_id already exists
+    $stmt = $pdo->prepare("SELECT * FROM association WHERE fiscal_id = ?");
+    $stmt->execute([$data['fiscal_id']]);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['error' => 'Fiscal ID already registered']);
+        exit;
     }
 
     // Process logo upload if provided

@@ -28,16 +28,23 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Connect to database
 require_once '../db.php';
 
-// Check for required fields
-if (empty($_POST['user_type']) || empty($_POST['pseudo']) || empty($_POST['password'])) {
-    header('Location: ../../index.html?error=missing_fields#loginModal');
+// Get POST data
+$data = json_decode(file_get_contents('php://input'), true);
+
+// If no data was received through JSON, try regular POST
+if (!$data) {
+    $data = $_POST;
+}
+
+// Validate required fields
+if (empty($data['user_type']) || empty($data['pseudo']) || empty($data['password'])) {
+    echo json_encode(['error' => 'User type, pseudo, and password are required']);
     exit;
 }
 
 // Validate user_type
-$user_type = $_POST['user_type'];
-if (!in_array($user_type, ['association', 'donor'])) {
-    header('Location: ../../index.html?error=invalid_user_type#loginModal');
+if (!in_array($data['user_type'], ['association', 'donor'])) {
+    echo json_encode(['error' => 'Invalid user type. Must be "association" or "donor"']);
     exit;
 }
 
@@ -61,9 +68,8 @@ try {
     }
     
     // Verify password
-    if (!password_verify($password, $user['password'])) {
-        file_put_contents($log_file, date('Y-m-d H:i:s') . " - Login failed: Invalid password (Pseudo: $pseudo, Type: $user_type)\n\n", FILE_APPEND);
-        header('Location: ../../index.html?error=invalid_password#loginModal');
+    if (!password_verify($data['password'], $user['password'])) {
+        echo json_encode(['error' => 'Invalid password']);
         exit;
     }
     
