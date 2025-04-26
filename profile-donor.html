@@ -112,18 +112,18 @@
                         </div>
                         <div class="card-body">
                             <!-- Donor Form -->
-                            <form id="donorProfileForm">
+                            <form id="donorProfileForm" action="backend/donor/update_profile.php" method="post">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="donorName" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="donorName" value="Jane" required aria-required="true">
+                                        <input type="text" class="form-control" id="donorName" name="name" value="Jane" required aria-required="true">
                                         <div class="invalid-feedback" id="donorNameFeedback">
                                             Please enter your name (minimum 2 characters).
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="donorSurname" class="form-label">Surname</label>
-                                        <input type="text" class="form-control" id="donorSurname" value="Doe" required aria-required="true">
+                                        <input type="text" class="form-control" id="donorSurname" name="surname" value="Doe" required aria-required="true">
                                         <div class="invalid-feedback" id="donorSurnameFeedback">
                                             Please enter your surname (minimum 2 characters).
                                         </div>
@@ -133,7 +133,7 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="donorEmail" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="donorEmail" value="jane.doe@example.com" required aria-required="true">
+                                        <input type="email" class="form-control" id="donorEmail" name="email" value="jane.doe@example.com" required aria-required="true">
                                         <div class="invalid-feedback" id="donorEmailFeedback">
                                             Please enter a valid email address.
                                         </div>

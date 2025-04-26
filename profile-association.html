@@ -107,18 +107,18 @@
                         </div>
                         <div class="card-body">
                             <!-- Association Form -->
-                            <form id="associationProfileForm">
+                            <form id="associationProfileForm" action="backend/association/update_profile.php" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="name" class="form-label">Representative Name</label>
-                                        <input type="text" class="form-control" id="name" value="John" required aria-required="true">
+                                        <input type="text" class="form-control" id="name" name="representative_name" value="John" required aria-required="true">
                                         <div class="invalid-feedback" id="nameFeedback">
                                             Please enter your name (minimum 2 characters).
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="surname" class="form-label">Representative Surname</label>
-                                        <input type="text" class="form-control" id="surname" value="Doe" required aria-required="true">
+                                        <input type="text" class="form-control" id="surname" name="representative_surname" value="Doe" required aria-required="true">
                                         <div class="invalid-feedback" id="surnameFeedback">
                                             Please enter your surname (minimum 2 characters).
                                         </div>
@@ -133,7 +133,7 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" value="john.doe@greenearthfoundation.org" required aria-required="true">
+                                        <input type="email" class="form-control" id="email" name="email" value="john.doe@greenearthfoundation.org" required aria-required="true">
                                         <div class="invalid-feedback" id="emailFeedback">
                                             Please enter a valid email address.
                                         </div>
@@ -142,7 +142,7 @@
 
                                 <div class="mb-3">
                                     <label for="associationName" class="form-label">Association Name</label>
-                                    <input type="text" class="form-control" id="associationName" value="Green Earth Foundation" required aria-required="true">
+                                    <input type="text" class="form-control" id="associationName" name="name" value="Green Earth Foundation" required aria-required="true">
                                     <div class="invalid-feedback" id="associationNameFeedback">
                                         Please enter the association name (minimum 3 characters).
                                     </div>
@@ -150,7 +150,7 @@
 
                                 <div class="mb-3">
                                     <label for="associationAddress" class="form-label">Association Address</label>
-                                    <textarea class="form-control" id="associationAddress" rows="2" required aria-required="true">123 Environmental Way, Green City, GC 12345</textarea>
+                                    <textarea class="form-control" id="associationAddress" name="address" rows="2" required aria-required="true">123 Environmental Way, Green City, GC 12345</textarea>
                                     <div class="invalid-feedback" id="associationAddressFeedback">
                                         Please enter the association address (minimum 5 characters).
                                     </div>
@@ -164,7 +164,7 @@
 
                                 <div class="mb-3">
                                     <label for="logo" class="form-label">Association Logo</label>
-                                    <input type="file" class="form-control" id="logo" accept="image/*">
+                                    <input type="file" class="form-control" id="logo" name="logo" accept="image/*">
                                     <div class="invalid-feedback" id="logoFeedback">
                                         Please select a valid image file (JPEG, PNG, or GIF).
                                     </div>

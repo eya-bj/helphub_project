@@ -343,12 +343,13 @@
                             </div>
                         </div>
                         <div class="col-md-7">
-                            <form id="donationForm" class="needs-validation" novalidate>
+                            <form id="donationForm" class="needs-validation" action="backend/donor/donate.php" method="post" novalidate>
                                 <div class="mb-3">
+                                    <input type="hidden" name="project_id" id="projectId" value="1">
                                     <label for="donationAmount" class="form-label">Donation Amount ($)</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="donationAmount" min="1" max="1800" step="1" required>
+                                        <input type="number" class="form-control" id="donationAmount" name="amount" min="1" max="1800" step="1" required>
                                     </div>
                                     <div class="invalid-feedback">
                                         Please enter a valid amount (max $1,800).
@@ -357,16 +358,16 @@
 
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="fullName" value="Jane Doe" required>
+                                    <input type="text" class="form-control" id="fullName" name="full_name" value="Jane Doe" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email" value="jane.doe@example.com" required>
+                                    <input type="email" class="form-control" id="email" name="email" value="jane.doe@example.com" required>
                                 </div>
 
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="anonymousCheck">
+                                    <input type="checkbox" class="form-check-input" id="anonymousCheck" name="anonymous" value="1">
                                     <label class="form-check-label" for="anonymousCheck">Make donation anonymous</label>
                                 </div>
                                 

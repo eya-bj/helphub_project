@@ -29,18 +29,18 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h2 class="card-title text-center mb-4">Donor Registration</h2>
-                        <form id="donorRegisterForm">
+                        <form id="donorRegisterForm" action="backend/auth/register_donor.php" method="post">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Enter your name" required aria-required="true">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required aria-required="true">
                                     <div class="invalid-feedback" id="nameFeedback">
                                         Please enter your name (minimum 2 characters).
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="surname" class="form-label">Surname</label>
-                                    <input type="text" class="form-control" id="surname" placeholder="Enter your surname" required aria-required="true">
+                                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter your surname" required aria-required="true">
                                     <div class="invalid-feedback" id="surnameFeedback">
                                         Please enter your surname (minimum 2 characters).
                                     </div>
@@ -50,14 +50,14 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="name@example.com" required aria-required="true">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required aria-required="true">
                                     <div class="invalid-feedback" id="emailFeedback">
                                         Please enter a valid email address.
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="ctn" class="form-label">CTN</label>
-                                    <input type="text" class="form-control" id="ctn" placeholder="8-digit number" required aria-required="true">
+                                    <input type="text" class="form-control" id="ctn" name="ctn" placeholder="8-digit number" required aria-required="true">
                                     <div class="invalid-feedback" id="ctnFeedback">
                                         Please enter a valid 8-digit CTN number.
                                     </div>
@@ -67,7 +67,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pseudo" class="form-label">Pseudo</label>
-                                    <input type="text" class="form-control" id="pseudo" placeholder="Letters only" required aria-required="true">
+                                    <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Letters only" required aria-required="true">
                                     <div class="invalid-feedback" id="pseudoFeedback">
                                         Please enter a valid pseudo (letters only).
                                     </div>
@@ -75,7 +75,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group">
-                                        <input type="password" class="form-control" id="password" placeholder="Minimum 8 characters, end with $ or #" required aria-required="true">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Minimum 8 characters, end with $ or #" required aria-required="true">
                                         <button class="btn btn-outline-secondary toggle-password" type="button" id="togglePassword">
                                             <i class="fas fa-eye"></i>
                                         </button>

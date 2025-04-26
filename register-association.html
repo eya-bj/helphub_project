@@ -29,18 +29,18 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h2 class="card-title text-center mb-4">Association Representative Registration</h2>
-                        <form id="associationRegisterForm" >
+                        <form id="associationRegisterForm" action="backend/auth/register_association.php" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Enter your name" required aria-required="true">
+                                    <label for="representative_name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="representative_name" name="representative_name" placeholder="Enter your name" required aria-required="true">
                                     <div class="invalid-feedback" id="nameFeedback">
                                         Please enter your name (minimum 2 characters).
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="surname" class="form-label">Surname</label>
-                                    <input type="text" class="form-control" id="surname" placeholder="Enter your surname" required aria-required="true">
+                                    <label for="representative_surname" class="form-label">Surname</label>
+                                    <input type="text" class="form-control" id="representative_surname" name="representative_surname" placeholder="Enter your surname" required aria-required="true">
                                     <div class="invalid-feedback" id="surnameFeedback">
                                         Please enter your surname (minimum 2 characters).
                                     </div>
@@ -50,14 +50,14 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="cin" class="form-label">CIN</label>
-                                    <input type="text" class="form-control" id="cin" placeholder="8-digit number" required aria-required="true">
+                                    <input type="text" class="form-control" id="cin" name="cin" placeholder="8-digit number" required aria-required="true">
                                     <div class="invalid-feedback" id="cinFeedback">
                                         Please enter a valid 8-digit CIN number.
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="name@example.com" required aria-required="true">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required aria-required="true">
                                     <div class="invalid-feedback" id="emailFeedback">
                                         Please enter a valid email address.
                                     </div>
@@ -65,24 +65,24 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="associationName" class="form-label">Association Name</label>
-                                <input type="text" class="form-control" id="associationName" placeholder="Enter association name" required aria-required="true">
+                                <label for="name" class="form-label">Association Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter association name" required aria-required="true">
                                 <div class="invalid-feedback" id="associationNameFeedback">
                                     Please enter the association name (minimum 3 characters).
                                     </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="associationAddress" class="form-label">Association Address</label>
-                                <textarea class="form-control" id="associationAddress" rows="2" placeholder="Enter association address" required aria-required="true"></textarea>
+                                <label for="address" class="form-label">Association Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="2" placeholder="Enter association address" required aria-required="true"></textarea>
                                 <div class="invalid-feedback" id="associationAddressFeedback">
                                     Please enter the association address (minimum 5 characters).
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="fiscalId" class="form-label">Fiscal ID</label>
-                                <input type="text" class="form-control" id="fiscalId" placeholder="Format: $ABC12" required aria-required="true">
+                                <label for="fiscal_id" class="form-label">Fiscal ID</label>
+                                <input type="text" class="form-control" id="fiscal_id" name="fiscal_id" placeholder="Format: $ABC12" required aria-required="true">
                                 <div class="invalid-feedback" id="fiscalIdFeedback">
                                     Please enter a valid fiscal ID (format: $ABC12).
                                 </div>
@@ -91,7 +91,7 @@
 
                             <div class="mb-3">
                                 <label for="logo" class="form-label">Association Logo</label>
-                                <input type="file" class="form-control" id="logo" accept="image/*" required aria-required="true">
+                                <input type="file" class="form-control" id="logo" name="logo" accept="image/*">
                                 <div class="invalid-feedback" id="logoFeedback">
                                     Please upload your association logo (image file).
                                 </div>
@@ -100,7 +100,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pseudo" class="form-label">Pseudo</label>
-                                    <input type="text" class="form-control" id="pseudo" placeholder="Letters only" required aria-required="true">
+                                    <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Letters only" required aria-required="true">
                                     <div class="invalid-feedback" id="pseudoFeedback">
                                         Please enter a valid pseudo (letters only).
                                     </div>
@@ -108,7 +108,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group">
-                                        <input type="password" class="form-control" id="password" placeholder="Minimum 8 characters, end with $ or #" required aria-required="true">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Minimum 8 characters, end with $ or #" required aria-required="true">
                                         <button class="btn btn-outline-secondary toggle-password" type="button" id="togglePassword">
                                             <i class="fas fa-eye"></i>
                                         </button>

@@ -383,10 +383,10 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form id="loginForm">
+                    <form id="loginForm" action="backend/auth/login.php" method="post">
                         <div class="mb-3">
                             <label for="userType" class="form-label">I am a:</label>
-                            <select class="form-select" id="userType" required>
+                            <select class="form-select" id="userType" name="user_type" required>
                                 <option value="" selected disabled>Select user type</option>
                                 <option value="donor">Donor</option>
                                 <option value="association">Association Representative</option>
@@ -396,14 +396,14 @@
                             <label for="pseudo" class="form-label">Pseudo</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" id="pseudo" placeholder="Enter your pseudo" required>
+                                <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Enter your pseudo" required>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                                 <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
                                     <i class="fa fa-eye"></i>
                                 </button>
