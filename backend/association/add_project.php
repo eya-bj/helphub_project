@@ -28,15 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
-// Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
+// Get POST data directly - removed JSON handling
+$data = $_POST;
 
-// If no data was received through JSON, try regular POST
-if (!$data) {
-    $data = $_POST;
-}
-
-// Validate required fields
+// Check for required fields (keeping this basic validation for security)
 $required_fields = ['title', 'description', 'category', 'goal_amount', 'start_date', 'end_date'];
 foreach ($required_fields as $field) {
     if (empty($data[$field])) {
@@ -45,16 +40,15 @@ foreach ($required_fields as $field) {
     }
 }
 
-// Validate goal_amount
+// Basic amount check (security check to prevent negative amounts)
 if (!is_numeric($data['goal_amount']) || $data['goal_amount'] <= 0) {
     echo json_encode(['error' => 'Goal amount must be a positive number']);
     exit;
 }
 
-// Validate dates
+// Basic date check (critical to prevent logical errors)
 $start_date = new DateTime($data['start_date']);
 $end_date = new DateTime($data['end_date']);
-$today = new DateTime();
 
 if ($end_date < $start_date) {
     echo json_encode(['error' => 'End date must be after start date']);

@@ -28,13 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
-// Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
-
-// If no data was received through JSON, try regular POST
-if (!$data) {
-    $data = $_POST;
-}
+// Get POST data directly - removed JSON handling
+$data = $_POST;
 
 // Validate project_id
 if (!isset($data['project_id']) || !is_numeric($data['project_id'])) {

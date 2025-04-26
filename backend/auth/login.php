@@ -22,21 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
-// Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
+// Get POST data directly - removed JSON handling
+$data = $_POST;
 
-// If no data was received through JSON, try regular POST
-if (!$data) {
-    $data = $_POST;
-}
-
-// Validate required fields
+// Check for required fields (keeping this basic validation for security)
 if (empty($data['user_type']) || empty($data['pseudo']) || empty($data['password'])) {
     echo json_encode(['error' => 'User type, pseudo, and password are required']);
     exit;
 }
 
-// Validate user_type
+// Basic user_type check (this is security-critical so we keep it)
 if (!in_array($data['user_type'], ['association', 'donor'])) {
     echo json_encode(['error' => 'Invalid user type. Must be "association" or "donor"']);
     exit;
@@ -57,7 +52,7 @@ try {
         exit;
     }
     
-    // Verify password
+    // Verify password (this is security-critical so we keep it)
     if (!password_verify($data['password'], $user['password'])) {
         echo json_encode(['error' => 'Invalid password']);
         exit;

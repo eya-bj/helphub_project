@@ -19,51 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
-// Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
+// Get POST data directly - removed JSON handling
+$data = $_POST;
 
-// If no data was received through JSON, try regular POST
-if (!$data) {
-    $data = $_POST;
-}
-
-// Validate required fields
+// Check for required fields (keeping this basic validation for security)
 $required_fields = ['name', 'address', 'fiscal_id', 'pseudo', 'password', 'email', 'representative_name', 'representative_surname', 'cin'];
 foreach ($required_fields as $field) {
     if (empty($data[$field])) {
         echo json_encode(['error' => "Field '$field' is required"]);
         exit;
     }
-}
-
-// Validate fiscal_id (format: $AAA12)
-if (!preg_match('/^\$[A-Z]{3}[0-9]{2}$/', $data['fiscal_id'])) {
-    echo json_encode(['error' => 'Invalid fiscal ID format. Must be $ followed by 3 uppercase letters and 2 digits']);
-    exit;
-}
-
-// Validate CIN (8 digits)
-if (!preg_match('/^[0-9]{8}$/', $data['cin'])) {
-    echo json_encode(['error' => 'Invalid CIN format. Must be 8 digits']);
-    exit;
-}
-
-// Validate pseudo (letters only)
-if (!preg_match('/^[a-zA-Z]+$/', $data['pseudo'])) {
-    echo json_encode(['error' => 'Invalid pseudo format. Must contain only letters']);
-    exit;
-}
-
-// Validate password (≥ 8 chars and ends with $ or #)
-if (strlen($data['password']) < 8 || !(substr($data['password'], -1) === '$' || substr($data['password'], -1) === '#')) {
-    echo json_encode(['error' => 'Invalid password. Must be at least 8 characters and end with $ or #']);
-    exit;
-}
-
-// Validate email
-if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['error' => 'Invalid email address']);
-    exit;
 }
 
 try {

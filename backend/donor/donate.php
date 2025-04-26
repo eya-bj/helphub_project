@@ -28,21 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
-// Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
+// Get POST data directly - removed JSON handling
+$data = $_POST;
 
-// If no data was received through JSON, try regular POST
-if (!$data) {
-    $data = $_POST;
-}
-
-// Validate required fields
+// Check for required fields (keeping this basic validation for security)
 if (!isset($data['project_id']) || !isset($data['amount'])) {
     echo json_encode(['error' => 'Project ID and amount are required']);
     exit;
 }
 
-// Validate amount
+// Basic amount check (security check to prevent negative amounts)
 if (!is_numeric($data['amount']) || $data['amount'] <= 0) {
     echo json_encode(['error' => 'Amount must be a positive number']);
     exit;
