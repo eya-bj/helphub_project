@@ -4,7 +4,7 @@ require_once 'backend/db.php'; // Adjust path as needed
 
 // Check if user is logged in as a donor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
-    header("Location: index.php?error=unauthorized"); // Updated link
+    header("Location: index.html?error=unauthorized");
     exit;
 }
 
