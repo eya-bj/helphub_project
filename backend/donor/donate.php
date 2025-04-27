@@ -1,121 +1,114 @@
 <?php
 /**
- * Donation Endpoint
+ * Donation Processing Script
  * 
- * Allows donors to make a donation to a project
- * Method: POST
- * Data: project_id, amount, anonymous (boolean)
+ * Processes donations from donors to projects
  */
 
 // Start session
 session_start();
 
-// Set JSON content type
-header('Content-Type: application/json');
-
 // Check if user is logged in as donor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
-    echo json_encode(['error' => 'Unauthorized access. Please login as a donor']);
+    header("Location: ../../index.html?error=unauthorized");
     exit;
 }
 
-// Allow only POST requests
+// Check if form was submitted
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['error' => 'Only POST method is allowed']);
+    header("Location: ../../projects.php");
     exit;
 }
 
-// Get database connection
+// Include database connection
 require_once '../db.php';
 
-// Get POST data directly - removed JSON handling
-$data = $_POST;
+// Get POST data
+$project_id = $_POST['project_id'] ?? null;
+$amount = $_POST['amount'] ?? null;
+$anonymous = isset($_POST['anonymous']) ? 1 : 0;
+$donor_id = $_SESSION['user_id'];
 
-// Check for required fields (keeping this basic validation for security)
-if (!isset($data['project_id']) || !isset($data['amount'])) {
-    echo json_encode(['error' => 'Project ID and amount are required']);
+// Basic validation
+if (!$project_id || !is_numeric($project_id) || !$amount || !is_numeric($amount) || $amount <= 0) {
+    header("Location: ../../project-details-donor.php?id=$project_id&error=invalid_amount");
     exit;
 }
-
-// Basic amount check (security check to prevent negative amounts)
-if (!is_numeric($data['amount']) || $data['amount'] <= 0) {
-    echo json_encode(['error' => 'Amount must be a positive number']);
-    exit;
-}
-
-// Process anonymous flag (default to false if not set)
-$anonymous = isset($data['anonymous']) ? (bool)$data['anonymous'] : false;
 
 try {
-    $donor_id = $_SESSION['user_id'];
-    $project_id = $data['project_id'];
-    $amount = floatval($data['amount']);
-    
-    // Check if project exists and is active
-    $stmt = $pdo->prepare("
-        SELECT * FROM project 
-        WHERE project_id = ? AND status = 'active' AND end_date >= CURDATE()
-    ");
-    $stmt->execute([$project_id]);
-    $project = $stmt->fetch();
-    
-    if (!$project) {
-        echo json_encode(['error' => 'Project not found or is not active']);
-        exit;
-    }
-    
     // Start transaction
     $pdo->beginTransaction();
     
-    // Insert donation
+    // Get project details
+    $stmt = $pdo->prepare("SELECT * FROM project WHERE project_id = ? AND status = 'active'");
+    $stmt->execute([$project_id]);
+    $project = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$project) {
+        $pdo->rollBack();
+        header("Location: ../../projects.php?error=project_not_found");
+        exit;
+    }
+    
+    // Check if project is still accepting donations (not past end date)
+    $today = new DateTime();
+    $end_date = new DateTime($project['end_date']);
+    if ($today > $end_date) {
+        $pdo->rollBack();
+        header("Location: ../../project-details-donor.php?id=$project_id&error=project_ended");
+        exit;
+    }
+    
+    // Check if amount is not more than what's needed to reach the goal
+    $remaining = $project['goal_amount'] - $project['current_amount'];
+    if ($amount > $remaining) {
+        $amount = $remaining; // Automatically adjust to remaining amount
+    }
+    
+    // Insert donation record
     $stmt = $pdo->prepare("
-        INSERT INTO donation (donor_id, project_id, amount, anonymous)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO donation (donor_id, project_id, amount, anonymous, donation_date)
+        VALUES (?, ?, ?, ?, NOW())
     ");
     $stmt->execute([$donor_id, $project_id, $amount, $anonymous]);
-    $donation_id = $pdo->lastInsertId();
     
-    // Update project current_amount
+    // Update project current amount
+    // (Note: This is redundant due to the trigger but included for clarity)
     $stmt = $pdo->prepare("
-        UPDATE project
+        UPDATE project 
         SET current_amount = current_amount + ?
         WHERE project_id = ?
     ");
     $stmt->execute([$amount, $project_id]);
     
-    // Fetch updated project data
-    $stmt = $pdo->prepare("SELECT * FROM project WHERE project_id = ?");
-    $stmt->execute([$project_id]);
-    $updated_project = $stmt->fetch();
-    
-    // Calculate new progress percentage
-    $progress = $updated_project['goal_amount'] > 0 
-        ? round(($updated_project['current_amount'] / $updated_project['goal_amount']) * 100, 2) 
-        : 0;
+    // If project has reached its goal, update status
+    if ($project['current_amount'] + $amount >= $project['goal_amount']) {
+        $stmt = $pdo->prepare("
+            UPDATE project
+            SET status = 'completed'
+            WHERE project_id = ? AND status = 'active'
+        ");
+        $stmt->execute([$project_id]);
+    }
     
     // Commit transaction
     $pdo->commit();
     
-    // Return success
-    echo json_encode([
-        'success' => true,
-        'data' => [
-            'message' => 'Donation successful',
-            'donation_id' => $donation_id,
-            'project' => [
-                'project_id' => $updated_project['project_id'],
-                'title' => $updated_project['title'],
-                'current_amount' => $updated_project['current_amount'],
-                'goal_amount' => $updated_project['goal_amount'],
-                'progress' => $progress
-            ]
-        ]
-    ]);
-
+    // Redirect with success message
+    header("Location: ../../project-details-donor.php?id=$project_id&success=donation_complete");
+    exit;
+    
 } catch (PDOException $e) {
     // Rollback transaction on error
     $pdo->rollBack();
-    echo json_encode(['error' => 'Donation failed: ' . $e->getMessage()]);
+    error_log("Donation error: " . $e->getMessage());
+    header("Location: ../../project-details-donor.php?id=$project_id&error=donation_failed");
+    exit;
+} catch (Exception $e) {
+    // Rollback transaction on any other error
+    $pdo->rollBack();
+    error_log("Donation error: " . $e->getMessage());
+    header("Location: ../../project-details-donor.php?id=$project_id&error=donation_failed");
     exit;
 }
 ?>

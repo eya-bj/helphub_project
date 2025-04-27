@@ -44,6 +44,21 @@ try {
         $stmt_stats->execute([$donor_id]);
         $stats = $stmt_stats->fetch(PDO::FETCH_ASSOC);
 
+        // Fetch recent donations (most recent 5)
+        $stmt_recent = $pdo->prepare("
+            SELECT d.donation_id, d.amount, d.donation_date, d.anonymous, 
+                   p.project_id, p.title as project_title,
+                   a.assoc_id, a.name as association_name
+            FROM donation d
+            JOIN project p ON d.project_id = p.project_id
+            JOIN association a ON p.assoc_id = a.assoc_id
+            WHERE d.donor_id = ?
+            ORDER BY d.donation_date DESC
+            LIMIT 5
+        ");
+        $stmt_recent->execute([$donor_id]);
+        $recent_donations = $stmt_recent->fetchAll(PDO::FETCH_ASSOC);
+
         // Format dates or numbers if needed
         $member_since = date("F Y", strtotime($donor['created_at']));
         $total_donations_amount = $stats['total_donations_amount'] ?? 0;
@@ -56,6 +71,7 @@ try {
         $total_donations_amount = 0;
         $projects_supported_count = 0;
         $associations_supported_count = 0;
+$recent_donations = [];
     }
 
 } catch (PDOException $e) {
@@ -68,6 +84,7 @@ try {
     $total_donations_amount = 0;
     $projects_supported_count = 0;
     $associations_supported_count = 0;
+$recent_donations = [];
     
     // Set error message
     $error_message = "Could not load profile data. Please try again later.";

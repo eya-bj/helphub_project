@@ -134,12 +134,12 @@ try {
 
     $stmt->execute([
         $_SESSION['user_id'],
-        htmlspecialchars($data['title']),
-        htmlspecialchars($data['description']),
-        htmlspecialchars($data['category']),
-        $data['goal_amount'],
-        $data['start_date'],
-        $data['end_date'],
+        htmlspecialchars($title),
+        htmlspecialchars($description),
+        htmlspecialchars($category),
+        $goal_amount,
+        $start_date_str,
+        $end_date_str,
         $image_path
     ]);
 
