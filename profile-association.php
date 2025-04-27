@@ -13,7 +13,6 @@ $error_message = $_GET['error'] ?? null;
 $success_message = $_GET['success'] ?? null;
 
 try {
-    // Fetch association details
     $stmt = $pdo->prepare("SELECT name, address, fiscal_id, logo_path, pseudo, email, representative_name, representative_surname, cin, created_at FROM association WHERE assoc_id = ?");
     $stmt->execute([$assoc_id]);
     $assoc = $stmt->fetch(PDO::FETCH_ASSOC);
