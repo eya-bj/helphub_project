@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate input
     if (empty($pseudo) || empty($password) || empty($user_type)) {
         // Redirect back with error
-        header("Location: ../../index.html?error=empty_fields");
+        header("Location: ../../index.php?error=empty_fields#loginModal"); // Updated link
         exit;
     }
     
@@ -58,19 +58,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         // If we get here, authentication failed
-        header("Location: ../../index.html?error=invalid_login");
+        header("Location: ../../index.php?error=invalid_login#loginModal"); // Updated link
         exit;
         
     } catch (PDOException $e) {
         // Log error for debugging (not visible to user)
         error_log("Login error: " . $e->getMessage());
         // Redirect with database error message
-        header("Location: ../../index.html?error=database&message=" . urlencode($e->getMessage()));
+        header("Location: ../../index.php?error=database#loginModal"); // Updated link
         exit;
     }
 } else {
     // If not POST request, redirect to login page
-    header("Location: ../../index.html");
+    header("Location: ../../index.php"); // Updated link
     exit;
 }
 ?>

@@ -2,13 +2,13 @@
 // Start session
 session_start();
 
-// Clear all session variables
+// Unset all session variables
 $_SESSION = array();
 
 // Destroy the session
 session_destroy();
 
-// Redirect to home page
-header("Location: ../../index.html");
+// Redirect to the homepage (index.php)
+header("Location: ../../index.php?logout=success"); // Updated link
 exit;
 ?>

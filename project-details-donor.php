@@ -4,7 +4,7 @@ session_start();
 
 // Check if user is logged in as donor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
-    header("Location: index.html?error=unauthorized");
+    header("Location: index.php?error=unauthorized"); // Updated link
     exit;
 }
 
@@ -520,17 +520,17 @@ function getCategoryIcon($category) {
                             </div>
                         </div>
                         <div class="col-md-7">
-                            <form id="donationForm" class="needs-validation" action="backend/donor/donate.php" method="post" novalidate>
+                            <form id="donationForm" class="needs-validation" action="backend/donor/donate.php" method="post">
                                 <input type="hidden" name="project_id" id="projectId" value="<?php echo $project_id; ?>">
                                 
                                 <div class="mb-3">
                                     <label for="donationAmount" class="form-label">Donation Amount ($)</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="donationAmount" name="amount" min="1" max="<?php echo $project['goal_amount'] - $project['current_amount']; ?>" step="1" required>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please enter a valid amount.
+                                        <input type="number" class="form-control" id="donationAmount" name="amount" min="1" max="<?php echo max(1, $project['goal_amount'] - $project['current_amount']); // Ensure max is at least 1 ?>" step="1" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid amount up to $<?php echo number_format(max(1, $project['goal_amount'] - $project['current_amount']), 2); ?>.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -549,53 +549,12 @@ function getCategoryIcon($category) {
                                     <label class="form-check-label" for="anonymousCheck">Make donation anonymous</label>
                                 </div>
                                 
-                                <div class="mb-3">
-                                    <label class="form-label">Payment Method</label>
-                                    <div class="d-flex flex-wrap gap-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
-                                            <label class="form-check-label" for="creditCard">
-                                                <i class="fab fa-cc-visa me-1"></i> Credit Card
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
-                                            <label class="form-check-label" for="paypal">
-                                                <i class="fab fa-paypal me-1"></i> PayPal
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
-                                            <label class="form-check-label" for="bankTransfer">
-                                                <i class="fas fa-university me-1"></i> Bank Transfer
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="creditCardForm">
-                                    <div class="row">
-                                        <div class="col-12 mb-3">
-                                            <label for="cardNumber" class="form-label">Card Number</label>
-                                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="expiryDate" class="form-label">Expiry Date</label>
-                                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="cvv" class="form-label">CVV</label>
-                                            <input type="text" class="form-control" id="cvv" placeholder="123" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="d-grid gap-2">
+                                <div class="d-grid gap-2 mt-4">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-heart me-2"></i> Donate Now
                                     </button>
                                 </div>
-                                <p class="text-center mt-3 small text-muted">Your payment information is secure and encrypted.</p>
+                                <p class="text-center mt-3 small text-muted">Your donation will be processed securely.</p>
                             </form>
                         </div>
                     </div>
@@ -635,7 +594,7 @@ function getCategoryIcon($category) {
                 });
             });
             
-            // Form validation
+            // Form validation (simplified as payment fields removed)
             const form = document.getElementById('donationForm');
             form.addEventListener('submit', function(event) {
                 if (!form.checkValidity()) {
