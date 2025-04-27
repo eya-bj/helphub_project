@@ -5,10 +5,10 @@ function showError(input, feedbackId, show) {
     var feedback = document.getElementById(feedbackId);
     if (show) {
         input.classList.add('is-invalid'); // Red border
-        feedback.style.display = 'block'; // Show error message
+        if (feedback) feedback.style.display = 'block'; // Show error message
     } else {
         input.classList.remove('is-invalid'); // Normal border
-        feedback.style.display = 'none'; // Hide error message
+        if (feedback) feedback.style.display = 'none'; // Hide error message
     }
 }
 
@@ -21,15 +21,15 @@ var deleteForm = document.getElementById('deleteAccountForm');
 // Association Profile Form Validation
 if (associationForm) {
     // Get inputs
-    var nameInput = document.getElementById('name');
-    var surnameInput = document.getElementById('surname');
+    var nameInput = document.getElementById('name'); // Rep Name
+    var surnameInput = document.getElementById('surname'); // Rep Surname
     var emailInput = document.getElementById('email');
     var associationNameInput = document.getElementById('associationName');
     var associationAddressInput = document.getElementById('associationAddress');
     var logoInput = document.getElementById('logo');
 
-    // Real-time validation
-    nameInput.addEventListener('input', function() {
+    // Real-time validation (Keep this for UX)
+    nameInput?.addEventListener('input', function() {
         if (nameInput.value.length < 2 && nameInput.value != '') {
             showError(nameInput, 'nameFeedback', true);
         } else {
@@ -37,7 +37,7 @@ if (associationForm) {
         }
     });
 
-    surnameInput.addEventListener('input', function() {
+    surnameInput?.addEventListener('input', function() {
         if (surnameInput.value.length < 2 && surnameInput.value != '') {
             showError(surnameInput, 'surnameFeedback', true);
         } else {
@@ -45,7 +45,7 @@ if (associationForm) {
         }
     });
 
-    emailInput.addEventListener('input', function() {
+    emailInput?.addEventListener('input', function() {
         var value = emailInput.value;
         var isValid = value.includes('@') && value.includes('.');
         if (!isValid && value != '') {
@@ -55,7 +55,7 @@ if (associationForm) {
         }
     });
 
-    associationNameInput.addEventListener('input', function() {
+    associationNameInput?.addEventListener('input', function() {
         if (associationNameInput.value.length < 3 && associationNameInput.value != '') {
             showError(associationNameInput, 'associationNameFeedback', true);
         } else {
@@ -63,7 +63,7 @@ if (associationForm) {
         }
     });
 
-    associationAddressInput.addEventListener('input', function() {
+    associationAddressInput?.addEventListener('input', function() {
         if (associationAddressInput.value.length < 5 && associationAddressInput.value != '') {
             showError(associationAddressInput, 'associationAddressFeedback', true);
         } else {
@@ -71,21 +71,34 @@ if (associationForm) {
         }
     });
 
-    logoInput.addEventListener('change', function() {
+    logoInput?.addEventListener('change', function() {
         var file = logoInput.files[0];
+        // Allow no file, or valid image types
         var isValid = !file || (file && (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'));
+        var maxSize = 2 * 1024 * 1024; // 2MB
+        var isSizeValid = !file || file.size <= maxSize;
+
         if (!isValid) {
             showError(logoInput, 'logoFeedback', true);
-        } else {
+            logoInput.value = ''; // Clear invalid file
+        } else if (!isSizeValid) {
+             // Optionally add a specific feedback element for size
+             showError(logoInput, 'logoFeedback', true); // Reuse feedback or add new one
+             document.getElementById('logoFeedback').textContent = 'File is too large (Max 2MB).';
+             logoInput.value = ''; // Clear invalid file
+        }
+         else {
             showError(logoInput, 'logoFeedback', false);
+             document.getElementById('logoFeedback').textContent = 'Please select a valid image file (JPEG, PNG, or GIF).'; // Reset message
         }
     });
 
-    // Form submission
+    // Form submission validation (runs before standard submit)
     associationForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+        // event.preventDefault(); // REMOVED to allow standard form submission
         var isValid = true;
 
+        // Re-validate all fields on submit
         if (nameInput.value.length < 2) {
             showError(nameInput, 'nameFeedback', true);
             isValid = false;
@@ -123,18 +136,28 @@ if (associationForm) {
         }
 
         var file = logoInput.files[0];
-        var logoValid = !file || (file && (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'));
-        if (!logoValid) {
+        var logoTypeValid = !file || (file && (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'));
+        var maxSize = 2 * 1024 * 1024; // 2MB
+        var logoSizeValid = !file || file.size <= maxSize;
+
+        if (!logoTypeValid) {
             showError(logoInput, 'logoFeedback', true);
+             document.getElementById('logoFeedback').textContent = 'Please select a valid image file (JPEG, PNG, or GIF).';
             isValid = false;
-        } else {
+        } else if (!logoSizeValid) {
+             showError(logoInput, 'logoFeedback', true);
+             document.getElementById('logoFeedback').textContent = 'File is too large (Max 2MB).';
+             isValid = false;
+        }
+         else {
             showError(logoInput, 'logoFeedback', false);
         }
 
-        if (isValid) {
-            alert('Profile updated successfully!');
-            associationForm.reset();
+        if (!isValid) {
+            event.preventDefault(); // Prevent submission ONLY if client-side validation fails
+            // alert('Please correct the errors in the form.'); // Optional: General alert
         }
+        // REMOVED success alert - backend handles redirection
     });
 }
 
@@ -145,8 +168,8 @@ if (donorForm) {
     var donorSurnameInput = document.getElementById('donorSurname');
     var donorEmailInput = document.getElementById('donorEmail');
 
-    // Real-time validation
-    donorNameInput.addEventListener('input', function() {
+    // Real-time validation (Keep this for UX)
+    donorNameInput?.addEventListener('input', function() {
         if (donorNameInput.value.length < 2 && donorNameInput.value != '') {
             showError(donorNameInput, 'donorNameFeedback', true);
         } else {
@@ -154,7 +177,7 @@ if (donorForm) {
         }
     });
 
-    donorSurnameInput.addEventListener('input', function() {
+    donorSurnameInput?.addEventListener('input', function() {
         if (donorSurnameInput.value.length < 2 && donorSurnameInput.value != '') {
             showError(donorSurnameInput, 'donorSurnameFeedback', true);
         } else {
@@ -162,7 +185,7 @@ if (donorForm) {
         }
     });
 
-    donorEmailInput.addEventListener('input', function() {
+    donorEmailInput?.addEventListener('input', function() {
         var value = donorEmailInput.value;
         var isValid = value.includes('@') && value.includes('.');
         if (!isValid && value != '') {
@@ -172,11 +195,12 @@ if (donorForm) {
         }
     });
 
-    // Form submission
+    // Form submission validation (runs before standard submit)
     donorForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+        // event.preventDefault(); // REMOVED to allow standard form submission
         var isValid = true;
 
+        // Re-validate all fields on submit
         if (donorNameInput.value.length < 2) {
             showError(donorNameInput, 'donorNameFeedback', true);
             isValid = false;
@@ -199,10 +223,11 @@ if (donorForm) {
             showError(donorEmailInput, 'donorEmailFeedback', false);
         }
 
-        if (isValid) {
-            alert('Profile updated successfully!');
-            donorForm.reset();
+         if (!isValid) {
+            event.preventDefault(); // Prevent submission ONLY if client-side validation fails
+            // alert('Please correct the errors in the form.'); // Optional: General alert
         }
+        // REMOVED success alert - backend handles redirection
     });
 }
 
@@ -213,16 +238,18 @@ if (passwordForm) {
     var newPasswordInput = document.getElementById('newPassword');
     var confirmPasswordInput = document.getElementById('confirmPassword');
 
-    // Real-time validation
-    currentPasswordInput.addEventListener('input', function() {
-        if (currentPasswordInput.value == '') {
+    // Real-time validation (Keep this for UX)
+    currentPasswordInput?.addEventListener('input', function() {
+        if (currentPasswordInput.value == '' && currentPasswordInput.touched) { // Check if touched to avoid error on load
             showError(currentPasswordInput, 'currentPasswordFeedback', true);
         } else {
             showError(currentPasswordInput, 'currentPasswordFeedback', false);
         }
     });
+    currentPasswordInput?.addEventListener('blur', function() { this.touched = true; }); // Mark as touched on blur
 
-    newPasswordInput.addEventListener('input', function() {
+
+    newPasswordInput?.addEventListener('input', function() {
         var value = newPasswordInput.value;
         var isValid = value.length >= 8 && (value.endsWith('$') || value.endsWith('#'));
         if (!isValid && value != '') {
@@ -230,9 +257,16 @@ if (passwordForm) {
         } else {
             showError(newPasswordInput, 'newPasswordFeedback', false);
         }
+        // Also re-validate confirm password when new password changes
+        var confirmIsValid = confirmPasswordInput.value == newPasswordInput.value;
+         if (!confirmIsValid && confirmPasswordInput.value != '') {
+            showError(confirmPasswordInput, 'confirmPasswordFeedback', true);
+        } else {
+            showError(confirmPasswordInput, 'confirmPasswordFeedback', false);
+        }
     });
 
-    confirmPasswordInput.addEventListener('input', function() {
+    confirmPasswordInput?.addEventListener('input', function() {
         var isValid = confirmPasswordInput.value == newPasswordInput.value;
         if (!isValid && confirmPasswordInput.value != '') {
             showError(confirmPasswordInput, 'confirmPasswordFeedback', true);
@@ -241,15 +275,17 @@ if (passwordForm) {
         }
     });
 
-    // Form submission
+    // Form submission validation (runs before standard submit)
     passwordForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+        // event.preventDefault(); // REMOVED to allow standard form submission
         var isValid = true;
 
+        // Re-validate all fields on submit
         if (currentPasswordInput.value == '') {
             showError(currentPasswordInput, 'currentPasswordFeedback', true);
             isValid = false;
         } else {
+            // No need to re-validate correctness here, backend does that
             showError(currentPasswordInput, 'currentPasswordFeedback', false);
         }
 
@@ -270,13 +306,11 @@ if (passwordForm) {
             showError(confirmPasswordInput, 'confirmPasswordFeedback', false);
         }
 
-        if (isValid) {
-            alert('Password changed successfully!');
-            passwordForm.reset();
-            // Close modal
-            var modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
-            modal.hide();
+        if (!isValid) {
+             event.preventDefault(); // Prevent submission ONLY if client-side validation fails
+            // alert('Please correct the errors in the form.'); // Optional: General alert
         }
+         // REMOVED success alert - backend handles redirection
     });
 }
 
@@ -287,32 +321,30 @@ if (deleteForm) {
     var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
     // Real-time validation and button enable/disable
-    deleteConfirmInput.addEventListener('input', function() {
-        var isValid = deleteConfirmInput.value == 'DELETE';
-        if (!isValid) {
+    deleteConfirmInput?.addEventListener('input', function() {
+        var isValid = deleteConfirmInput.value === 'DELETE'; // Strict comparison
+        if (!isValid && deleteConfirmInput.value !== '') { // Show error only if not empty and incorrect
             showError(deleteConfirmInput, 'deleteConfirmFeedback', true);
-            confirmDeleteBtn.disabled = true;
         } else {
             showError(deleteConfirmInput, 'deleteConfirmFeedback', false);
-            confirmDeleteBtn.disabled = false;
         }
+        confirmDeleteBtn.disabled = !isValid; // Enable/disable button
     });
 
-    // Form submission
+    // Form submission validation (runs before standard submit)
     deleteForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        var isValid = deleteConfirmInput.value == 'DELETE';
+        // event.preventDefault(); // REMOVED to allow standard form submission
+        var isValid = deleteConfirmInput.value === 'DELETE';
         if (!isValid) {
             showError(deleteConfirmInput, 'deleteConfirmFeedback', true);
+            event.preventDefault(); // Prevent submission ONLY if client-side validation fails
         } else {
             showError(deleteConfirmInput, 'deleteConfirmFeedback', false);
-            alert('Account deleted successfully! Redirecting to homepage...');
-            deleteForm.reset();
-            // Close modal
-            var modal = bootstrap.Modal.getInstance(document.getElementById('deleteAccountModal'));
-            modal.hide();
-            // Redirect to homepage
-            window.location.href = 'index.html';
+            // Confirmation message before submitting (optional but recommended)
+            if (!confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) {
+                 event.preventDefault(); // Prevent submission if user cancels confirmation
+            }
+            // REMOVED success alert - backend handles redirection
         }
     });
 }
