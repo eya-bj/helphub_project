@@ -58,8 +58,11 @@ try {
     
     // Check if user exists
     if (!$user) {
-        echo json_encode(['error' => 'User not found']);
-        exit;
+        // Redirect back with error parameter
+        header('Location: ../../index.html?error=user_not_found#loginModal');
+        exit; 
+        // echo json_encode(['error' => 'User not found']); // Replaced with redirect
+        // exit;
     }
     
     // Verify password
@@ -80,9 +83,24 @@ try {
     $_SESSION['pseudo'] = $user['pseudo'];
     
     // Remove password from user data
-    unset($user['password']);
+    // unset($user['password']); // No longer needed as we are redirecting
     
-    // Return success
+    // Determine redirect URL based on user type
+    $redirect_url = '';
+    if ($_SESSION['user_type'] === 'donor') {
+        $redirect_url = '../../dashboard-donor.html';
+    } elseif ($_SESSION['user_type'] === 'association') {
+        $redirect_url = '../../dashboard-association.html';
+    } else {
+        // Fallback or error handling if user type is somehow invalid
+        $redirect_url = '../../index.html?error=login_failed#loginModal';
+    }
+
+    // Redirect to the appropriate dashboard
+    header('Location: ' . $redirect_url);
+    exit; // Important: Stop script execution after redirect
+
+    /* Removed JSON success response:
     echo json_encode([
         'success' => true,
         'data' => [
@@ -91,9 +109,13 @@ try {
             'session_id' => session_id()
         ]
     ]);
+    */
 
 } catch (PDOException $e) {
-    echo json_encode(['error' => 'Login failed: ' . $e->getMessage()]);
+    // Redirect back with a generic error on database issues
+    header('Location: ../../index.html?error=login_failed#loginModal');
     exit;
+    // echo json_encode(['error' => 'Login failed: ' . $e->getMessage()]);
+    // exit;
 }
 ?>

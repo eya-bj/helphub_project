@@ -2,6 +2,43 @@
 
 // Wait for page to load before running code
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- ERROR HANDLING from URL ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    const loginErrorMsgDiv = document.getElementById('loginErrorMsg'); // Assumes an element with id="loginErrorMsg" exists in the login modal
+
+    if (loginErrorMsgDiv) {
+        let errorMessage = '';
+        if (error === 'user_not_found') {
+            errorMessage = 'User not found.';
+        } else if (error === 'invalid_password') {
+            errorMessage = 'Invalid password.';
+        } else if (error === 'missing_fields') {
+            errorMessage = 'Please fill in all fields.';
+        } else if (error === 'invalid_user_type') {
+            errorMessage = 'Invalid user type selected.';
+        } else if (error === 'login_failed') {
+            errorMessage = 'Login failed. Please try again.';
+        }
+        // Add more error cases as needed
+
+        if (errorMessage) {
+            loginErrorMsgDiv.textContent = errorMessage;
+            loginErrorMsgDiv.classList.remove('d-none'); // Make the error message visible
+
+            // Optionally, ensure the login modal is open if there's an error
+            const loginModalElement = document.getElementById('loginModal');
+            if (loginModalElement && window.location.hash === '#loginModal') {
+                const loginModal = new bootstrap.Modal(loginModalElement);
+                loginModal.show();
+            }
+        } else {
+            loginErrorMsgDiv.classList.add('d-none'); // Hide if no error
+        }
+    }
+
+
     // --- LOGIN SYSTEM ---
 
     // Handle login form
@@ -16,12 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Basic client-side validation (optional, server should always validate)
             if (!userType || !username || !password) {
                 alert('Please fill out all fields');
-                event.preventDefault(); // Prevent submission if fields are empty
+                event.preventDefault(); // Prevent submission ONLY if fields are empty client-side
                 return;
             }
 
             // Form will now submit to the action specified in the HTML
-            // Remove client-side redirection:
+            // REMOVED client-side redirection:
             // localStorage.setItem('userType', userType);
             // window.location.href = `dashboard-${userType}.html`;
         });
