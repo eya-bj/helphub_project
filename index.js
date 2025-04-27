@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Thank you, ' + name + '! Your message has been sent.');
             contactForm.reset();
             contactForm.classList.remove('was-validated');
-            window.location.href = 'index.html';
+            window.location.href = 'index.php'; // Updated link
         });
     }
 
@@ -171,37 +171,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Handle donation form submission
-    const donationForm = document.getElementById('donationForm');
-    if (donationForm) {
-        donationForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+    // const donationForm = document.getElementById('donationForm'); // This might conflict with project-details-donor.php
+    // if (donationForm) {
+    //     donationForm.addEventListener('submit', function(event) {
+    //         event.preventDefault();
             
-            // Validate form fields
-            let isValid = true;
-            const amount = document.getElementById('donationAmount').value;
+    //         // Validate form fields
+    //         let isValid = true;
+    //         const amount = document.getElementById('donationAmount').value;
             
-            // Check for valid amount
-            if (!amount || isNaN(amount) || amount <= 0 || amount > 1800) {
-                document.getElementById('donationAmount').classList.add('is-invalid');
-                isValid = false;
-            } else {
-                document.getElementById('donationAmount').classList.remove('is-invalid');
-            }
+    //         // Check for valid amount (REMOVE or ADJUST this logic if it's not for the main donation modal)
+    //         // if (!amount || isNaN(amount) || amount <= 0 || amount > 1800) { 
+    //         //     document.getElementById('donationAmount').classList.add('is-invalid');
+    //         //     isValid = false;
+    //         // } else {
+    //         //     document.getElementById('donationAmount').classList.remove('is-invalid');
+    //         // }
             
-            if (isValid) {
-                // Display success message
-                alert('Thank you for your donation of $' + amount + '!');
+    //         if (isValid) {
+    //             // Display success message
+    //             alert('Thank you for your donation of $' + amount + '!');
                 
-                // Close modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('donationModal'));
-                modal.hide();
+    //             // Close modal
+    //             const modal = bootstrap.Modal.getInstance(document.getElementById('donationModal'));
+    //             modal.hide();
                 
-                // Refresh page or update UI as needed
-                // For demo purposes, we'll just reset the form
-                donationForm.reset();
-            }
-        });
-    }
+    //             // Refresh page or update UI as needed
+    //             // For demo purposes, we'll just reset the form
+    //             donationForm.reset();
+    //         }
+    //     });
+    // }
 });
 
 // Search projects by keywords
@@ -231,20 +231,87 @@ function searchProjects(query) {
     }
 }
 
-// Filter projects by category
+// Filter projects by category (Updated to handle links, not buttons)
 function filterProjects(category) {
-    var projects = document.querySelectorAll('.project-item, [class*="col-lg"][class*="col-md"]');
+    // This function might not be needed anymore if using links to projects.php
+    // Or it could be adapted for client-side filtering if projects are loaded via AJAX
+    console.log("Filtering by:", category); 
+}
 
-    projects.forEach(item => {
-        if (category === 'all') {
-            item.style.display = '';
+// Add event listener for search button if needed (now handled by form submission)
+const homeSearchButton = document.getElementById('homeSearchButton');
+const homeProjectSearch = document.getElementById('homeProjectSearch');
+
+if (homeSearchButton && homeProjectSearch) {
+    // The form now handles the submission, JS might not be needed here
+    // homeSearchButton.addEventListener('click', function() {
+    //     const query = homeProjectSearch.value;
+    //     window.location.href = `projects.php?search=${encodeURIComponent(query)}`;
+    // });
+}
+
+// Handle login form error display
+const loginForm = document.getElementById('loginForm');
+const loginErrorMsg = document.getElementById('loginErrorMsg');
+const urlParams = new URLSearchParams(window.location.search);
+const loginError = urlParams.get('error');
+const registerSuccess = urlParams.get('register');
+
+if (loginError && loginErrorMsg) {
+    let message = 'An unknown error occurred.';
+    switch (loginError) {
+        case 'empty_fields':
+            message = 'Please enter both pseudo and password.';
+            break;
+        case 'invalid_login':
+            message = 'Invalid pseudo or password.';
+            break;
+        case 'database':
+            message = 'Database error. Please try again later.';
+            break;
+        case 'unauthorized':
+             message = 'You must be logged in to access that page.';
+             break;
+    }
+    loginErrorMsg.textContent = message;
+    loginErrorMsg.classList.remove('d-none');
+    // Ensure modal is shown if there's an error
+    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+}
+
+if (registerSuccess && loginErrorMsg) {
+     let message = 'Registration successful! Please log in.';
+     if (registerSuccess === 'success_association') {
+         message = 'Association registration successful! Please log in.';
+     } else if (registerSuccess === 'success_donor') {
+         message = 'Donor registration successful! Please log in.';
+     }
+     loginErrorMsg.textContent = message;
+     loginErrorMsg.classList.remove('alert-danger');
+     loginErrorMsg.classList.add('alert-success'); // Show success message
+     loginErrorMsg.classList.remove('d-none');
+     // Ensure modal is shown after registration
+     const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+     loginModal.show();
+}
+
+
+// Password toggle visibility
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const passwordInput = document.querySelector(targetId);
+        const icon = this.querySelector('i');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
         } else {
-            var badge = item.querySelector('.badge');
-            if (badge && badge.textContent.toLowerCase() === category.toLowerCase()) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
         }
     });
-}
+});
