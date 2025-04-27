@@ -5,19 +5,11 @@
 function showError(input, feedbackId, show) {
     var feedback = document.getElementById(feedbackId);
     if (show) {
-<<<<<<< Updated upstream
-        input.classList.add('is-invalid'); // Red border
-        feedback.style.display = 'block'; // Show error message
-    } else {
-        input.classList.remove('is-invalid'); // Normal border
-        feedback.style.display = 'none'; // Hide error message
-=======
         input.classList.add('is-invalid');
         if (feedback) feedback.style.display = 'block'; // Show feedback message
     } else {
         input.classList.remove('is-invalid');
         if (feedback) feedback.style.display = 'none'; // Hide feedback message
->>>>>>> Stashed changes
     }
 }
 
@@ -43,23 +35,10 @@ function validateEmail(input, feedbackId) {
 
 function validatePseudo(input, feedbackId) {
     var value = input.value;
-<<<<<<< Updated upstream
-    var isValid = true;
-    for (var i = 0; i < value.length; i++) {
-        var char = value[i];
-        if (!(char >= 'A' && char <= 'Z') && !(char >= 'a' && char <= 'z')) {
-            isValid = false;
-            break;
-        }
-    }
-    showError(input, feedbackId, !isValid && value != '');
-    return isValid && value != '';
-=======
     // Allow letters and numbers, minimum 3 chars (Matches PHP)
     var isValid = /^[a-zA-Z0-9]{3,}$/.test(value);
     showError(input, feedbackId, !isValid && value !== '');
     return isValid;
->>>>>>> Stashed changes
 }
 
 function validatePassword(input, feedbackId) {
@@ -71,9 +50,6 @@ function validatePassword(input, feedbackId) {
 
 function validateTermsCheck(input, feedbackId) {
     var isValid = input.checked;
-<<<<<<< Updated upstream
-    showError(input, feedbackId, !isValid);
-=======
     // Show error differently for checkbox
     var label = input.closest('.form-check').querySelector('.form-check-label');
     var feedback = document.getElementById(feedbackId); // Get feedback element
@@ -86,25 +62,11 @@ function validateTermsCheck(input, feedbackId) {
         if (label) label.classList.remove('text-danger');
         if (feedback) feedback.style.display = 'none'; // Hide feedback
     }
->>>>>>> Stashed changes
     return isValid;
 }
 
 // Shared password toggle function
 function setupPasswordToggle(passwordInput, toggleButton) {
-<<<<<<< Updated upstream
-    toggleButton.addEventListener('click', function() {
-        var icon = toggleButton.querySelector('i');
-        if (passwordInput.type == 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-=======
     if (!passwordInput || !toggleButton) return; // Exit if elements not found
 
     toggleButton.addEventListener('click', function() {
@@ -116,7 +78,6 @@ function setupPasswordToggle(passwordInput, toggleButton) {
         const icon = this.querySelector('i');
         icon.classList.toggle('fa-eye');
         icon.classList.toggle('fa-eye-slash');
->>>>>>> Stashed changes
     });
 }
 
@@ -169,173 +130,6 @@ function validateLogo(input, feedbackId) {
     return isValid;
 }
 
-<<<<<<< Updated upstream
-// Donor Registration Form
-var donorForm = document.getElementById('donorRegisterForm');
-if (donorForm) {
-    // Get input fields
-    var nameInput = document.getElementById('name');
-    var surnameInput = document.getElementById('surname');
-    var emailInput = document.getElementById('email');
-    var ctnInput = document.getElementById('ctn');
-    var pseudoInput = document.getElementById('pseudo');
-    var passwordInput = document.getElementById('password');
-    var termsCheckInput = document.getElementById('termsCheck');
-    var togglePasswordButton = document.getElementById('togglePassword');
-
-    // Real-time validation for shared fields
-    nameInput.addEventListener('input', function() {
-        validateName(nameInput, 'nameFeedback');
-    });
-
-    surnameInput.addEventListener('input', function() {
-        validateSurname(surnameInput, 'surnameFeedback');
-    });
-
-    emailInput.addEventListener('input', function() {
-        validateEmail(emailInput, 'emailFeedback');
-    });
-
-    pseudoInput.addEventListener('input', function() {
-        validatePseudo(pseudoInput, 'pseudoFeedback');
-    });
-
-    passwordInput.addEventListener('input', function() {
-        validatePassword(passwordInput, 'passwordFeedback');
-    });
-
-    termsCheckInput.addEventListener('change', function() {
-        validateTermsCheck(termsCheckInput, 'termsCheckFeedback');
-    });
-
-    // Real-time validation for donor-specific field
-    ctnInput.addEventListener('input', function() {
-        validateCtn(ctnInput, 'ctnFeedback');
-    });
-
-    // Setup password toggle
-    setupPasswordToggle(passwordInput, togglePasswordButton);
-
-    // Form submission
-    donorForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        var isValid = true;
-
-        // Validate shared fields
-        if (!validateName(nameInput, 'nameFeedback')) isValid = false;
-        if (!validateSurname(surnameInput, 'surnameFeedback')) isValid = false;
-        if (!validateEmail(emailInput, 'emailFeedback')) isValid = false;
-        if (!validatePseudo(pseudoInput, 'pseudoFeedback')) isValid = false;
-        if (!validatePassword(passwordInput, 'passwordFeedback')) isValid = false;
-        if (!validateTermsCheck(termsCheckInput, 'termsCheckFeedback')) isValid = false;
-
-        // Validate donor-specific field
-        if (!validateCtn(ctnInput, 'ctnFeedback')) isValid = false;
-
-        // If all fields are valid, show success and redirect
-        if (isValid) {
-            alert('Registration successful! Redirecting to dashboard...');
-            donorForm.reset();
-            window.location.href = 'dashboard-donor.html';
-        }
-    });
-}
-
-// Association Registration Form
-var associationForm = document.getElementById('associationRegisterForm');
-if (associationForm) {
-    // Get input fields
-    var nameInput = document.getElementById('name');
-    var surnameInput = document.getElementById('surname');
-    var cinInput = document.getElementById('cin');
-    var emailInput = document.getElementById('email');
-    var associationNameInput = document.getElementById('associationName');
-    var associationAddressInput = document.getElementById('associationAddress');
-    var fiscalIdInput = document.getElementById('fiscalId');
-    var logoInput = document.getElementById('logo');
-    var pseudoInput = document.getElementById('pseudo');
-    var passwordInput = document.getElementById('password');
-    var termsCheckInput = document.getElementById('termsCheck');
-    var togglePasswordButton = document.getElementById('togglePassword');
-
-    // Real-time validation for shared fields
-    nameInput.addEventListener('input', function() {
-        validateName(nameInput, 'nameFeedback');
-    });
-
-    surnameInput.addEventListener('input', function() {
-        validateSurname(surnameInput, 'surnameFeedback');
-    });
-
-    emailInput.addEventListener('input', function() {
-        validateEmail(emailInput, 'emailFeedback');
-    });
-
-    pseudoInput.addEventListener('input', function() {
-        validatePseudo(pseudoInput, 'pseudoFeedback');
-    });
-
-    passwordInput.addEventListener('input', function() {
-        validatePassword(passwordInput, 'passwordFeedback');
-    });
-
-    termsCheckInput.addEventListener('change', function() {
-        validateTermsCheck(termsCheckInput, 'termsCheckFeedback');
-    });
-
-    // Real-time validation for association-specific fields
-    cinInput.addEventListener('input', function() {
-        validateCin(cinInput, 'cinFeedback');
-    });
-
-    associationNameInput.addEventListener('input', function() {
-        validateAssociationName(associationNameInput, 'associationNameFeedback');
-    });
-
-    associationAddressInput.addEventListener('input', function() {
-        validateAssociationAddress(associationAddressInput, 'associationAddressFeedback');
-    });
-
-    fiscalIdInput.addEventListener('input', function() {
-        validateFiscalId(fiscalIdInput, 'fiscalIdFeedback');
-    });
-
-    logoInput.addEventListener('change', function() {
-        validateLogo(logoInput, 'logoFeedback');
-    });
-
-    // Setup password toggle
-    setupPasswordToggle(passwordInput, togglePasswordButton);
-
-    // Form submission
-    associationForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        var isValid = true;
-
-        // Validate shared fields
-        if (!validateName(nameInput, 'nameFeedback')) isValid = false;
-        if (!validateSurname(surnameInput, 'surnameFeedback')) isValid = false;
-        if (!validateEmail(emailInput, 'emailFeedback')) isValid = false;
-        if (!validatePseudo(pseudoInput, 'pseudoFeedback')) isValid = false;
-        if (!validatePassword(passwordInput, 'passwordFeedback')) isValid = false;
-        if (!validateTermsCheck(termsCheckInput, 'termsCheckFeedback')) isValid = false;
-
-        // Validate association-specific fields
-        if (!validateCin(cinInput, 'cinFeedback')) isValid = false;
-        if (!validateAssociationName(associationNameInput, 'associationNameFeedback')) isValid = false;
-        if (!validateAssociationAddress(associationAddressInput, 'associationAddressFeedback')) isValid = false;
-        if (!validateFiscalId(fiscalIdInput, 'fiscalIdFeedback')) isValid = false;
-        if (!validateLogo(logoInput, 'logoFeedback')) isValid = false;
-
-        // If all fields are valid, show success and redirect
-        if (isValid) {
-            alert('Registration successful! Redirecting to dashboard...');
-            associationForm.reset();
-            window.location.href = 'dashboard-association.html';
-        }
-    });
-}
-=======
 // --- Setup Event Listeners ---
 document.addEventListener('DOMContentLoaded', function() {
     // Donor Registration Form Setup
@@ -455,4 +249,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
->>>>>>> Stashed changes

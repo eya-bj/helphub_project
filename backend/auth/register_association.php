@@ -34,8 +34,6 @@ foreach ($required_fields as $field) {
     }
 }
 
-<<<<<<< Updated upstream
-=======
 // Assign variables AFTER validation
 $name = trim($data['name']);
 $address = trim($data['address']);
@@ -92,7 +90,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     // exit;
 }
 
->>>>>>> Stashed changes
 try {
     // Check if email already exists
     $stmt = $pdo->prepare("SELECT assoc_id FROM association WHERE email = ?"); // Use assoc_id
@@ -168,11 +165,7 @@ try {
     }
 
     // Hash password
-<<<<<<< Updated upstream
-    $hashed_password = password_hash($data['password'], PASSWORD_DEFAULT);
-=======
     $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Use the $password variable
->>>>>>> Stashed changes
 
     // Insert association
     $stmt = $pdo->prepare("
