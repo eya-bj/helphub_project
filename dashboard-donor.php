@@ -5,7 +5,7 @@ session_start();
 // Check if user is logged in as donor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
     // Redirect to login page
-    header("Location: index.html?error=unauthorized");
+    header("Location: index.php?error=unauthorized"); // Updated link
     exit;
 }
 

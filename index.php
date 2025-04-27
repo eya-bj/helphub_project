@@ -345,57 +345,10 @@ try {
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light">
-        <div class="container py-5">
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <h5 class="mb-3"><span class="text-primary">Help</span><span class="text-light">Hub</span></h5>
-                    <p class="mb-3">Connecting hearts and resources for a better world.</p>
-                    <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <h6 class="mb-3">Quick Links</h6>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><a href="index.php" class="text-decoration-none">Home</a></li> <!-- Updated link -->
-                                <li class="mb-2"><a href="#projects" class="text-decoration-none">Projects</a></li>
-                                <li class="mb-2"><a href="#how-it-works" class="text-decoration-none">How It Works</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-4">
-                            <h6 class="mb-3">For Donors</h6>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><a href="register-donor.html" class="text-decoration-none">Sign Up</a></li>
-                                <li class="mb-2"><a href="#projects" class="text-decoration-none">Browse Projects</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-4">
-                            <h6 class="mb-3">For Associations</h6>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><a href="register-association.html" class="text-decoration-none">Register</a></li>
-                                <li class="mb-2"><a href="#" class="text-decoration-none">Create Projects</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr class="my-4 bg-light opacity-25">
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
             <div class="text-center">
-                <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2025. All Rights Reserved.</p>
+                <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © <?php echo date('Y'); ?>. All Rights Reserved.</p>
             </div>
         </div>
     </footer>

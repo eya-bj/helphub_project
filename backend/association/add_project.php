@@ -46,7 +46,7 @@ foreach ($required_fields as $field) {
 }
 
 if (!empty($missing_fields)) {
-    header('Location: ../../dashboard-association.html?error=missing_fields&fields=' . implode(',', $missing_fields) . '#addProjectModal');
+    header('Location: ../../dashboard-association.php?error=missing_fields&fields=' . implode(',', $missing_fields) . '#addProjectModal');
     exit;
 }
 
@@ -59,10 +59,10 @@ $start_date_str = $_POST['start_date'];
 $end_date_str = $_POST['end_date'];
 
 
-// Validate goal_amount
+// Validate goal amount
 if (!is_numeric($goal_amount) || $goal_amount <= 0) {
     // Redirect back with error
-    header('Location: ../../dashboard-association.html?error=invalid_goal#addProjectModal');
+    header('Location: ../../dashboard-association.php?error=invalid_goal#addProjectModal'); // Updated link
     exit;
     // echo json_encode(['error' => 'Goal amount must be a positive number']);
     // exit;
@@ -77,20 +77,20 @@ try {
 
     // Optional: Check if start date is not in the past (unless allowed)
     // if ($start_date < $today) {
-    //     header('Location: ../../dashboard-association.html?error=invalid_start_date_past#addProjectModal');
+    //     header('Location: ../../dashboard-association.php?error=invalid_start_date_past#addProjectModal'); // Updated link
     //     exit;
     // }
 
     if ($end_date < $start_date) {
         // Redirect back with error
-        header('Location: ../../dashboard-association.html?error=invalid_end_date#addProjectModal');
+        header('Location: ../../dashboard-association.php?error=invalid_end_date#addProjectModal'); // Updated link
         exit;
         // echo json_encode(['error' => 'End date must be after start date']);
         // exit;
     }
 } catch (Exception $e) {
     // Handle invalid date formats
-    header('Location: ../../dashboard-association.html?error=invalid_date_format#addProjectModal');
+    header('Location: ../../dashboard-association.php?error=invalid_date_format#addProjectModal'); // Updated link
     exit;
 }
 
@@ -100,22 +100,28 @@ try {
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
         $file_type = $_FILES['image']['type'];
-        
+        $max_file_size = 2 * 1024 * 1024; // 2MB
+
         if (!in_array($file_type, $allowed_types)) {
-            echo json_encode(['error' => 'Invalid file type. Only JPEG, PNG, and GIF are allowed']);
+            header('Location: ../../dashboard-association.php?error=invalid_file_type#addProjectModal'); // Updated link
             exit;
         }
-        
+
+        if ($_FILES['image']['size'] > $max_file_size) {
+             header('Location: ../../dashboard-association.php?error=file_too_large#addProjectModal'); // Updated link
+             exit;
+        }
+
         $upload_dir = '../../uploads/projects/';
-        
+
         // Create directory if it doesn't exist
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
-        
+
         $file_name = uniqid() . '_' . basename($_FILES['image']['name']);
         $file_path = $upload_dir . $file_name;
-        
+
         if (move_uploaded_file($_FILES['image']['tmp_name'], $file_path)) {
             $image_path = 'uploads/projects/' . $file_name;
         } else {
@@ -158,8 +164,17 @@ try {
         ]
     ]);
 
+    // Redirect to dashboard with success message
+    header('Location: ../../dashboard-association.php?success=project_added'); // Updated link
+    exit;
+
 } catch (PDOException $e) {
-    echo json_encode(['error' => 'Failed to create project: ' . $e->getMessage()]);
+    error_log("Project add error: " . $e->getMessage());
+    // Clean up uploaded file if DB error occurs
+    if ($image_path !== null && file_exists('../../' . $image_path)) {
+        unlink('../../' . $image_path);
+    }
+    header('Location: ../../dashboard-association.php?error=database_error#addProjectModal'); // Updated link
     exit;
 }
 ?>

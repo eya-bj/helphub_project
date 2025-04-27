@@ -15,7 +15,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
             </a>
         </div>
@@ -29,10 +29,7 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h2 class="card-title text-center mb-4">Association Representative Registration</h2>
-<<<<<<< Updated upstream
-=======
-                        <!-- Add action, method, enctype -->
->>>>>>> Stashed changes
+
                         <form id="associationRegisterForm" action="backend/auth/register_association.php" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -104,9 +101,9 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pseudo" class="form-label">Pseudo</label>
-                                    <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Letters only" required aria-required="true">
+                                    <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Letters/Numbers, min 3 chars" required aria-required="true">
                                     <div class="invalid-feedback" id="pseudoFeedback">
-                                        Please enter a valid pseudo (letters only).
+                                        Please enter a valid pseudo (letters/numbers, minimum 3 characters).
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -137,7 +134,7 @@
 
                             <div class="text-center mt-3">
                                 <span>Already have an account? </span>
-                                <a href="index.html">Login</a>
+                                <a href="index.php">Login</a>
                             </div>
                         </form>
                     </div>
