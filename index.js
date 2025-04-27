@@ -20,10 +20,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+<<<<<<< Updated upstream
+            // Create form data for POST submission
+            var formData = new FormData();
+            formData.append('user_type', userType);
+            formData.append('pseudo', username);
+            formData.append('password', password);
+            
+            // Send POST request to backend
+            fetch('backend/auth/login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Store user data and redirect
+                    localStorage.setItem('userType', userType);
+                    window.location.href = `dashboard-${userType}.html`;
+                } else {
+                    alert(data.error || 'Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                alert('Login failed. Please try again.');
+            });
+=======
             // Form will now submit to the action specified in the HTML
             // Remove client-side redirection:
             // localStorage.setItem('userType', userType);
             // window.location.href = `dashboard-${userType}.html`;
+>>>>>>> Stashed changes
         });
     }
 

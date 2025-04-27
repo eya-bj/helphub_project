@@ -34,19 +34,28 @@ if (empty($data['user_type']) || empty($data['pseudo']) || empty($data['password
     // exit;
 }
 
+<<<<<<< Updated upstream
+// Basic user_type check (this is security-critical so we keep it)
+if (!in_array($data['user_type'], ['association', 'donor'])) {
+    echo json_encode(['error' => 'Invalid user type. Must be "association" or "donor"']);
+=======
 // Validate user_type
 $user_type = $data['user_type']; // Assign to variable
 if (!in_array($user_type, ['association', 'donor'])) {
     // Redirect back with error
     header('Location: ../../index.html?error=invalid_user_type#loginModal');
+>>>>>>> Stashed changes
     exit;
     // echo json_encode(['error' => 'Invalid user type. Must be "association" or "donor"']);
     // exit;
 }
 
+<<<<<<< Updated upstream
+=======
 $pseudo = trim($data['pseudo']); // Use $data
 $password = $data['password']; // Use $data, don't trim password
 
+>>>>>>> Stashed changes
 try {
     $table = $data['user_type'];
     $id_field = $data['user_type'] === 'association' ? 'assoc_id' : 'donor_id';
@@ -62,18 +71,28 @@ try {
         exit;
     }
     
+<<<<<<< Updated upstream
+    // Verify password (this is security-critical so we keep it)
+    if (!password_verify($data['password'], $user['password'])) {
+        echo json_encode(['error' => 'Invalid password']);
+=======
     // Verify password
     if (!password_verify($password, $user['password'])) { // Use $password variable
         // Redirect back with error
         header('Location: ../../index.html?error=invalid_password#loginModal');
+>>>>>>> Stashed changes
         exit;
         // echo json_encode(['error' => 'Invalid password']);
         // exit;
     }
+<<<<<<< Updated upstream
+    
+=======
 
     // Regenerate session ID upon successful login
     session_regenerate_id(true);
 
+>>>>>>> Stashed changes
     // Set session variables
     $_SESSION['user_id'] = $user[$id_field];
     $_SESSION['user_type'] = $data['user_type'];

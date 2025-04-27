@@ -28,6 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
+<<<<<<< Updated upstream
+// Get POST data directly - removed JSON handling
+$data = $_POST;
+
+// Check for required fields (keeping this basic validation for security)
+=======
 // Get POST data - Use $_POST directly for forms with enctype="multipart/form-data"
 // $data = json_decode(file_get_contents('php://input'), true);
 // if (!$data) {
@@ -36,9 +42,21 @@ require_once '../db.php';
 // Use $_POST instead of $data below
 
 // Validate required fields
+>>>>>>> Stashed changes
 $required_fields = ['title', 'description', 'category', 'goal_amount', 'start_date', 'end_date'];
 $missing_fields = []; // Initialize array
 foreach ($required_fields as $field) {
+<<<<<<< Updated upstream
+    if (empty($data[$field])) {
+        echo json_encode(['error' => "Field '$field' is required"]);
+        exit;
+    }
+}
+
+// Basic amount check (security check to prevent negative amounts)
+if (!is_numeric($data['goal_amount']) || $data['goal_amount'] <= 0) {
+    echo json_encode(['error' => 'Goal amount must be a positive number']);
+=======
     // Check POST data for field names matching the required fields
     if (empty($_POST[$field])) {
         $missing_fields[] = $field;
@@ -63,17 +81,24 @@ $end_date_str = $_POST['end_date'];
 if (!is_numeric($goal_amount) || $goal_amount <= 0) {
     // Redirect back with error
     header('Location: ../../dashboard-association.html?error=invalid_goal#addProjectModal');
+>>>>>>> Stashed changes
     exit;
     // echo json_encode(['error' => 'Goal amount must be a positive number']);
     // exit;
 }
 
+<<<<<<< Updated upstream
+// Basic date check (critical to prevent logical errors)
+$start_date = new DateTime($data['start_date']);
+$end_date = new DateTime($data['end_date']);
+=======
 // Validate dates
 try {
     $start_date = new DateTime($start_date_str);
     $end_date = new DateTime($end_date_str);
     $today = new DateTime(); // Consider timezone if necessary
     $today->setTime(0, 0, 0); // Set time to midnight for comparison
+>>>>>>> Stashed changes
 
     // Optional: Check if start date is not in the past (unless allowed)
     // if ($start_date < $today) {
