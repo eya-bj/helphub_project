@@ -11,50 +11,66 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
 $donor_id = $_SESSION['user_id'];
 $error_message = $_GET['error'] ?? null;
 $success_message = $_GET['success'] ?? null;
+$debug_message = ""; // For debugging
 
 try {
+    // Test database connection first
+    $pdo->query("SELECT 1");
+    
     // Fetch donor details
-    $stmt = $pdo->prepare("SELECT name, surname, email, ctn, pseudo, created_at FROM donor WHERE donor_id = ?");
+    $stmt = $pdo->prepare("SELECT name, surname, email, ctn, pseudo, created_at, profile_image FROM donor WHERE donor_id = ?");
     $stmt->execute([$donor_id]);
     $donor = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$donor) {
         // Handle case where donor data is not found (should not happen if session is valid)
-        session_destroy();
-        header("Location: index.html?error=user_not_found");
-        exit;
+        $debug_message = "No donor found with ID: $donor_id";
+        error_log($debug_message);
+        // Don't destroy session yet - show error instead
     }
 
-    // Fetch donation stats
-    $stmt_stats = $pdo->prepare("
-        SELECT 
-            COUNT(donation_id) as total_donations_count, 
-            SUM(amount) as total_donations_amount,
-            COUNT(DISTINCT project_id) as projects_supported_count,
-            COUNT(DISTINCT p.assoc_id) as associations_supported_count
-        FROM donation d
-        LEFT JOIN project p ON d.project_id = p.project_id
-        WHERE d.donor_id = ?
-    ");
-    $stmt_stats->execute([$donor_id]);
-    $stats = $stmt_stats->fetch(PDO::FETCH_ASSOC);
+    // Fetch donation stats - only if donor was found
+    if ($donor) {
+        $stmt_stats = $pdo->prepare("
+            SELECT 
+                COUNT(donation_id) as total_donations_count, 
+                SUM(amount) as total_donations_amount,
+                COUNT(DISTINCT d.project_id) as projects_supported_count,
+                COUNT(DISTINCT p.assoc_id) as associations_supported_count
+            FROM donation d
+            LEFT JOIN project p ON d.project_id = p.project_id
+            WHERE d.donor_id = ?
+        ");
+        $stmt_stats->execute([$donor_id]);
+        $stats = $stmt_stats->fetch(PDO::FETCH_ASSOC);
 
-    // Format dates or numbers if needed
-    $member_since = date("F Y", strtotime($donor['created_at']));
-    $total_donations_amount = $stats['total_donations_amount'] ?? 0;
-    $projects_supported_count = $stats['projects_supported_count'] ?? 0;
-    $associations_supported_count = $stats['associations_supported_count'] ?? 0;
-
+        // Format dates or numbers if needed
+        $member_since = date("F Y", strtotime($donor['created_at']));
+        $total_donations_amount = $stats['total_donations_amount'] ?? 0;
+        $projects_supported_count = $stats['projects_supported_count'] ?? 0;
+        $associations_supported_count = $stats['associations_supported_count'] ?? 0;
+    } else {
+        // Initialize variables to avoid errors in HTML
+        $donor = ['name' => 'Unknown', 'surname' => 'User', 'email' => 'not.available@example.com', 'ctn' => 'N/A', 'pseudo' => 'unknown', 'profile_image' => null];
+        $member_since = 'N/A';
+        $total_donations_amount = 0;
+        $projects_supported_count = 0;
+        $associations_supported_count = 0;
+    }
 
 } catch (PDOException $e) {
     error_log("Profile fetch error: " . $e->getMessage());
-    $error_message = "Could not load profile data.";
+    $debug_message = "Database error: " . $e->getMessage();
+    
     // Initialize variables to avoid errors in HTML
-    $donor = ['name' => '', 'surname' => '', 'email' => '', 'ctn' => '', 'pseudo' => ''];
+    $donor = ['name' => 'Error', 'surname' => 'Loading', 'email' => 'error@example.com', 'ctn' => 'N/A', 'pseudo' => 'error', 'profile_image' => null];
     $member_since = 'N/A';
     $total_donations_amount = 0;
     $projects_supported_count = 0;
     $associations_supported_count = 0;
+    
+    // Set error message
+    $error_message = "Could not load profile data. Please try again later.";
 }
 
 ?>
@@ -139,7 +155,15 @@ try {
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
-
+            
+            <?php if (!empty($debug_message) && (isset($_GET['debug']) || true)): ?>
+                <div class="alert alert-warning">
+                    <h5>Debug Information (Admin only)</h5>
+                    <p><?php echo htmlspecialchars($debug_message); ?></p>
+                    <p>User ID: <?php echo htmlspecialchars($_SESSION['user_id']); ?></p>
+                    <p>User Type: <?php echo htmlspecialchars($_SESSION['user_type']); ?></p>
+                </div>
+            <?php endif; ?>
 
             <div class="row">
                 <!-- Left sidebar - profile summary -->
@@ -148,9 +172,13 @@ try {
                     <div class="card shadow-sm mb-4">
                         <div class="card-body text-center">
                             <div class="profile-image-container mb-3">
-                                <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mx-auto" style="width: 100px; height: 100px;">
-                                    <i class="fas fa-user fa-3x m-auto text-primary"></i>
-                                </div>
+                                <?php if (!empty($donor['profile_image'])): ?>
+                                    <img src="<?php echo htmlspecialchars($donor['profile_image']); ?>" alt="Profile Picture" class="rounded-circle img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                <?php else: ?>
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mx-auto" style="width: 100px; height: 100px;">
+                                        <i class="fas fa-user fa-3x m-auto text-primary"></i>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <h4><?php echo htmlspecialchars($donor['name'] . ' ' . $donor['surname']); ?></h4>
                             <p class="text-muted mb-1">Donor</p>
@@ -205,7 +233,7 @@ try {
                         </div>
                         <div class="card-body">
                             <!-- Donor Form -->
-                            <form id="donorProfileForm" action="backend/donor/update_profile.php" method="post">
+                            <form id="donorProfileForm" action="backend/donor/update_profile.php" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="donorName" class="form-label">Name</label>
@@ -242,6 +270,15 @@ try {
                                     <label for="donorPseudo" class="form-label">Pseudo</label>
                                     <input type="text" class="form-control" id="donorPseudo" value="<?php echo htmlspecialchars($donor['pseudo']); ?>" readonly>
                                     <div class="form-text text-muted">Pseudo cannot be changed.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="profileImage" class="form-label">Profile Picture</label>
+                                    <input type="file" class="form-control" id="profileImage" name="profile_image" accept="image/jpeg,image/png,image/gif">
+                                    <div class="invalid-feedback" id="profileImageFeedback">
+                                        Please select a valid image file (JPEG, PNG, or GIF).
+                                    </div>
+                                    <div class="form-text text-muted">Leave empty to keep current picture. Max 2MB.</div>
                                 </div>
 
                                 <div class="d-grid gap-2">

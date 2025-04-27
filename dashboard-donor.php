@@ -48,7 +48,7 @@ try {
     
     // Get donor information
     $stmt = $pdo->prepare("
-        SELECT name, surname, email, ctn
+        SELECT name, surname, email, ctn, profile_image
         FROM donor
         WHERE donor_id = ?
     ");
@@ -109,10 +109,10 @@ try {
                         <a class="nav-link active" href="dashboard-donor.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
+                        <a class="nav-link" href="projects.php">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="profile-donor.html">Profile</a>
+                        <a class="nav-link" href="profile-donor.php">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="backend/auth/logout.php">Logout</a>
@@ -144,9 +144,13 @@ try {
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center mb-3 mb-md-0">
-                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mx-auto" style="width: 100px; height: 100px;">
-                                <i class="fas fa-user fa-3x m-auto text-primary"></i>
-                            </div>
+                            <?php if (!empty($donor_info['profile_image'])): ?>
+                                <img src="<?php echo htmlspecialchars($donor_info['profile_image']); ?>" alt="Profile Picture" class="rounded-circle img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                            <?php else: ?>
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mx-auto" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-user fa-3x m-auto text-primary"></i>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <div class="col-md-10">
                             <h3 class="mb-3"><?php echo htmlspecialchars($_SESSION['user_name']); ?></h3>
@@ -155,7 +159,7 @@ try {
                                 <div class="col-md-4 mb-2"><i class="fas fa-id-card me-2"></i> CTN: <?php echo htmlspecialchars($donor_info['ctn'] ?? 'Not available'); ?></div>
                                 <div class="col-md-4 mb-2"><i class="fas fa-heart me-2"></i> Supporting <?php echo $projects_count; ?> projects</div>
                             </div>
-                            <a href="profile-donor.html" class="btn btn-sm btn-outline-primary mt-2">
+                            <a href="profile-donor.php" class="btn btn-sm btn-outline-primary mt-2">
                                 <i class="fas fa-edit me-2"></i> Edit Profile
                             </a>
                         </div>
@@ -248,7 +252,7 @@ try {
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="project-details-donor.html?id=<?php echo $donation['project_id']; ?>" class="btn btn-sm btn-info">
+                                                <a href="project-details-donor.php?id=<?php echo $donation['project_id']; ?>" class="btn btn-sm btn-info">
                                                     <i class="fas fa-eye"></i> View
                                                 </a>
                                             </td>

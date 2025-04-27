@@ -1,34 +1,27 @@
 <?php
-/**
- * Database Connection
- * 
- * Establishes a PDO connection to the HelpHub database
- */
-
-// Database configuration
-$db_host = 'localhost';
-$db_name = 'helphub';
-$db_user = 'root';
-$db_pass = '';
-$db_charset = 'utf8mb4';
+// Database connection parameters
+$host = 'localhost';    // Database host
+$dbname = 'helphub';    // Database name
+$username = 'root';     // Database username
+$password = '';         // Database password (default is empty for WAMP)
+$charset = 'utf8mb4';   // Character set
 
 // DSN (Data Source Name)
-$dsn = "mysql:host=$db_host;dbname=$db_name;charset=$db_charset";
+$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
 
-// PDO options for error handling and prepared statements
+// PDO options for better error handling
 $options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,  // Throw exceptions on errors
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,        // Return associative arrays by default
+    PDO::ATTR_EMULATE_PREPARES   => false,                   // Use real prepared statements
 ];
 
-// Create PDO instance
 try {
-    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
+    // Create PDO instance
+    $pdo = new PDO($dsn, $username, $password, $options);
 } catch (PDOException $e) {
-    // Return error as JSON
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
-    exit;
+    // Log the error and exit gracefully
+    error_log("Database Connection Error: " . $e->getMessage());
+    die("Database connection failed. Please contact the administrator.");
 }
 ?>

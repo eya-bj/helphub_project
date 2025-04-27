@@ -167,6 +167,7 @@ if (donorForm) {
     var donorNameInput = document.getElementById('donorName');
     var donorSurnameInput = document.getElementById('donorSurname');
     var donorEmailInput = document.getElementById('donorEmail');
+    var profileImageInput = document.getElementById('profileImage');
 
     // Real-time validation (Keep this for UX)
     donorNameInput?.addEventListener('input', function() {
@@ -192,6 +193,27 @@ if (donorForm) {
             showError(donorEmailInput, 'donorEmailFeedback', true);
         } else {
             showError(donorEmailInput, 'donorEmailFeedback', false);
+        }
+    });
+
+    // Add validation for profile image
+    profileImageInput?.addEventListener('change', function() {
+        var file = profileImageInput.files[0];
+        // Allow no file, or valid image types
+        var isValid = !file || (file && (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'));
+        var maxSize = 2 * 1024 * 1024; // 2MB
+        var isSizeValid = !file || file.size <= maxSize;
+
+        if (!isValid) {
+            showError(profileImageInput, 'profileImageFeedback', true);
+            document.getElementById('profileImageFeedback').textContent = 'Please select a valid image file (JPEG, PNG, or GIF).';
+            profileImageInput.value = ''; // Clear invalid file
+        } else if (!isSizeValid) {
+            showError(profileImageInput, 'profileImageFeedback', true);
+            document.getElementById('profileImageFeedback').textContent = 'File is too large (Max 2MB).';
+            profileImageInput.value = ''; // Clear invalid file
+        } else {
+            showError(profileImageInput, 'profileImageFeedback', false);
         }
     });
 
@@ -223,7 +245,25 @@ if (donorForm) {
             showError(donorEmailInput, 'donorEmailFeedback', false);
         }
 
-         if (!isValid) {
+        // Validate profile image on form submit
+        var file = profileImageInput?.files[0];
+        var imageTypeValid = !file || (file && (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'));
+        var maxSize = 2 * 1024 * 1024; // 2MB
+        var imageSizeValid = !file || file.size <= maxSize;
+
+        if (!imageTypeValid) {
+            showError(profileImageInput, 'profileImageFeedback', true);
+            document.getElementById('profileImageFeedback').textContent = 'Please select a valid image file (JPEG, PNG, or GIF).';
+            isValid = false;
+        } else if (!imageSizeValid) {
+            showError(profileImageInput, 'profileImageFeedback', true);
+            document.getElementById('profileImageFeedback').textContent = 'File is too large (Max 2MB).';
+            isValid = false;
+        } else {
+            showError(profileImageInput, 'profileImageFeedback', false);
+        }
+
+        if (!isValid) {
             event.preventDefault(); // Prevent submission ONLY if client-side validation fails
             // alert('Please correct the errors in the form.'); // Optional: General alert
         }
