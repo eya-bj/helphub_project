@@ -34,8 +34,6 @@ foreach ($required_fields as $field) {
     }
 }
 
-<<<<<<< Updated upstream
-=======
 // Assign variables AFTER validation
 $name = trim($data['name']);
 $surname = trim($data['surname']);
@@ -81,7 +79,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     // exit;
 }
 
->>>>>>> Stashed changes
 try {
     // Check if email already exists
     $stmt = $pdo->prepare("SELECT * FROM donor WHERE email = ?");
