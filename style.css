@@ -1,75 +1,49 @@
-/* HelpHub Custom Styles
- * This file defines the visual design and layout for the HelpHub application, 
- * including colors, typography, component styles, and responsive behavior. 
- * It combines core styling with visual fixes to ensure consistency and accessibility 
- * across all pages, replacing Bootstrap JavaScript functionality with CSS where needed.
- */
-
-/* Color Palette and Theme Variables
- * Defines reusable colors for buttons, backgrounds, text, and other elements to maintain 
- * a consistent look across the application.
- */
- :root {
-    --primary-color: #4e73df; /* Main brand color for buttons and highlights */
-    --primary-dark: #3a56a5; /* Darker shade for hover states */
-    --secondary-color: #5a5c69; /* Neutral color for secondary elements */
-    --accent-color: #f6c23e; /* Yellow for emphasis and highlights */
-    --success-color: #1cc88a; /* Green for success states and progress bars */
-    --success-dark: #169e6c; /* Darker green for hover */
-    --info-color: #36b9cc; /* Cyan for informational elements */
-    --warning-color: #f6c23e; /* Yellow for warnings, matches accent */
-    --danger-color: #e74a3b; /* Red for errors or alerts */
-    --light-color: #f8f9fc; /* Light background for cards and sections */
-    --dark-color: #5a5c69; /* Dark text or secondary backgrounds */
-    --gray-100: #f8f9fc; /* Lightest gray for backgrounds */
-    --gray-200: #eaecf4;
-    --gray-300: #dddfeb;
-    --gray-400: #d1d3e2;
-    --gray-500: #b7b9cc;
-    --gray-600: #858796;
-    --gray-700: #6e707e;
-    --gray-800: #5a5c69;
-    --gray-900: #3a3b45;
-    --primary-light: rgba(78, 115, 223, 0.1); /* Transparent primary for backgrounds */
+:root {
+    --primary-color: #4e73df;
+    --primary-dark: #3a56a5;
+    --secondary-color: #5a5c69;
+    --accent-color: #f6c23e;
+    --success-color: #1cc88a;
+    --success-dark: #169e6c;
+    --info-color: #36b9cc;
+    --info-dark: #2a8f9e;
+    --warning-color: #f6c23e;
+    --warning-dark: #d1a02c;
+    --danger-color: #e74a3b;
+    --danger-dark: #c73e31;
+    --light-color: #f8f9fc;
+    --dark-color: #5a5c69;
+    --white-color: #fff;
+    --primary-light: rgba(78, 115, 223, 0.1);
     --success-light: rgba(28, 200, 138, 0.1);
     --info-light: rgba(54, 185, 204, 0.1);
     --warning-light: rgba(246, 194, 62, 0.1);
     --danger-light: rgba(231, 74, 59, 0.1);
 }
 
-/* Base Typography
- * Sets the default font family for the application, ensuring a modern and readable style.
- */
 body {
     font-family: 'Nunito', sans-serif;
 }
 
-/* Card Styling
- * Styles cards used for project displays, dashboards, and profiles, adding shadows and 
- * hover effects for interactivity. Ensures consistent spacing on mobile.
- */
 .card {
-    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Subtle default shadow */
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
 .card:hover {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Deeper shadow on hover */
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 576px) {
     .card {
-        margin-bottom: 1.25rem; /* Extra spacing between cards on small screens */
+        margin-bottom: 1.25rem;
     }
     .card-body {
-        padding: 1rem; /* Reduced padding for compact mobile display */
+        padding: 1rem;
     }
 }
 
-/* Bootstrap Color Overrides
- * Customizes Bootstrap’s primary color classes to match the HelpHub theme, ensuring 
- * buttons, text, and backgrounds align with the brand.
- */
 .text-primary {
     color: var(--primary-color) !important;
 }
@@ -88,47 +62,35 @@ body {
     border-color: var(--primary-dark);
 }
 
-/* Form and Button Accessibility
- * Enhances form inputs, dropdowns, and buttons with consistent focus states for better 
- * accessibility and visual feedback when interacting.
- */
 .form-control:focus,
 .form-select:focus,
 .btn:focus {
-    border-color: var(--primary-color); /* Highlight border on focus */
-    box-shadow: 0 0 0 0.25rem var(--primary-light); /* Subtle glow effect */
-    outline: none; /* Remove default browser outline */
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem var(--primary-light);
+    outline: none;
 }
 
-/* Profile Images
- * Styles circular profile images for user and association profiles, ensuring proper 
- * sizing and cropping.
- */
 .profile-image {
     width: 100px;
     height: 100px;
-    object-fit: cover; /* Ensures images fill the circle without distortion */
+    object-fit: cover;
     border-radius: 50%;
     margin: 0 auto 1rem;
 }
 
-/* Hero Section Styling
- * Styles the prominent hero sections on the homepage and dashboard pages, with a gradient 
- * background and responsive padding for a bold introduction.
- */
 .hero-section {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
-    padding: 8rem 0 5rem; /* Generous padding for large screens */
-    margin-top: -1px; /* Aligns with navbar */
+    padding: 8rem 0 5rem;
+    margin-top: -1px;
 }
 
 .hero-section-bg {
     background: url('https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center;
-    background-size: cover; /* Full-width background image */
-    min-height: 100vh; /* Fills viewport height */
+    background-size: cover;
+    min-height: 100vh;
     display: flex;
-    align-items: center; /* Centers content vertically */
+    align-items: center;
     position: relative;
     margin-top: -1px;
     padding: 8rem 0;
@@ -140,52 +102,48 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(78, 115, 223, 0.9) 0%, rgba(58, 86, 165, 0.85) 100%);
-    z-index: 1; /* Places overlay above background image */
-}
-
-.hero-section-bg .container {
-    position: relative;
-    z-index: 2; /* Ensures content is above overlay */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
 .hero-badge {
     display: inline-block;
-    background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent badge */
-    color: white;
-    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--white-color);
     padding: 0.5rem 1.5rem;
-    border-radius: 2rem;
+    border-radius: 50px;
     font-size: 1rem;
-    margin-bottom: 1.5rem;
-    backdrop-filter: blur(5px); /* Subtle blur for modern look */
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hero-title {
     font-size: 3.5rem;
-    font-weight: 800; /* Bold headline */
+    font-weight: 800;
     line-height: 1.2;
 }
 
 .hero-text {
-    font-size: 1.2rem;
-    opacity: 0.9; /* Slightly faded for contrast */
+    font-size: 1.15rem;
+    font-weight: 400;
+    opacity: 0.9;
 }
 
 .text-highlight {
-    color: var(--accent-color); /* Yellow highlight for key text */
+    color: var(--accent-color);
     position: relative;
     display: inline-block;
 }
 
 .hero-image {
     max-height: 450px;
-    object-fit: cover; /* Ensures image fits without stretching */
-    border: 8px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+    object-fit: cover;
+    border: 8px solid rgba(255, 255, 255, 0.1);
 }
 
 .hero-buttons .btn {
-    padding: 0.8rem 2rem; /* Larger buttons for prominence */
+    padding: 0.8rem 2rem;
     font-weight: 600;
     border-radius: 50px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -193,28 +151,25 @@ body {
 }
 
 .hero-buttons .btn:hover {
-    transform: translateY(-3px); /* Lift effect on hover */
+    transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .hero-buttons .btn-outline-light {
     backdrop-filter: blur(5px);
-    border-width: 2px; /* Thicker border for visibility */
+    border-width: 2px;
 }
 
-/* Responsive Hero Adjustments
- * Adjusts hero section for smaller screens to maintain readability and spacing.
- */
 @media (max-width: 991px) {
     .hero-section {
-        padding: 7rem 0 4rem; /* Reduced padding for tablets */
+        padding: 7rem 0 4rem;
         text-align: center;
     }
     .hero-title {
         font-size: 2.5rem;
     }
     .hero-section-bg {
-        min-height: auto; /* Allows flexible height */
+        min-height: auto;
         padding: 7rem 0;
     }
     .hero-buttons .btn {
@@ -231,57 +186,45 @@ body {
         padding: 0.4rem 1.2rem;
     }
     .hero-buttons .btn {
-        width: 100%; /* Full-width buttons on mobile */
+        width: 100%;
         margin-bottom: 0.5rem;
     }
 }
 
-/* Progress Bar Styling
- * Customizes progress bars for project funding displays, matching the primary theme color.
- */
 .progress {
     border-radius: 0.25rem;
-    height: 0.8rem; /* Consistent height for visibility */
-    background-color: #e9ecef; /* Neutral background */
+    height: 0.8rem;
+    background-color: #e9ecef;
     overflow: hidden;
 }
 
 .progress-bar {
-    background-color: var(--primary-color); /* Matches theme */
-    transition: width 0.6s ease; /* Smooth width animation */
+    background-color: var(--primary-color);
+    transition: width 0.6s ease;
 }
 
-/* Table Styling
- * Ensures tables (e.g., donor lists) are responsive and vertically aligned for clarity.
- */
 .table-responsive {
-    overflow-x: auto; /* Allows horizontal scrolling on small screens */
+    overflow-x: auto;
     border-radius: 0.375rem;
 }
 
 .table td, .table th {
-    vertical-align: middle; /* Centers content vertically in cells */
+    vertical-align: middle;
 }
 
 @media (max-width: 768px) {
     .table-responsive {
         margin-bottom: 1rem;
-        border: 0; /* Removes border for cleaner mobile look */
+        border: 0;
     }
 }
 
-/* Badge Styling
- * Styles badges used for project categories and statuses, ensuring readability.
- */
 .badge {
     font-weight: 500;
     padding: 0.5em 0.75em;
-    letter-spacing: 0.03em; /* Slight spacing for clarity */
+    letter-spacing: 0.03em;
 }
 
-/* Button Padding
- * Sets consistent padding for buttons across different sizes to match design.
- */
 .btn {
     padding: 0.375rem 0.75rem;
 }
@@ -294,70 +237,44 @@ body {
     padding: 0.25rem 0.5rem;
 }
 
-/* Modal Styling
- * Ensures modals (e.g., login, donation) have consistent padding and responsive sizing.
- */
 .modal-body {
-    padding: 1.5rem; /* Comfortable padding for content */
+    padding: 1.5rem;
 }
 
 .modal-lg {
-    max-width: 800px; /* Larger modals for donation forms */
+    max-width: 800px;
 }
 
-/* Image Thumbnails
- * Ensures circular images (e.g., donor avatars) are properly cropped and displayed.
- */
 .rounded-circle {
     object-fit: cover;
 }
 
-/* Navbar Item Spacing
- * Adds spacing between navbar items for better navigation clarity.
- */
 .nav-item {
     margin-right: 0.5rem;
 }
 
-/* Icon Alignment
- * Adjusts vertical alignment of Font Awesome icons for consistent positioning.
- */
 i.fas, i.fab {
     vertical-align: -0.125em;
 }
 
-/* Form Group Spacing
- * Ensures consistent spacing below form groups for clean layout.
- */
 .mb-3 {
     margin-bottom: 1rem !important;
 }
 
-/* CSS-Only Bootstrap Component Fixes
- * Provides CSS-based functionality for navbar, dropdowns, modals, and tabs, replacing 
- * Bootstrap JavaScript where needed (e.g., in pages without JS).
- */
-
-/* Navbar Collapse
- * Toggles navbar menu visibility on mobile devices without JavaScript.
- */
 .navbar-collapse {
-    display: none; /* Hidden by default on mobile */
+    display: none;
 }
 
 .navbar-collapse.show {
-    display: block; /* Shows when toggled */
+    display: block;
 }
 
 @media (min-width: 992px) {
     .navbar-collapse {
-        display: flex !important; /* Always visible on desktop */
+        display: flex !important;
     }
 }
 
-/* Dropdown Menu
- * Styles dropdown menus (e.g., register options) to appear on click without JavaScript.
- */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -377,61 +294,34 @@ i.fas, i.fab {
 }
 
 .dropdown-menu.show {
-    display: block; /* Shows when toggled */
+    display: block;
 }
 
-/* Modal Dialog
- * Styles modals (e.g., login, donation) for CSS-only display, ensuring proper 
- * positioning and overlay behavior.
- */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1050; /* Above other content */
+    z-index: 1050;
     display: none;
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
-}
-
-.modal.show {
-    display: block; /* Shows when toggled */
-}
-
-body.modal-open {
-    overflow: hidden; /* Prevents scrolling when modal is open */
-    padding-right: 17px; /* Accounts for scrollbar width */
-}
-
-/* Modal Backdrop
- * Creates the semi-transparent background behind modals.
- */
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040; /* Below modal */
-    width: 100vw;
-    height: 100vh;
+    overflow: hidden;
+    outline: 0;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-backdrop.fade {
-    opacity: 0.5;
+.modal.fade {
+    transition: opacity 0.15s linear;
 }
 
-.modal-backdrop.show {
-    opacity: 0.5;
+.modal.show {
+    display: block;
+    opacity: 1;
 }
 
-/* Modal Dialog Positioning
- * Centers modals and ensures proper sizing for content.
- */
 .modal-dialog {
     position: relative;
+    width: auto;
     margin: 1.75rem auto;
     pointer-events: none;
     max-width: 500px;
@@ -441,7 +331,7 @@ body.modal-open {
     display: flex;
     align-items: center;
     min-height: calc(100% - 3.5rem);
-    justify-content: center; /* Centers horizontally */
+    justify-content: center;
 }
 
 .modal-content {
@@ -456,20 +346,14 @@ body.modal-open {
     outline: 0;
 }
 
-/* Tab Panes
- * Manages tab content visibility for project details pages without JavaScript.
- */
 .tab-content > .tab-pane {
-    display: none; /* Hides inactive tabs */
+    display: none;
 }
 
 .tab-content > .active {
-    display: block; /* Shows active tab */
+    display: block;
 }
 
-/* Fade Animation
- * Adds smooth opacity transitions for modals and tabs.
- */
 .fade {
     transition: opacity 0.15s linear;
 }
@@ -478,25 +362,19 @@ body.modal-open {
     opacity: 0;
 }
 
-/* Tab Navigation
- * Styles tab links to indicate active states and ensure proper borders.
- */
 .nav-tabs .nav-link:not(.active) {
     color: #495057;
     background-color: transparent;
     border-color: transparent;
 }
 
-.nav-tabs .nav-link.active, 
+.nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
     color: #495057;
     background-color: #fff;
-    border-color: #dee2e6 #dee2e6 #fff; /* Matches Bootstrap default */
+    border-color: #dee2e6 #dee2e6 #fff;
 }
 
-/* Close Button
- * Styles the modal close button with a clean, accessible design.
- */
 .btn-close {
     box-sizing: content-box;
     width: 1em;
@@ -511,5 +389,5 @@ body.modal-open {
 }
 
 .btn-close-white {
-    filter: invert(1) grayscale(100%) brightness(200%); /* White version for dark modals */
+    filter: invert(1) grayscale(100%) brightness(200%);
 }

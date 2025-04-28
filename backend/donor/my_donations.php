@@ -1,94 +1,66 @@
 <?php
-/**
- * My Donations Endpoint
- * 
- * Fetches donation history for the logged-in donor
- * Method: GET
- * Optional params: sort (newest|oldest|amount)
- */
-
-// Start session
 session_start();
-
-// Set JSON content type
 header('Content-Type: application/json');
 
-// Check if user is logged in as donor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
     echo json_encode(['error' => 'Unauthorized access. Please login as a donor']);
     exit;
 }
 
-// Allow only GET requests
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    echo json_encode(['error' => 'Only GET method is allowed']);
-    exit;
-}
-
-// Get database connection
 require_once '../db.php';
 
+$donor_id = $_SESSION['user_id'];
+
 try {
-    $donor_id = $_SESSION['user_id'];
-    
-    // Apply sorting
-    $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
-    $order_by = "d.donation_date DESC"; // default newest
-    
-    switch ($sort) {
-        case 'oldest':
-            $order_by = "d.donation_date ASC";
-            break;
-        case 'amount':
-            $order_by = "d.amount DESC";
-            break;
-    }
-    
-    // Get all donations with project and association details
     $stmt = $pdo->prepare("
         SELECT 
-            d.donation_id, d.amount, d.anonymous, d.donation_date,
-            p.project_id, p.title as project_title, p.category, p.goal_amount, p.current_amount, p.status,
-            a.assoc_id, a.name as association_name
+            d.donation_id, d.amount, d.donation_date, d.anonymous,
+            p.project_id, p.title as project_title, p.image_path as project_image, p.status as project_status,
+            a.name as association_name
         FROM donation d
         JOIN project p ON d.project_id = p.project_id
         JOIN association a ON p.assoc_id = a.assoc_id
         WHERE d.donor_id = ?
-        ORDER BY $order_by
+        ORDER BY d.donation_date DESC
     ");
     $stmt->execute([$donor_id]);
-    $donations = $stmt->fetchAll();
-    
-    // Calculate additional info for each donation
-    foreach ($donations as &$donation) {
-        // Calculate progress percentage
-        $donation['progress'] = $donation['goal_amount'] > 0 
-            ? round(($donation['current_amount'] / $donation['goal_amount']) * 100, 2) 
-            : 0;
-            
-        // Format donation date
-        $date = new DateTime($donation['donation_date']);
-        $donation['formatted_date'] = $date->format('M d, Y');
+    $donations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stats = [
+        'total_donated' => 0,
+        'projects_supported' => 0,
+        'associations_supported' => 0,
+        'average_donation' => 0,
+        'largest_donation' => 0,
+        'first_donation_date' => null,
+        'last_donation_date' => null
+    ];
+
+    if (!empty($donations)) {
+        $total_amount = 0;
+        $project_ids = [];
+        $assoc_ids = [];
+        $amounts = [];
+        $dates = [];
+
+        foreach ($donations as $donation) {
+            $total_amount += $donation['amount'];
+            $project_ids[$donation['project_id']] = true;
+            $assoc_ids[$donation['association_name']] = true; 
+            $amounts[] = $donation['amount'];
+            $dates[] = strtotime($donation['donation_date']);
+        }
+
+        $stats['total_donated'] = $total_amount;
+        $stats['projects_supported'] = count($project_ids);
+        $stats['average_donation'] = round($total_amount / count($donations), 2);
+        $stats['largest_donation'] = max($amounts);
+        $stats['first_donation_date'] = date('Y-m-d', min($dates));
+        $stats['last_donation_date'] = date('Y-m-d', max($dates));
     }
-    
-    // Get donation statistics
+
     $stmt = $pdo->prepare("
-        SELECT 
-            COUNT(*) as total_donations,
-            SUM(amount) as total_amount,
-            COUNT(DISTINCT project_id) as projects_supported,
-            MAX(amount) as largest_donation,
-            MIN(amount) as smallest_donation,
-            AVG(amount) as average_donation
-        FROM donation
-        WHERE donor_id = ?
-    ");
-    $stmt->execute([$donor_id]);
-    $stats = $stmt->fetch();
-    
-    // Get associations supported
-    $stmt = $pdo->prepare("
-        SELECT COUNT(DISTINCT a.assoc_id) as associations_count
+        SELECT COUNT(DISTINCT p.assoc_id) as associations_count
         FROM donation d
         JOIN project p ON d.project_id = p.project_id
         JOIN association a ON p.assoc_id = a.assoc_id
@@ -98,7 +70,6 @@ try {
     $assoc_count = $stmt->fetch();
     $stats['associations_supported'] = $assoc_count['associations_count'];
     
-    // Return success
     echo json_encode([
         'success' => true,
         'data' => [
