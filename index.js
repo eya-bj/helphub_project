@@ -1,12 +1,11 @@
 // Handles login, password toggle, search/filter triggers, project search/filter, and contact form
 
-// Wait for page to load before running code
 document.addEventListener('DOMContentLoaded', function() {
     
     // --- ERROR HANDLING from URL ---
     const urlParams = new URLSearchParams(window.location.search);
     const error = urlParams.get('error');
-    const loginErrorMsgDiv = document.getElementById('loginErrorMsg'); // Assumes an element with id="loginErrorMsg" exists in the login modal
+    const loginErrorMsgDiv = document.getElementById('loginErrorMsg'); 
 
     if (loginErrorMsgDiv) {
         let errorMessage = '';
@@ -21,20 +20,19 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (error === 'login_failed') {
             errorMessage = 'Login failed. Please try again.';
         }
-        // Add more error cases as needed
 
         if (errorMessage) {
             loginErrorMsgDiv.textContent = errorMessage;
-            loginErrorMsgDiv.classList.remove('d-none'); // Make the error message visible
+            loginErrorMsgDiv.classList.remove('d-none'); 
 
-            // Optionally, ensure the login modal is open if there's an error
+            //ensure the login modal is open if there's an error
             const loginModalElement = document.getElementById('loginModal');
             if (loginModalElement && window.location.hash === '#loginModal') {
                 const loginModal = new bootstrap.Modal(loginModalElement);
                 loginModal.show();
             }
         } else {
-            loginErrorMsgDiv.classList.add('d-none'); // Hide if no error
+            loginErrorMsgDiv.classList.add('d-none'); 
         }
     }
 
@@ -45,22 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
-            // event.preventDefault(); // REMOVED - Let the form submit normally
             var userType = document.getElementById('userType').value;
             var username = document.getElementById('pseudo').value;
             var password = document.getElementById('password').value;
 
-            // Basic client-side validation (optional, server should always validate)
+
             if (!userType || !username || !password) {
                 alert('Please fill out all fields');
-                event.preventDefault(); // Prevent submission ONLY if fields are empty client-side
+                event.preventDefault(); 
                 return;
             }
 
-            // Form will now submit to the action specified in the HTML
-            // REMOVED client-side redirection:
-            // localStorage.setItem('userType', userType);
-            // window.location.href = `dashboard-${userType}.html`;
+            
         });
     }
 
@@ -148,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Thank you, ' + name + '! Your message has been sent.');
             contactForm.reset();
             contactForm.classList.remove('was-validated');
-            window.location.href = 'index.php'; // Updated link
+            window.location.href = 'index.php';  
         });
     }
 
@@ -169,39 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
-    // Handle donation form submission
-    // const donationForm = document.getElementById('donationForm'); // This might conflict with project-details-donor.php
-    // if (donationForm) {
-    //     donationForm.addEventListener('submit', function(event) {
-    //         event.preventDefault();
-            
-    //         // Validate form fields
-    //         let isValid = true;
-    //         const amount = document.getElementById('donationAmount').value;
-            
-    //         // Check for valid amount (REMOVE or ADJUST this logic if it's not for the main donation modal)
-    //         // if (!amount || isNaN(amount) || amount <= 0 || amount > 1800) { 
-    //         //     document.getElementById('donationAmount').classList.add('is-invalid');
-    //         //     isValid = false;
-    //         // } else {
-    //         //     document.getElementById('donationAmount').classList.remove('is-invalid');
-    //         // }
-            
-    //         if (isValid) {
-    //             // Display success message
-    //             alert('Thank you for your donation of $' + amount + '!');
-                
-    //             // Close modal
-    //             const modal = bootstrap.Modal.getInstance(document.getElementById('donationModal'));
-    //             modal.hide();
-                
-    //             // Refresh page or update UI as needed
-    //             // For demo purposes, we'll just reset the form
-    //             donationForm.reset();
-    //         }
-    //     });
-    // }
 });
 
 // Search projects by keywords
@@ -231,24 +192,16 @@ function searchProjects(query) {
     }
 }
 
-// Filter projects by category (Updated to handle links, not buttons)
+// Filter projects by category 
 function filterProjects(category) {
-    // This function might not be needed anymore if using links to projects.php
-    // Or it could be adapted for client-side filtering if projects are loaded via AJAX
+   
     console.log("Filtering by:", category); 
 }
 
-// Add event listener for search button if needed (now handled by form submission)
+// Add event listener for search button if needed 
 const homeSearchButton = document.getElementById('homeSearchButton');
 const homeProjectSearch = document.getElementById('homeProjectSearch');
 
-if (homeSearchButton && homeProjectSearch) {
-    // The form now handles the submission, JS might not be needed here
-    // homeSearchButton.addEventListener('click', function() {
-    //     const query = homeProjectSearch.value;
-    //     window.location.href = `projects.php?search=${encodeURIComponent(query)}`;
-    // });
-}
 
 // Handle login form error display
 const loginForm = document.getElementById('loginForm');
@@ -275,7 +228,6 @@ if (loginError && loginErrorMsg) {
     }
     loginErrorMsg.textContent = message;
     loginErrorMsg.classList.remove('d-none');
-    // Ensure modal is shown if there's an error
     const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
     loginModal.show();
 }
@@ -289,9 +241,8 @@ if (registerSuccess && loginErrorMsg) {
      }
      loginErrorMsg.textContent = message;
      loginErrorMsg.classList.remove('alert-danger');
-     loginErrorMsg.classList.add('alert-success'); // Show success message
+     loginErrorMsg.classList.add('alert-success'); 
      loginErrorMsg.classList.remove('d-none');
-     // Ensure modal is shown after registration
      const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
      loginModal.show();
 }

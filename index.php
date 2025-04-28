@@ -1,5 +1,5 @@
 <?php
-// Start session (optional, but good practice if needed)
+// Start session 
 session_start();
 
 // Include database connection
@@ -35,7 +35,6 @@ try {
     
 } catch (PDOException $e) {
     $error_message = "Database error: Could not fetch projects.";
-    // Log error: error_log("Index project fetch error: " . $e->getMessage());
 }
 ?>
 <!DOCTYPE html>
@@ -44,20 +43,16 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpHub - Connect & Donate</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.php"> <!-- Updated link -->
+            <a class="navbar-brand" href="index.php"> 
                 <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -67,7 +62,7 @@ try {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.php">Home</a> <!-- Updated link -->
+                        <a class="nav-link active" href="index.php">Home</a> 
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#how-it-works">How It Works</a>
@@ -93,7 +88,7 @@ try {
         </div>
     </nav>
 
-    <!-- Hero Section with Background Image -->
+    <!-- Hero Section  -->
     <section class="hero-section-bg" id="home">
         <div class="hero-overlay"></div>
         <div class="container position-relative">
@@ -171,16 +166,16 @@ try {
             <!-- Project Filters -->
             <div class="row mb-4">
                 <div class="col-lg-6 mb-3 mb-lg-0">
-                    <form action="projects.php" method="get" class="input-group"> <!-- Form added for search -->
+                    <form action="projects.php" method="get" class="input-group"> <!-- Form  for search -->
                         <input type="text" class="form-control" placeholder="Search projects by keywords..." name="search" id="homeProjectSearch">
-                        <button class="btn btn-primary" type="submit" id="homeSearchButton"> <!-- Changed button type to submit -->
+                        <button class="btn btn-primary" type="submit" id="homeSearchButton"> <!-- Search button -->
                             <i class="fas fa-search me-2"></i> Search
                         </button>
                     </form>
                 </div>
                 <div class="col-lg-6 text-lg-end">
                     <div class="btn-group" role="group">
-                        <a href="projects.php?category=all" class="btn btn-outline-primary active">All</a> <!-- Changed to links -->
+                        <a href="projects.php?category=all" class="btn btn-outline-primary active">All</a> 
                         <a href="projects.php?category=environment" class="btn btn-outline-primary">Environment</a>
                         <a href="projects.php?category=education" class="btn btn-outline-primary">Education</a>
                         <a href="projects.php?category=health" class="btn btn-outline-primary">Health</a>
@@ -399,7 +394,6 @@ try {
                             </div>
                         </div>
                         <div id="loginErrorMsg" class="alert alert-danger d-none mt-2" role="alert">
-                            <!-- Error message will appear here -->
                         </div>
                         <div class="mb-4 form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe">
@@ -423,9 +417,7 @@ try {
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="index.js"></script>
 </body>
 </html>
