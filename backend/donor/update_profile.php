@@ -21,7 +21,7 @@ if (empty($name) || strlen($name) < 2 || empty($surname) || strlen($surname) < 2
     exit;
 }
 
-$profile_image_path_to_save = null; // Initialize profile image path
+$profile_image_path_to_save = null; 
 
 try {
     // Check if email is already taken by another donor
@@ -50,7 +50,7 @@ try {
             exit;
         }
 
-        $upload_dir = '../../uploads/donors/'; // Relative to this script's location
+        $upload_dir = '../../uploads/donors/'; 
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
@@ -64,14 +64,14 @@ try {
         $stmt_old_image->execute([$donor_id]);
         $old_image_relative = $stmt_old_image->fetchColumn();
         if ($old_image_relative) {
-            $old_image_absolute = '../../' . $old_image_relative; // Adjust path relative to this script
+            $old_image_absolute = '../../' . $old_image_relative; 
             if (file_exists($old_image_absolute)) {
                 unlink($old_image_absolute);
             }
         }
 
         if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $file_path)) {
-            $profile_image_path_to_save = 'uploads/donors/' . $file_name; // Path to store in DB (relative to project root)
+            $profile_image_path_to_save = 'uploads/donors/' . $file_name; 
         } else {
             header("Location: ../../profile-donor.php?error=file_upload_error");
             exit;
@@ -107,7 +107,6 @@ try {
     if ($profile_image_path_to_save !== null && file_exists('../../' . $profile_image_path_to_save)) {
         unlink('../../' . $profile_image_path_to_save);
     }
-    header("Location: ../../profile-donor.php?error=db_error"); // Generic DB error
-    exit;
+    header("Location: ../../profile-donor.php?error=db_error"); 
 }
 ?>

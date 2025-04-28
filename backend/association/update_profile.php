@@ -52,8 +52,7 @@ try {
              exit;
         }
 
-        $upload_dir = '../../uploads/logos/'; // Relative to this script's location
-        if (!file_exists($upload_dir)) {
+        $upload_dir = '../../uploads/logos/'; 
             mkdir($upload_dir, 0777, true);
         }
 

@@ -1,7 +1,6 @@
 <?php
 session_start();
-require_once '../db.php'; // Adjust path as needed
-
+require_once '../db.php'; 
 // Check if user is logged in and request is POST
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: ../../index.php?error=unauthorized"); // Updated link
@@ -29,19 +28,9 @@ try {
     // Begin transaction
     $pdo->beginTransaction();
 
-    // --- Data Deletion Logic ---
-    // Add specific deletion logic here if needed (e.g., deleting related records like donations, projects for associations)
-    // For simplicity, we'll just delete the user record.
-    // WARNING: This is a basic example. In a real application, consider how to handle related data (e.g., anonymize donations, delete projects, etc.)
+
 
     if ($user_type === 'association') {
-        // Optional: Delete projects associated with the association first
-        // $stmt_del_projects = $pdo->prepare("DELETE FROM project WHERE assoc_id = ?");
-        // $stmt_del_projects->execute([$user_id]);
-        
-        // Optional: Handle donations related to those projects (e.g., anonymize or delete)
-        // $stmt_del_donations = $pdo->prepare("DELETE FROM donation WHERE project_id IN (SELECT project_id FROM project WHERE assoc_id = ?)");
-        // $stmt_del_donations->execute([$user_id]);
 
         // Delete logo file if exists
         $stmt_logo = $pdo->prepare("SELECT logo_path FROM association WHERE assoc_id = ?");
@@ -55,11 +44,8 @@ try {
         }
     }
      elseif ($user_type === 'donor') {
-        // Optional: Handle donations made by the donor (e.g., anonymize donor_id or delete)
-        // $stmt_update_donations = $pdo->prepare("UPDATE donation SET donor_id = NULL WHERE donor_id = ?"); // Example: Anonymize
-        // $stmt_update_donations->execute([$user_id]);
-    }
 
+    }
 
     // Delete the user record
     $stmt_delete = $pdo->prepare("DELETE FROM $table WHERE $id_column = ?");
@@ -71,8 +57,7 @@ try {
 
         // Destroy session and redirect to homepage
         session_destroy();
-        header("Location: ../../index.php?message=account_deleted"); // Updated link
-        exit;
+        header("Location: ../../index.php?message=account_deleted"); 
     } else {
         // Rollback transaction
         $pdo->rollBack();
