@@ -1,70 +1,56 @@
 <?php
-/**
- * Donor Registration Endpoint
- * 
- * Handles registration of new donors
- * Method: POST
- * Data: name, surname, ctn, pseudo, password, email
- */
-
-// Set JSON content type
-header('Content-Type: application/json');
-
-// Allow only POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['error' => 'Only POST method is allowed']);
-    exit;
-}
-
-// Get database connection
+session_start();
 require_once '../db.php';
 
-// Get POST data directly
-$data = $_POST;
-
-// Check for required fields
-$required_fields = ['name', 'surname', 'ctn', 'pseudo', 'password', 'email'];
-foreach ($required_fields as $field) {
-    if (empty($data[$field])) {
-        header('Location: ../../register-donor.html?error=missing_fields');
-        exit;
-    }
-}
-
-// Assign variables AFTER validation
-$name = trim($data['name']);
-$surname = trim($data['surname']);
-$ctn = trim($data['ctn']);
-$pseudo = trim($data['pseudo']);
-$password = $data['password']; // Don't trim password
-$email = trim($data['email']);
-
-// Validate CTN (format: CTN followed by 8 digits)
-if (!preg_match('/^CTN[0-9]{8}$/', $ctn)) {
-    header('Location: ../../register-donor.html?error=invalid_ctn');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../../register-donor.html');
     exit;
 }
 
-// Validate pseudo (letters and numbers, min 3 chars)
-if (!preg_match('/^[a-zA-Z0-9]{3,}$/', $pseudo)) {
-    header('Location: ../../register-donor.html?error=invalid_pseudo');
+$name = $_POST['name'] ?? '';
+$surname = $_POST['surname'] ?? '';
+$email = $_POST['email'] ?? '';
+$ctn = $_POST['ctn'] ?? '';
+$pseudo = $_POST['pseudo'] ?? '';
+$password = $_POST['password'] ?? '';
+$terms = isset($_POST['terms']);
+
+if (empty($name) || empty($surname) || empty($email) || empty($ctn) || empty($pseudo) || empty($password) || !$terms) {
+    header('Location: ../../register-donor.html?error=missing_fields');
     exit;
 }
 
-// Validate password (≥ 8 chars and ends with $ or #)
-if (strlen($password) < 8 || !(substr($password, -1) === '$' || substr($password, -1) === '#')) {
-    header('Location: ../../register-donor.html?error=invalid_password');
-    exit;
-}
-
-// Validate email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     header('Location: ../../register-donor.html?error=invalid_email');
     exit;
 }
 
+if (!preg_match('/^[a-zA-Z]{2,}$/', $name)) {
+    header('Location: ../../register-donor.html?error=invalid_name');
+    exit;
+}
+
+if (!preg_match('/^[a-zA-Z]{2,}$/', $surname)) {
+    header('Location: ../../register-donor.html?error=invalid_surname');
+    exit;
+}
+
+if (!preg_match('/^\d{8}$/', $ctn)) {
+    header('Location: ../../register-donor.html?error=invalid_ctn');
+    exit;
+}
+
+if (!preg_match('/^[a-zA-Z0-9]{3,}$/', $pseudo)) {
+    header('Location: ../../register-donor.html?error=invalid_pseudo');
+    exit;
+}
+
+if (strlen($password) < 8 || !(substr($password, -1) === '$' || substr($password, -1) === '#')) {
+    header('Location: ../../register-donor.html?error=invalid_password');
+    exit;
+}
+
 try {
-    // Check if email already exists
     $stmt = $pdo->prepare("SELECT donor_id FROM donor WHERE email = ?");
     $stmt->execute([$email]);
     if ($stmt->fetch()) {
@@ -72,7 +58,6 @@ try {
         exit;
     }
 
-    // Check if pseudo already exists
     $stmt = $pdo->prepare("SELECT donor_id FROM donor WHERE pseudo = ?");
     $stmt->execute([$pseudo]);
     if ($stmt->fetch()) {
@@ -80,7 +65,6 @@ try {
         exit;
     }
 
-    // Check if CTN already exists
     $stmt = $pdo->prepare("SELECT donor_id FROM donor WHERE ctn = ?");
     $stmt->execute([$ctn]);
     if ($stmt->fetch()) {
@@ -88,23 +72,20 @@ try {
         exit;
     }
 
-    // Hash password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert donor
     $stmt = $pdo->prepare("
-        INSERT INTO donor (name, surname, ctn, pseudo, password, email) 
+        INSERT INTO donor (name, surname, email, ctn, pseudo, password)
         VALUES (?, ?, ?, ?, ?, ?)
     ");
-    $stmt->execute([$name, $surname, $ctn, $pseudo, $hashed_password, $email]);
+    $stmt->execute([$name, $surname, $email, $ctn, $pseudo, $hashed_password]);
 
-    // Redirect to login page with success message
-    header('Location: ../../index.php?register=success_donor#loginModal'); // Updated link
+    header('Location: ../../index.php?register=success_donor#loginModal');
     exit;
 
 } catch (PDOException $e) {
-    error_log("Donor registration error: " . $e->getMessage());
-    header('Location: ../../register-donor.html?error=database');
+    error_log("Donor Registration Error: " . $e->getMessage());
+    header('Location: ../../register-donor.html?error=db_error');
     exit;
 }
 ?>

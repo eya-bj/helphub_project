@@ -1,19 +1,14 @@
-// JavaScript for Donor and Association Registration Forms
-// This code checks form inputs and shows errors if something is wrong, with shared validation for common fields
-
-// Function to show or hide error messages
 function showError(input, feedbackId, show) {
     var feedback = document.getElementById(feedbackId);
     if (show) {
         input.classList.add('is-invalid');
-        if (feedback) feedback.style.display = 'block'; // Show feedback message
+        if (feedback) feedback.style.display = 'block';
     } else {
         input.classList.remove('is-invalid');
-        if (feedback) feedback.style.display = 'none'; // Hide feedback message
+        if (feedback) feedback.style.display = 'none';
     }
 }
 
-// Shared validation functions for common fields
 function validateName(input, feedbackId) {
     var isValid = input.value.length >= 2;
     showError(input, feedbackId, !isValid && input.value != '');
@@ -35,7 +30,6 @@ function validateEmail(input, feedbackId) {
 
 function validatePseudo(input, feedbackId) {
     var value = input.value;
-    // Allow letters and numbers, minimum 3 chars (Matches PHP)
     var isValid = /^[a-zA-Z0-9]{3,}$/.test(value);
     showError(input, feedbackId, !isValid && value !== '');
     return isValid;
@@ -50,38 +44,23 @@ function validatePassword(input, feedbackId) {
 
 function validateTermsCheck(input, feedbackId) {
     var isValid = input.checked;
-    // Show error differently for checkbox
-    var label = input.closest('.form-check').querySelector('.form-check-label');
-    var feedback = document.getElementById(feedbackId); // Get feedback element
-    if (!isValid) {
-        input.classList.add('is-invalid');
-        if (label) label.classList.add('text-danger'); // Optionally make label red
-        if (feedback) feedback.style.display = 'block'; // Show feedback
-    } else {
-        input.classList.remove('is-invalid');
-        if (label) label.classList.remove('text-danger');
-        if (feedback) feedback.style.display = 'none'; // Hide feedback
-    }
+    showError(input, feedbackId, !isValid);
     return isValid;
 }
 
-// Shared password toggle function
 function setupPasswordToggle(passwordInput, toggleButton) {
-    if (!passwordInput || !toggleButton) return; // Exit if elements not found
+    if (!passwordInput || !toggleButton) return;
 
     toggleButton.addEventListener('click', function() {
-        // Toggle the type attribute
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
 
-        // Toggle the icon
         const icon = this.querySelector('i');
         icon.classList.toggle('fa-eye');
         icon.classList.toggle('fa-eye-slash');
     });
 }
 
-// Donor-specific validation
 function validateCtn(input, feedbackId) {
     var value = input.value;
     var isValid = value.length == 8 && !isNaN(value);
@@ -89,7 +68,6 @@ function validateCtn(input, feedbackId) {
     return isValid;
 }
 
-// Association-specific validations
 function validateCin(input, feedbackId) {
     var value = input.value;
     var isValid = value.length == 8 && !isNaN(value);
@@ -125,14 +103,26 @@ function validateFiscalId(input, feedbackId) {
 
 function validateLogo(input, feedbackId) {
     var file = input.files[0];
-    var isValid = file && (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif');
+    var isValid = true;
+    var feedback = document.getElementById(feedbackId);
+
+    if (file) {
+        var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        var maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (!allowedTypes.includes(file.type)) {
+            feedback.textContent = 'Please select a valid image file (JPEG, PNG, or GIF).';
+            isValid = false;
+        } else if (file.size > maxSize) {
+            feedback.textContent = 'File is too large (Max 2MB).';
+            isValid = false;
+        }
+    }
     showError(input, feedbackId, !isValid);
     return isValid;
 }
 
-// --- Setup Event Listeners ---
 document.addEventListener('DOMContentLoaded', function() {
-    // Donor Registration Form Setup
     var donorForm = document.getElementById('donorRegisterForm');
     if (donorForm) {
         const nameInput = document.getElementById('name');
@@ -141,13 +131,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctnInput = document.getElementById('ctn');
         const pseudoInput = document.getElementById('pseudo');
         const passwordInput = document.getElementById('password');
-        const togglePasswordBtn = document.getElementById('togglePassword'); // Use specific ID if available
+        const togglePasswordBtn = document.getElementById('togglePassword');
         const termsCheck = document.getElementById('termsCheck');
 
-        // Setup password toggle
         setupPasswordToggle(passwordInput, togglePasswordBtn);
 
-        // Add input event listeners for real-time validation
         nameInput?.addEventListener('input', () => validateName(nameInput, 'nameFeedback'));
         surnameInput?.addEventListener('input', () => validateSurname(surnameInput, 'surnameFeedback'));
         emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback'));
@@ -157,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
         termsCheck?.addEventListener('change', () => validateTermsCheck(termsCheck, 'termsCheckFeedback'));
 
         donorForm.addEventListener('submit', function(event) {
-            // Run all validations on submit
             const isNameValid = validateName(nameInput, 'nameFeedback');
             const isSurnameValid = validateSurname(surnameInput, 'surnameFeedback');
             const isEmailValid = validateEmail(emailInput, 'emailFeedback');
@@ -166,49 +153,43 @@ document.addEventListener('DOMContentLoaded', function() {
             const isPasswordValid = validatePassword(passwordInput, 'passwordFeedback');
             const isTermsValid = validateTermsCheck(termsCheck, 'termsCheckFeedback');
 
-            // Prevent submission if any validation fails
             if (!isNameValid || !isSurnameValid || !isEmailValid || !isCtnValid || !isPseudoValid || !isPasswordValid || !isTermsValid) {
                 event.preventDefault();
-                // Optionally scroll to the first error or show a general message
                 alert('Please correct the errors in the form.');
             }
         });
     }
 
-    // Association Registration Form Setup
     var associationForm = document.getElementById('associationRegisterForm');
     if (associationForm) {
         const repNameInput = document.getElementById('representative_name');
         const repSurnameInput = document.getElementById('representative_surname');
         const cinInput = document.getElementById('cin');
-        const emailInput = document.getElementById('email'); // Shared ID, ensure it's the correct one
-        const assocNameInput = document.getElementById('name'); // Shared ID
+        const emailInput = document.getElementById('email');
+        const assocNameInput = document.getElementById('name');
         const assocAddressInput = document.getElementById('address');
         const fiscalIdInput = document.getElementById('fiscal_id');
         const logoInput = document.getElementById('logo');
-        const pseudoInput = document.getElementById('pseudo'); // Shared ID
-        const passwordInput = document.getElementById('password'); // Shared ID
-        const togglePasswordBtn = associationForm.querySelector('.toggle-password'); // Find within form
-        const termsCheck = document.getElementById('termsCheck'); // Shared ID
+        const pseudoInput = document.getElementById('pseudo');
+        const passwordInput = document.getElementById('password');
+        const togglePasswordBtn = associationForm.querySelector('.toggle-password');
+        const termsCheck = document.getElementById('termsCheck');
 
-        // Setup password toggle
         setupPasswordToggle(passwordInput, togglePasswordBtn);
 
-        // Add input event listeners
-        repNameInput?.addEventListener('input', () => validateName(repNameInput, 'nameFeedback')); // Reusing nameFeedback ID, might need unique IDs
-        repSurnameInput?.addEventListener('input', () => validateSurname(repSurnameInput, 'surnameFeedback')); // Reusing surnameFeedback ID
+        repNameInput?.addEventListener('input', () => validateName(repNameInput, 'nameFeedback'));
+        repSurnameInput?.addEventListener('input', () => validateSurname(repSurnameInput, 'surnameFeedback'));
         cinInput?.addEventListener('input', () => validateCin(cinInput, 'cinFeedback'));
-        emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback')); // Reusing emailFeedback ID
+        emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback'));
         assocNameInput?.addEventListener('input', () => validateAssociationName(assocNameInput, 'associationNameFeedback'));
         assocAddressInput?.addEventListener('input', () => validateAssociationAddress(assocAddressInput, 'associationAddressFeedback'));
         fiscalIdInput?.addEventListener('input', () => validateFiscalId(fiscalIdInput, 'fiscalIdFeedback'));
-        logoInput?.addEventListener('change', () => validateLogo(logoInput, 'logoFeedback')); // Use 'change' for file inputs
-        pseudoInput?.addEventListener('input', () => validatePseudo(pseudoInput, 'pseudoFeedback')); // Reusing pseudoFeedback ID
-        passwordInput?.addEventListener('input', () => validatePassword(passwordInput, 'passwordFeedback')); // Reusing passwordFeedback ID
-        termsCheck?.addEventListener('change', () => validateTermsCheck(termsCheck, 'termsCheckFeedback')); // Reusing termsCheckFeedback ID
+        logoInput?.addEventListener('change', () => validateLogo(logoInput, 'logoFeedback'));
+        pseudoInput?.addEventListener('input', () => validatePseudo(pseudoInput, 'pseudoFeedback'));
+        passwordInput?.addEventListener('input', () => validatePassword(passwordInput, 'passwordFeedback'));
+        termsCheck?.addEventListener('change', () => validateTermsCheck(termsCheck, 'termsCheckFeedback'));
 
         associationForm.addEventListener('submit', function(event) {
-            // Run all validations
             const isRepNameValid = validateName(repNameInput, 'nameFeedback');
             const isRepSurnameValid = validateSurname(repSurnameInput, 'surnameFeedback');
             const isCinValid = validateCin(cinInput, 'cinFeedback');
@@ -216,12 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const isAssocNameValid = validateAssociationName(assocNameInput, 'associationNameFeedback');
             const isAssocAddressValid = validateAssociationAddress(assocAddressInput, 'associationAddressFeedback');
             const isFiscalIdValid = validateFiscalId(fiscalIdInput, 'fiscalIdFeedback');
-            const isLogoValid = logoInput.files.length > 0 ? validateLogo(logoInput, 'logoFeedback') : true; // Logo might be optional
+            const isLogoValid = logoInput.files.length > 0 ? validateLogo(logoInput, 'logoFeedback') : true;
             const isPseudoValid = validatePseudo(pseudoInput, 'pseudoFeedback');
             const isPasswordValid = validatePassword(passwordInput, 'passwordFeedback');
             const isTermsValid = validateTermsCheck(termsCheck, 'termsCheckFeedback');
 
-            // Prevent submission if invalid
             if (!isRepNameValid || !isRepSurnameValid || !isCinValid || !isEmailValid || !isAssocNameValid || !isAssocAddressValid || !isFiscalIdValid || !isLogoValid || !isPseudoValid || !isPasswordValid || !isTermsValid) {
                 event.preventDefault();
                 alert('Please correct the errors in the form.');
@@ -229,9 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Also setup password toggles globally if they exist outside forms (like login modal)
     document.querySelectorAll('.toggle-password').forEach(button => {
-        // Find the target input using data-target or by proximity
         const targetSelector = button.getAttribute('data-target');
         let passwordField = targetSelector ? document.querySelector(targetSelector) : null;
 
@@ -240,11 +218,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (passwordField) {
-            // Check if a listener is already attached by the form-specific setup
-            // This is a simple check; more robust checks might be needed if complexity increases
             if (!passwordField.dataset.toggleListenerAttached) {
                  setupPasswordToggle(passwordField, button);
-                 passwordField.dataset.toggleListenerAttached = 'true'; // Mark as attached
+                 passwordField.dataset.toggleListenerAttached = 'true';
             }
         }
     });

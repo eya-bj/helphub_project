@@ -1,10 +1,7 @@
--- Create database
 CREATE DATABASE IF NOT EXISTS helphub;
 
--- Use database
 USE helphub;
 
--- Association table
 CREATE TABLE IF NOT EXISTS association (
     assoc_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -16,11 +13,10 @@ CREATE TABLE IF NOT EXISTS association (
     email VARCHAR(100) NOT NULL UNIQUE,
     representative_name VARCHAR(50) NOT NULL,
     representative_surname VARCHAR(50) NOT NULL,
-    cin VARCHAR(8) NOT NULL UNIQUE, 
+    cin VARCHAR(8) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Donor table
 CREATE TABLE IF NOT EXISTS donor (
     donor_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -29,10 +25,10 @@ CREATE TABLE IF NOT EXISTS donor (
     pseudo VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(60) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    profile_image VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Project table
 CREATE TABLE IF NOT EXISTS project (
     project_id INT AUTO_INCREMENT PRIMARY KEY,
     assoc_id INT NOT NULL,
@@ -49,7 +45,6 @@ CREATE TABLE IF NOT EXISTS project (
     FOREIGN KEY (assoc_id) REFERENCES association(assoc_id) ON DELETE CASCADE
 );
 
--- Donation table
 CREATE TABLE IF NOT EXISTS donation (
     donation_id INT AUTO_INCREMENT PRIMARY KEY,
     donor_id INT NOT NULL,
@@ -61,31 +56,14 @@ CREATE TABLE IF NOT EXISTS donation (
     FOREIGN KEY (project_id) REFERENCES project(project_id) ON DELETE CASCADE
 );
 
--- Trigger to update current_amount when a new donation is made
-DELIMITER //
-CREATE TRIGGER after_donation_insert
-AFTER INSERT ON donation
-FOR EACH ROW
-BEGIN
-    UPDATE project
-    SET current_amount = current_amount + NEW.amount
-    WHERE project_id = NEW.project_id;
-END//
-DELIMITER ;
+INSERT INTO association (name, address, fiscal_id, pseudo, password, email, representative_name, representative_surname, cin)
+VALUES ('Global Aid Foundation', '123 Charity Lane, New York, NY 10001', '$ABC12', 'GlobalAid', '$2y$10$exampleHashedPassword1...', 'contact@globalaid.org', 'John', 'Smith', '12345678');
 
--- Insert sample data
--- Association
-INSERT INTO association (name, address, fiscal_id, logo_path, pseudo, password, email, representative_name, representative_surname, cin)
-VALUES ('Green Earth Foundation', '123 Environmental Way, Green City, GC 12345', '$ABC12', NULL, 'GreenEarth', '$2y$10$4sDMIGe.OgkCE.QKbTl.0upOVCeDb.EQbWQ.JezdY6w6UGqpHm/Y.', 'john.doe@greenearthfoundation.org', 'John', 'Doe', '12345678');
-
--- Donor
 INSERT INTO donor (name, surname, ctn, pseudo, password, email)
 VALUES ('Jane', 'Doe', '87654321', 'JaneDoe', '$2y$10$4sDMIGe.OgkCE.QKbTl.0upOVCeDb.EQbWQ.JezdY6w6UGqpHm/Y.', 'jane.doe@example.com');
 
--- Project
 INSERT INTO project (assoc_id, title, description, category, goal_amount, current_amount, start_date, end_date, image_path, status)
 VALUES (1, 'Clean Water Initiative', 'This project aims to provide clean water to rural communities in developing countries. Access to clean water is a fundamental human right, yet millions around the world still lack this basic necessity.', 'Environment', 5000.00, 3200.00, '2023-10-01', '2023-12-31', NULL, 'active');
 
--- Donation
 INSERT INTO donation (donor_id, project_id, amount, anonymous)
 VALUES (1, 1, 250.00, false);

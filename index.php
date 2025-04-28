@@ -1,11 +1,8 @@
 <?php
-// Start session (optional, but good practice if needed)
 session_start();
 
-// Include database connection
 require_once 'backend/db.php';
 
-// Helper function to get appropriate Bootstrap color for categories
 function getCategoryColor($category) {
     switch(strtolower($category)) {
         case 'education': return 'success';
@@ -21,7 +18,6 @@ $projects = [];
 $error_message = null;
 
 try {
-    // Fetch 3 newest active projects for the homepage
     $stmt = $pdo->prepare("
         SELECT p.*, a.name as association_name 
         FROM project p
@@ -32,10 +28,10 @@ try {
     ");
     $stmt->execute();
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
 } catch (PDOException $e) {
     $error_message = "Database error: Could not fetch projects.";
-    // Log error: error_log("Index project fetch error: " . $e->getMessage());
+
 }
 ?>
 <!DOCTYPE html>
@@ -44,30 +40,25 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpHub - Connect & Donate</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.php"> <!-- Updated link -->
+            <a class="navbar-brand" href="index.php">
                 <span class="text-primary fw-bold">Help</span><span class="text-secondary">Hub</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.php">Home</a> <!-- Updated link -->
+                        <a class="nav-link active" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#how-it-works">How It Works</a>
@@ -76,8 +67,8 @@ try {
                         <a class="nav-link" href="#projects">Projects</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" 
-                        data-bs-toggle="dropdown" aria-expanded="false">Register</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">Register</a>
                         <ul class="dropdown-menu" aria-labelledby="registerDropdown">
                             <li><a class="dropdown-item" href="register-association.html">Register as Association</a></li>
                             <li><a class="dropdown-item" href="register-donor.html">Register as Donor</a></li>
@@ -93,7 +84,6 @@ try {
         </div>
     </nav>
 
-    <!-- Hero Section with Background Image -->
     <section class="hero-section-bg" id="home">
         <div class="hero-overlay"></div>
         <div class="container position-relative">
@@ -115,7 +105,6 @@ try {
         </div>
     </section>
 
-    <!-- How It Works Section -->
     <section class="py-5 bg-white" id="how-it-works">
         <div class="container py-5">
             <div class="text-center mb-5">
@@ -159,36 +148,33 @@ try {
             </div>
         </div>
     </section>
-    
-    <!-- Find Projects Section -->
+
     <section class="py-5 bg-light" id="projects">
         <div class="container py-5">
             <div class="text-center mb-5">
                 <h2 class="fw-bold">Find Projects to Support</h2>
                 <p class="text-muted mx-auto" style="max-width: 600px;">Browse through our curated selection of charitable projects and make a difference today</p>
             </div>
-            
-            <!-- Project Filters -->
+
             <div class="row mb-4">
                 <div class="col-lg-6 mb-3 mb-lg-0">
-                    <form action="projects.php" method="get" class="input-group"> <!-- Form added for search -->
+                    <form action="projects.php" method="get" class="input-group">
                         <input type="text" class="form-control" placeholder="Search projects by keywords..." name="search" id="homeProjectSearch">
-                        <button class="btn btn-primary" type="submit" id="homeSearchButton"> <!-- Changed button type to submit -->
+                        <button class="btn btn-primary" type="submit" id="homeSearchButton">
                             <i class="fas fa-search me-2"></i> Search
                         </button>
                     </form>
                 </div>
                 <div class="col-lg-6 text-lg-end">
                     <div class="btn-group" role="group">
-                        <a href="projects.php?category=all" class="btn btn-outline-primary active">All</a> <!-- Changed to links -->
+                        <a href="projects.php?category=all" class="btn btn-outline-primary active">All</a>
                         <a href="projects.php?category=environment" class="btn btn-outline-primary">Environment</a>
                         <a href="projects.php?category=education" class="btn btn-outline-primary">Education</a>
                         <a href="projects.php?category=health" class="btn btn-outline-primary">Health</a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Projects Grid -->
+
             <div class="row g-4">
                 <?php if ($error_message): ?>
                     <div class="col-12">
@@ -199,25 +185,21 @@ try {
                         <div class="alert alert-info">No active projects found at the moment. Check back soon!</div>
                     </div>
                 <?php else: ?>
-                    <?php foreach ($projects as $project): 
-                        // Calculate progress percentage
-                        $progress = $project['goal_amount'] > 0 
-                            ? round(($project['current_amount'] / $project['goal_amount']) * 100) 
+                    <?php foreach ($projects as $project):
+                        $progress = $project['goal_amount'] > 0
+                            ? round(($project['current_amount'] / $project['goal_amount']) * 100)
                             : 0;
-                            
-                        // Calculate days remaining
-                        $end_date_obj = new DateTime($project['end_date']);
+                        $end_date = new DateTime($project['end_date']);
                         $today = new DateTime();
-                        $days_remaining = $today <= $end_date_obj ? $end_date_obj->diff($today)->days : 0;
+                        $days_remaining = $today <= $end_date ? $end_date->diff($today)->days : 0;
                     ?>
-                    <div class="col-lg-4 col-md-6 project-item" data-category="<?php echo htmlspecialchars($project['category']); ?>">
-                        <div class="card h-100 border-0 shadow">
+                    <div class="col-lg-4 col-md-6 project-item">
+                        <div class="card h-100 shadow-sm">
                             <?php if (!empty($project['image_path'])): ?>
-                                <img src="<?php echo htmlspecialchars($project['image_path']); ?>" 
+                                <img src="<?php echo htmlspecialchars($project['image_path']); ?>"
                                      class="card-img-top" style="height: 200px; object-fit: cover;" alt="<?php echo htmlspecialchars($project['title']); ?>">
                             <?php else: ?>
-                                <!-- Default image if none provided -->
-                                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlJTIwaGVscGluZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" 
+                                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlJTIwaGVscGluZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
                                      class="card-img-top" style="height: 200px; object-fit: cover;" alt="Default Project Image">
                             <?php endif; ?>
                             <div class="card-body d-flex flex-column">
@@ -233,19 +215,18 @@ try {
                                 <p class="card-text"><?php echo substr(htmlspecialchars($project['description']), 0, 100) . '...'; ?></p>
                                 <div class="mt-auto pt-3">
                                     <div class="progress mb-2">
-                                        <div class="progress-bar bg-<?php echo getCategoryColor($project['category']); ?>" 
-                                             role="progressbar" 
-                                             style="width: <?php echo $progress; ?>%" 
-                                             aria-valuenow="<?php echo $progress; ?>" 
-                                             aria-valuemin="0" 
+                                        <div class="progress-bar bg-<?php echo getCategoryColor($project['category']); ?>"
+                                             role="progressbar"
+                                             style="width: <?php echo $progress; ?>%"
+                                             aria-valuenow="<?php echo $progress; ?>"
+                                             aria-valuemin="0"
                                              aria-valuemax="100"></div>
                                     </div>
                                     <div class="d-flex justify-content-between small text-muted mb-3">
                                         <span>$<?php echo number_format($project['current_amount'], 2); ?> raised</span>
                                         <span><?php echo $progress; ?>% of $<?php echo number_format($project['goal_amount'], 2); ?></span>
                                     </div>
-                                    <!-- Link to project details page (requires login) -->
-                                    <a href="projects.php" class="btn btn-primary w-100">Learn More & Donate</a> 
+                                    <a href="projects.php" class="btn btn-primary w-100">Learn More & Donate</a>
                                 </div>
                             </div>
                         </div>
@@ -253,10 +234,8 @@ try {
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
-            
-            <!-- More Projects Button -->
+
             <div class="text-center mt-5">
-                <!-- Link to the main projects page -->
                 <a href="projects.php" class="btn btn-primary btn-lg">
                     <i class="fas fa-th-large me-2"></i> Explore All Projects
                 </a>
@@ -264,7 +243,6 @@ try {
         </div>
     </section>
 
-    <!-- Impact Statistics -->
     <section class="py-5 bg-white">
         <div class="container py-5">
             <div class="row">
@@ -324,7 +302,6 @@ try {
         </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="py-5 bg-light">
         <div class="container py-5">
             <div class="card border-0 shadow">
@@ -344,7 +321,6 @@ try {
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
             <div class="text-center">
@@ -353,7 +329,6 @@ try {
         </div>
     </footer>
 
-    <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -389,7 +364,7 @@ try {
                             </div>
                         </div>
                         <div id="loginErrorMsg" class="alert alert-danger d-none mt-2" role="alert">
-                            <!-- Error message will appear here -->
+
                         </div>
                         <div class="mb-4 form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe">
@@ -413,9 +388,7 @@ try {
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="index.js"></script>
 </body>
 </html>
