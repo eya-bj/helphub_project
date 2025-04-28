@@ -1,29 +1,44 @@
 <?php
+/**
+ * Project Details Endpoint for Association
+ * 
+ * Fetches detailed information about a specific project
+ * Method: GET
+ * Required params: project_id
+ */
+
+// Start session
 session_start();
 
+// Set JSON content type
 header('Content-Type: application/json');
 
+// Check if user is logged in as association
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'association') {
     echo json_encode(['error' => 'Unauthorized access. Please login as an association']);
     exit;
 }
 
+// Allow only GET requests
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     echo json_encode(['error' => 'Only GET method is allowed']);
     exit;
 }
 
+// Validate project_id parameter
 if (!isset($_GET['project_id']) || !is_numeric($_GET['project_id'])) {
     echo json_encode(['error' => 'Valid project_id parameter is required']);
     exit;
 }
 
+// Get database connection
 require_once '../db.php';
 
 try {
     $assoc_id = $_SESSION['user_id'];
     $project_id = $_GET['project_id'];
     
+    // Get project details
     $stmt = $pdo->prepare("
         SELECT * FROM project 
         WHERE project_id = ? AND assoc_id = ?
@@ -31,67 +46,68 @@ try {
     $stmt->execute([$project_id, $assoc_id]);
     $project = $stmt->fetch();
     
+    // Check if project exists and belongs to the association
     if (!$project) {
         echo json_encode(['error' => 'Project not found or does not belong to your association']);
         exit;
     }
     
+    // Calculate progress percentage
     $project['progress'] = $project['goal_amount'] > 0 
         ? round(($project['current_amount'] / $project['goal_amount']) * 100, 2) 
         : 0;
     
+    // Calculate days remaining
     $end_date = new DateTime($project['end_date']);
     $today = new DateTime();
     $project['days_remaining'] = $today <= $end_date ? $end_date->diff($today)->days : 0;
     
+    // Get donations with donor information
     $stmt = $pdo->prepare("
-        SELECT d.amount, d.donation_date, d.anonymous, dn.name as donor_name, dn.surname as donor_surname, dn.profile_image as donor_image
+        SELECT d.donation_id, d.amount, d.anonymous, d.donation_date,
+               donor.name, donor.surname, donor.pseudo
         FROM donation d
-        LEFT JOIN donor dn ON d.donor_id = dn.donor_id
+        JOIN donor ON d.donor_id = donor.donor_id
         WHERE d.project_id = ?
         ORDER BY d.donation_date DESC
     ");
     $stmt->execute([$project_id]);
-    $donations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $donations = $stmt->fetchAll();
     
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM donation WHERE project_id = ?");
+    // Anonymize donor information for anonymous donations
+    foreach ($donations as &$donation) {
+        if ($donation['anonymous']) {
+            $donation['name'] = 'Anonymous';
+            $donation['surname'] = '';
+            $donation['pseudo'] = 'Anonymous';
+        }
+    }
+    
+    // Get donation statistics
+    $stmt = $pdo->prepare("
+        SELECT 
+            COUNT(*) as total_donations,
+            COUNT(DISTINCT donor_id) as unique_donors,
+            MAX(amount) as largest_donation,
+            AVG(amount) as average_donation
+        FROM donation
+        WHERE project_id = ?
+    ");
     $stmt->execute([$project_id]);
-    $total_donations = $stmt->fetchColumn();
+    $stats = $stmt->fetch();
     
-    $stmt = $pdo->prepare("SELECT COUNT(DISTINCT donor_id) FROM donation WHERE project_id = ?");
-    $stmt->execute([$project_id]);
-    $unique_donors = $stmt->fetchColumn();
-    
-    $stmt = $pdo->prepare("SELECT AVG(amount) FROM donation WHERE project_id = ?");
-    $stmt->execute([$project_id]);
-    $average_donation = $stmt->fetchColumn() ?? 0;
-    
-    $stmt = $pdo->prepare("SELECT MAX(amount) FROM donation WHERE project_id = ?");
-    $stmt->execute([$project_id]);
-    $largest_donation = $stmt->fetchColumn() ?? 0;
-    
-    $stmt = $pdo->prepare("SELECT MIN(amount) FROM donation WHERE project_id = ?");
-    $stmt->execute([$project_id]);
-    $smallest_donation = $stmt->fetchColumn() ?? 0;
-    
+    // Return success
     echo json_encode([
         'success' => true,
         'data' => [
             'project' => $project,
             'donations' => $donations,
-            'statistics' => [
-                'total_donations' => $total_donations,
-                'unique_donors' => $unique_donors,
-                'average_donation' => round($average_donation, 2),
-                'largest_donation' => $largest_donation,
-                'smallest_donation' => $smallest_donation
-            ]
+            'statistics' => $stats
         ]
     ]);
 
 } catch (PDOException $e) {
-    error_log("Error fetching project details: " . $e->getMessage());
-    echo json_encode(['error' => 'Database error occurred.']);
+    echo json_encode(['error' => 'Failed to fetch project details: ' . $e->getMessage()]);
     exit;
 }
 ?>

@@ -1,120 +1,113 @@
 <?php
 session_start();
-require_once '../db.php';
+require_once '../db.php'; // Adjust path as needed
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
-    header("Location: ../../index.php?error=unauthorized");
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../../profile-donor.php");
+// Check if user is logged in as a donor and request is POST
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor' || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: ../../index.html?error=unauthorized");
     exit;
 }
 
 $donor_id = $_SESSION['user_id'];
-$name = $_POST['name'] ?? '';
-$surname = $_POST['surname'] ?? '';
-$email = $_POST['email'] ?? '';
-$profile_image_path = null;
-$debug_message = "";
 
-if (empty($name) || empty($surname) || empty($email)) {
-    header('Location: ../../profile-donor.php?error=missing_fields');
+// Get data from POST request
+$name = trim($_POST['name'] ?? '');
+$surname = trim($_POST['surname'] ?? '');
+$email = trim($_POST['email'] ?? '');
+
+// Basic Validation (Add more robust validation as needed)
+if (empty($name) || strlen($name) < 2 || empty($surname) || strlen($surname) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    header("Location: ../../profile-donor.php?error=invalid_input");
     exit;
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    header('Location: ../../profile-donor.php?error=invalid_email');
-    exit;
-}
-
-if (!preg_match('/^[a-zA-Z]{2,}$/', $name)) {
-    header('Location: ../../profile-donor.php?error=invalid_name');
-    exit;
-}
-
-if (!preg_match('/^[a-zA-Z]{2,}$/', $surname)) {
-    header('Location: ../../profile-donor.php?error=invalid_surname');
-    exit;
-}
+$profile_image_path_to_save = null; // Initialize profile image path
 
 try {
-    $stmt = $pdo->prepare("SELECT email, profile_image FROM donor WHERE donor_id = ?");
-    $stmt->execute([$donor_id]);
-    $current_donor = $stmt->fetch();
-
-    if ($email !== $current_donor['email']) {
-        $stmt = $pdo->prepare("SELECT donor_id FROM donor WHERE email = ?");
-        $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-            header('Location: ../../profile-donor.php?error=email_exists');
-            exit;
-        }
+    // Check if email is already taken by another donor
+    $stmt_check_email = $pdo->prepare("SELECT donor_id FROM donor WHERE email = ? AND donor_id != ?");
+    $stmt_check_email->execute([$email, $donor_id]);
+    if ($stmt_check_email->fetch()) {
+        header("Location: ../../profile-donor.php?error=email_exists");
+        exit;
     }
 
-    $profile_image_path = $current_donor['profile_image'];
-
+    // Handle profile image upload if provided
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../../uploads/profile_images/';
-        if (!is_dir($upload_dir)) {
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $file_info = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($file_info, $_FILES['profile_image']['tmp_name']);
+        finfo_close($file_info);
+
+        $max_file_size = 2 * 1024 * 1024; // 2MB
+
+        if (!in_array($file_type, $allowed_types)) {
+            header("Location: ../../profile-donor.php?error=invalid_file_type");
+            exit;
+        }
+        if ($_FILES['profile_image']['size'] > $max_file_size) {
+            header("Location: ../../profile-donor.php?error=file_too_large");
+            exit;
+        }
+
+        $upload_dir = '../../uploads/donors/'; // Relative to this script's location
+        if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
 
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-        $file_type = $_FILES['profile_image']['type'];
-        $file_size = $_FILES['profile_image']['size'];
-        $max_size = 2 * 1024 * 1024;
-
-        if (!in_array($file_type, $allowed_types)) {
-            header('Location: ../../profile-donor.php?error=invalid_file_type');
-            exit;
-        }
-
-        if ($file_size > $max_size) {
-            header('Location: ../../profile-donor.php?error=file_too_large');
-            exit;
-        }
-
         $file_extension = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
-        $new_filename = 'donor_' . $donor_id . '_' . time() . '.' . $file_extension;
-        $target_path = $upload_dir . $new_filename;
+        $file_name = 'donor_' . $donor_id . '_' . uniqid() . '.' . $file_extension;
+        $file_path = $upload_dir . $file_name;
 
-        if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $target_path)) {
-            if ($profile_image_path && file_exists($profile_image_path) && strpos($profile_image_path, 'default') === false) {
-                unlink($profile_image_path);
+        // Before moving, delete old image if it exists
+        $stmt_old_image = $pdo->prepare("SELECT profile_image FROM donor WHERE donor_id = ?");
+        $stmt_old_image->execute([$donor_id]);
+        $old_image_relative = $stmt_old_image->fetchColumn();
+        if ($old_image_relative) {
+            $old_image_absolute = '../../' . $old_image_relative; // Adjust path relative to this script
+            if (file_exists($old_image_absolute)) {
+                unlink($old_image_absolute);
             }
-            $profile_image_path = 'uploads/profile_images/' . $new_filename;
+        }
+
+        if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $file_path)) {
+            $profile_image_path_to_save = 'uploads/donors/' . $file_name; // Path to store in DB (relative to project root)
         } else {
-            $debug_message = "Failed to move uploaded file.";
-            header('Location: ../../profile-donor.php?error=upload_failed&debug=' . urlencode($debug_message));
+            header("Location: ../../profile-donor.php?error=file_upload_error");
             exit;
         }
     }
 
-    $sql = "UPDATE donor SET name = ?, surname = ?, email = ?";
-    $params = [$name, $surname, $email];
-
-    if ($profile_image_path !== $current_donor['profile_image']) {
-        $sql .= ", profile_image = ?";
-        $params[] = $profile_image_path;
+    // Update donor information with or without new profile image
+    if ($profile_image_path_to_save !== null) {
+        $stmt = $pdo->prepare("UPDATE donor SET name = ?, surname = ?, email = ?, profile_image = ? WHERE donor_id = ?");
+        $success = $stmt->execute([$name, $surname, $email, $profile_image_path_to_save, $donor_id]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE donor SET name = ?, surname = ?, email = ? WHERE donor_id = ?");
+        $success = $stmt->execute([$name, $surname, $email, $donor_id]);
     }
 
-    $sql .= " WHERE donor_id = ?";
-    $params[] = $donor_id;
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-
-    $_SESSION['user_name'] = $name;
-    $_SESSION['profile_image'] = $profile_image_path;
-
-    header("Location: ../../profile-donor.php?success=profile_updated");
-    exit;
+    if ($success) {
+        // Update session name if needed
+        $_SESSION['user_name'] = $name . ' ' . $surname;
+        header("Location: ../../profile-donor.php?success=updated");
+        exit;
+    } else {
+        // If update failed but image was uploaded, clean up
+        if ($profile_image_path_to_save !== null && file_exists('../../' . $profile_image_path_to_save)) {
+            unlink('../../' . $profile_image_path_to_save);
+        }
+        header("Location: ../../profile-donor.php?error=update_failed");
+        exit;
+    }
 
 } catch (PDOException $e) {
-    error_log("Donor Profile Update Error: " . $e->getMessage());
-    header("Location: ../../profile-donor.php?error=db_error");
+    error_log("Donor update error: " . $e->getMessage());
+    // Clean up uploaded image if there was a database error
+    if ($profile_image_path_to_save !== null && file_exists('../../' . $profile_image_path_to_save)) {
+        unlink('../../' . $profile_image_path_to_save);
+    }
+    header("Location: ../../profile-donor.php?error=db_error"); // Generic DB error
     exit;
 }
 ?>

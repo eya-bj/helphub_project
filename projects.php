@@ -1,17 +1,22 @@
 <?php
+// Start session
 session_start();
 
+// Check if user is logged in as donor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'donor') {
-    header("Location: index.php?error=unauthorized");
+    header("Location: index.php?error=unauthorized"); // Updated link
     exit;
 }
 
+// Include database connection
 require_once 'backend/db.php';
 
+// Get search and filter parameters
 $category_filter = $_GET['category'] ?? 'all';
 $search_query = $_GET['search'] ?? '';
 
 try {
+    // Fetch active projects
     $query = "
         SELECT p.*, a.name as association_name 
         FROM project p
@@ -19,37 +24,41 @@ try {
         WHERE p.status = 'active' AND p.end_date >= CURDATE()
     ";
     $params = [];
-
+    
+    // Apply category filter
     if ($category_filter !== 'all') {
         $query .= " AND p.category = ?";
         $params[] = $category_filter;
     }
-
+    
+    // Apply search filter if provided
     if (!empty($search_query)) {
         $query .= " AND (p.title LIKE ? OR p.description LIKE ?)";
         $search_term = '%' . $search_query . '%';
         $params[] = $search_term;
         $params[] = $search_term;
     }
-
-    $query .= " ORDER BY p.end_date ASC, p.created_at DESC";
-
+    
+    // Order by newest first
+    $query .= " ORDER BY p.created_at DESC";
+    
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $stmt = $pdo->query("SELECT DISTINCT category FROM project WHERE status = 'active' AND end_date >= CURDATE() ORDER BY category");
+    
+    // Get all available categories for the filter dropdown
+    $stmt = $pdo->prepare("SELECT DISTINCT category FROM project WHERE status = 'active' ORDER BY category");
+    $stmt->execute();
     $categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-    $today = new DateTime();
-
+    
 } catch (PDOException $e) {
-    $error_message = "Database error: Could not fetch projects.";
-    error_log("Projects Page Error: " . $e->getMessage());
+    $error_message = "Database error: " . $e->getMessage();
+    // Initialize empty arrays to avoid undefined variable errors
     $projects = [];
     $categories = [];
 }
 
+// Helper function to get appropriate Bootstrap color for categories
 function getCategoryColor($category) {
     switch(strtolower($category)) {
         case 'education': return 'success';
@@ -67,11 +76,15 @@ function getCategoryColor($category) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects - HelpHub</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="dashboard-donor.php">
@@ -99,6 +112,7 @@ function getCategoryColor($category) {
         </div>
     </nav>
 
+    <!-- Page Header -->
     <section class="bg-primary text-white text-center py-5 mt-5">
         <div class="container py-4">
             <h1 class="display-4 fw-bold">Explore Projects</h1>
@@ -106,9 +120,11 @@ function getCategoryColor($category) {
         </div>
     </section>
 
+    <!-- Project Search & Filter -->
     <section class="py-5 bg-light">
         <div class="container">
             <div class="row g-4">
+                <!-- Search Bar -->
                 <div class="col-lg-6">
                     <form action="projects.php" method="get" class="d-flex">
                         <input type="hidden" name="category" value="<?php echo htmlspecialchars($category_filter); ?>">
@@ -118,6 +134,7 @@ function getCategoryColor($category) {
                         </button>
                     </form>
                 </div>
+                <!-- Category Filter -->
                 <div class="col-lg-6">
                     <form action="projects.php" method="get" class="d-flex">
                         <?php if (!empty($search_query)): ?>
@@ -140,41 +157,44 @@ function getCategoryColor($category) {
         </div>
     </section>
 
+    <!-- Projects Grid -->
     <section class="py-5">
         <div class="container">
             <?php if (isset($error_message)): ?>
                 <div class="alert alert-danger">
                     <?php echo $error_message; ?>
                 </div>
-            <?php elseif (empty($projects)): ?>
-                <div class="alert alert-info text-center">
-                    No active projects found matching your criteria. 
-                    <?php if ($category_filter !== 'all' || !empty($search_query)): ?>
-                        Try broadening your search or <a href="projects.php" class="alert-link">view all projects</a>.
-                    <?php else: ?>
-                        Check back soon for new opportunities!
-                    <?php endif; ?>
+            <?php endif; ?>
+            
+            <?php if (empty($projects)): ?>
+                <div class="alert alert-info">
+                    <h4>No projects found</h4>
+                    <p>Try adjusting your search criteria or check back later for new projects.</p>
                 </div>
             <?php else: ?>
-                <div class="row g-4">
-                    <?php foreach ($projects as $project):
-                        $progress = $project['goal_amount'] > 0
-                            ? round(($project['current_amount'] / $project['goal_amount']) * 100)
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <?php foreach ($projects as $project): 
+                        // Calculate progress percentage
+                        $progress = $project['goal_amount'] > 0 
+                            ? round(($project['current_amount'] / $project['goal_amount']) * 100) 
                             : 0;
+                            
+                        // Calculate days remaining
                         $end_date = new DateTime($project['end_date']);
+                        $today = new DateTime();
                         $days_remaining = $today <= $end_date ? $end_date->diff($today)->days : 0;
                     ?>
-                    <div class="col-lg-4 col-md-6 project-item">
-                        <div class="card h-100 shadow-sm">
+                    <div class="col project-item" data-category="<?php echo htmlspecialchars($project['category']); ?>">
+                        <div class="card h-100 border-0 shadow">
                             <?php if (!empty($project['image_path'])): ?>
-                                <img src="<?php echo htmlspecialchars($project['image_path']); ?>"
+                                <img src="<?php echo htmlspecialchars($project['image_path']); ?>" 
                                      class="card-img-top" style="height: 200px; object-fit: cover;" alt="<?php echo htmlspecialchars($project['title']); ?>">
                             <?php else: ?>
-                                <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hhcml0eXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
+                                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlJTIwaGVscGluZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" 
                                      class="card-img-top" style="height: 200px; object-fit: cover;" alt="Default Project Image">
                             <?php endif; ?>
                             <div class="card-body d-flex flex-column">
-                                <div class="d-flex justify-content-between mb-3">
+                                <div class="d-flex justify-content-between mb-2">
                                     <span class="badge bg-<?php echo getCategoryColor($project['category']); ?>">
                                         <?php echo ucfirst(htmlspecialchars($project['category'])); ?>
                                     </span>
@@ -186,11 +206,11 @@ function getCategoryColor($category) {
                                 <p class="card-text"><?php echo substr(htmlspecialchars($project['description']), 0, 100) . '...'; ?></p>
                                 <div class="mt-auto pt-3">
                                     <div class="progress mb-2">
-                                        <div class="progress-bar bg-<?php echo getCategoryColor($project['category']); ?>"
-                                             role="progressbar"
-                                             style="width: <?php echo $progress; ?>%"
-                                             aria-valuenow="<?php echo $progress; ?>"
-                                             aria-valuemin="0"
+                                        <div class="progress-bar bg-<?php echo getCategoryColor($project['category']); ?>" 
+                                             role="progressbar" 
+                                             style="width: <?php echo $progress; ?>%" 
+                                             aria-valuenow="<?php echo $progress; ?>" 
+                                             aria-valuemin="0" 
                                              aria-valuemax="100"></div>
                                     </div>
                                     <div class="d-flex justify-content-between small text-muted mb-3">
@@ -208,6 +228,7 @@ function getCategoryColor($category) {
         </div>
     </section>
 
+    <!-- Pagination -->
     <?php if (!empty($projects)): ?>
     <section class="py-3">
         <div class="container">
@@ -228,6 +249,7 @@ function getCategoryColor($category) {
     </section>
     <?php endif; ?>
 
+    <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-4">
         <div class="container">
             <div class="row">
@@ -245,7 +267,8 @@ function getCategoryColor($category) {
             </div>
         </div>
     </footer>
-
+    
+    <!-- Bootstrap JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
