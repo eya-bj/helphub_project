@@ -34,14 +34,14 @@ foreach ($required_fields as $field) {
 // Assign variables AFTER validation
 $name = trim($data['name']);
 $surname = trim($data['surname']);
-$ctn = trim($data['ctn']);
+$cin = trim($data['ctn']); // Keep variable name as 'cin' but still read from the form field 'ctn'
 $pseudo = trim($data['pseudo']);
 $password = $data['password']; // Don't trim password
 $email = trim($data['email']);
 
-// Validate CTN (format: CTN followed by 8 digits)
-if (!preg_match('/^CTN[0-9]{8}$/', $ctn)) {
-    header('Location: ../../register-donor.html?error=invalid_ctn');
+// Validate CIN (format: 8 digits only)
+if (!preg_match('/^[0-9]{8}$/', $cin)) {
+    header('Location: ../../register-donor.html?error=invalid_cin');
     exit;
 }
 
@@ -80,11 +80,11 @@ try {
         exit;
     }
 
-    // Check if CTN already exists
+    // Check if CIN already exists
     $stmt = $pdo->prepare("SELECT donor_id FROM donor WHERE ctn = ?");
-    $stmt->execute([$ctn]);
+    $stmt->execute([$cin]);
     if ($stmt->fetch()) {
-        header('Location: ../../register-donor.html?error=ctn_exists');
+        header('Location: ../../register-donor.html?error=cin_exists');
         exit;
     }
 
@@ -96,7 +96,7 @@ try {
         INSERT INTO donor (name, surname, ctn, pseudo, password, email) 
         VALUES (?, ?, ?, ?, ?, ?)
     ");
-    $stmt->execute([$name, $surname, $ctn, $pseudo, $hashed_password, $email]);
+    $stmt->execute([$name, $surname, $cin, $pseudo, $hashed_password, $email]);
 
     // Redirect to login page with success message
     header('Location: ../../index.php?register=success_donor#loginModal'); // Updated link

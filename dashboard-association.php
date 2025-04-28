@@ -5,7 +5,7 @@ session_start();
 // Check if user is logged in as association
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'association') {
     // Redirect to login page
-    header("Location: index.html?error=unauthorized");
+    header("Location: index.php?error=unauthorized"); // Changed from index.html
     exit;
 }
 
@@ -372,12 +372,11 @@ try {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023</h5>
+                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2025</h5>
                     <p>Connecting hearts and resources for a better world.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
@@ -385,6 +384,7 @@ try {
                         <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
                         <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
                         <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
+                        <li class="list-inline-item"><a href="index.php" class="text-light">Home</a></li>
                     </ul>
                 </div>
             </div>

@@ -527,11 +527,19 @@ function getCategoryIcon($category) {
                                     <label for="donationAmount" class="form-label">Donation Amount ($)</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="donationAmount" name="amount" min="1" max="<?php echo max(1, $project['goal_amount'] - $project['current_amount']); // Ensure max is at least 1 ?>" step="1" required>
+                                        <input type="number" class="form-control" id="donationAmount" name="amount" 
+                                            min="1" 
+                                            max="<?php echo max(1, $project['goal_amount'] - $project['current_amount']); ?>" 
+                                            step="1" 
+                                            pattern="\d+"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                            onchange="this.value=Math.floor(this.value)" 
+                                            required>
                                         <div class="invalid-feedback">
-                                            Please enter a valid amount up to $<?php echo number_format(max(1, $project['goal_amount'] - $project['current_amount']), 2); ?>.
+                                            Please enter a valid whole dollar amount.
                                         </div>
                                     </div>
+                                    <div class="form-text">Please enter whole dollar amounts only (no cents).</div>
                                 </div>
 
                                 <div class="mb-3">
@@ -563,10 +571,22 @@ function getCategoryIcon($category) {
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-4">
-        <div class="container text-center">
-            <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © <?php echo date('Y'); ?>. All Rights Reserved.</p>
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2025</h5>
+                    <p>Connecting hearts and resources for a better world.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
+                        <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
+                        <li class="list-inline-item"><a href="index.php" class="text-light">Home</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
 

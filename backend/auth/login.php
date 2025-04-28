@@ -70,7 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     // If not POST request, redirect to login page
-    header("Location: ../../index.php"); // Updated link
-    exit;
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header("Location: ../../index.php"); // Update all redirects to use index.php
+        exit;
+    }
 }
 ?>

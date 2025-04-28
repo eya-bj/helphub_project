@@ -277,9 +277,9 @@ $recent_donations = [];
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="ctn" class="form-label">CTN</label>
+                                        <label for="ctn" class="form-label">CIN</label>
                                         <input type="text" class="form-control" id="ctn" value="<?php echo htmlspecialchars($donor['ctn']); ?>" readonly>
-                                        <div class="form-text text-muted">CTN cannot be changed.</div>
+                                        <div class="form-text text-muted">CIN cannot be changed.</div>
                                     </div>
                                 </div>
 

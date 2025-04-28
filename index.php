@@ -344,11 +344,21 @@ try {
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
-            <div class="text-center">
-                <p class="mb-0"><span class="text-primary">Help</span><span class="text-light">Hub</span> © <?php echo date('Y'); ?>. All Rights Reserved.</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2025</h5>
+                    <p>Connecting hearts and resources for a better world.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
+                        <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
+                        <li class="list-inline-item"><a href="index.php" class="text-light">Home</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </footer>

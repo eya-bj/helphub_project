@@ -4,7 +4,7 @@ require_once '../db.php'; // Adjust path as needed
 
 // Check if user is logged in and request is POST
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../../index.html?error=unauthorized");
+    header("Location: ../../index.php?error=unauthorized"); // Changed from index.html
     exit;
 }
 

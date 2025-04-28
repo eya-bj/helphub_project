@@ -81,16 +81,32 @@ function setupPasswordToggle(passwordInput, toggleButton) {
     });
 }
 
-// Donor-specific validation
-function validateCtn(input, feedbackId) {
+// Donor-specific validation - renamed function from validateCtn to validateCin
+function validateCin(input, feedbackId) {
     var value = input.value;
-    var isValid = value.length == 8 && !isNaN(value);
-    showError(input, feedbackId, !isValid && value != '');
+    // Accept only 8 digits
+    var isValid = /^[0-9]{8}$/.test(value);
+    
+    // Show custom message based on format
+    if (!isValid && value != '') {
+        var feedback = document.getElementById(feedbackId);
+        if (feedback) {
+            feedback.textContent = "Please enter exactly 8 digits";
+        }
+        input.classList.add('is-invalid');
+    } else {
+        input.classList.remove('is-invalid');
+        var feedback = document.getElementById(feedbackId);
+        if (feedback) {
+            feedback.style.display = 'none';
+        }
+    }
+    
     return isValid;
 }
 
-// Association-specific validations
-function validateCin(input, feedbackId) {
+// Association-specific validations - rename to associationCinValidation to avoid duplicate function
+function validateAssociationCin(input, feedbackId) {
     var value = input.value;
     var isValid = value.length == 8 && !isNaN(value);
     showError(input, feedbackId, !isValid && value != '');
@@ -138,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const nameInput = document.getElementById('name');
         const surnameInput = document.getElementById('surname');
         const emailInput = document.getElementById('email');
-        const ctnInput = document.getElementById('ctn');
+        const cinInput = document.getElementById('ctn'); // Keep ID as 'ctn' to match HTML
         const pseudoInput = document.getElementById('pseudo');
         const passwordInput = document.getElementById('password');
         const togglePasswordBtn = document.getElementById('togglePassword'); // Use specific ID if available
@@ -151,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nameInput?.addEventListener('input', () => validateName(nameInput, 'nameFeedback'));
         surnameInput?.addEventListener('input', () => validateSurname(surnameInput, 'surnameFeedback'));
         emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback'));
-        ctnInput?.addEventListener('input', () => validateCtn(ctnInput, 'ctnFeedback'));
+        cinInput?.addEventListener('input', () => validateCin(cinInput, 'ctnFeedback'));
         pseudoInput?.addEventListener('input', () => validatePseudo(pseudoInput, 'pseudoFeedback'));
         passwordInput?.addEventListener('input', () => validatePassword(passwordInput, 'passwordFeedback'));
         termsCheck?.addEventListener('change', () => validateTermsCheck(termsCheck, 'termsCheckFeedback'));
@@ -161,13 +177,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const isNameValid = validateName(nameInput, 'nameFeedback');
             const isSurnameValid = validateSurname(surnameInput, 'surnameFeedback');
             const isEmailValid = validateEmail(emailInput, 'emailFeedback');
-            const isCtnValid = validateCtn(ctnInput, 'ctnFeedback');
+            const isCinValid = validateCin(cinInput, 'ctnFeedback');
             const isPseudoValid = validatePseudo(pseudoInput, 'pseudoFeedback');
             const isPasswordValid = validatePassword(passwordInput, 'passwordFeedback');
             const isTermsValid = validateTermsCheck(termsCheck, 'termsCheckFeedback');
 
             // Prevent submission if any validation fails
-            if (!isNameValid || !isSurnameValid || !isEmailValid || !isCtnValid || !isPseudoValid || !isPasswordValid || !isTermsValid) {
+            if (!isNameValid || !isSurnameValid || !isEmailValid || !isCinValid || !isPseudoValid || !isPasswordValid || !isTermsValid) {
                 event.preventDefault();
                 // Optionally scroll to the first error or show a general message
                 alert('Please correct the errors in the form.');
@@ -197,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add input event listeners
         repNameInput?.addEventListener('input', () => validateName(repNameInput, 'nameFeedback')); // Reusing nameFeedback ID, might need unique IDs
         repSurnameInput?.addEventListener('input', () => validateSurname(repSurnameInput, 'surnameFeedback')); // Reusing surnameFeedback ID
-        cinInput?.addEventListener('input', () => validateCin(cinInput, 'cinFeedback'));
+        cinInput?.addEventListener('input', () => validateAssociationCin(cinInput, 'cinFeedback'));
         emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback')); // Reusing emailFeedback ID
         assocNameInput?.addEventListener('input', () => validateAssociationName(assocNameInput, 'associationNameFeedback'));
         assocAddressInput?.addEventListener('input', () => validateAssociationAddress(assocAddressInput, 'associationAddressFeedback'));
@@ -211,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Run all validations
             const isRepNameValid = validateName(repNameInput, 'nameFeedback');
             const isRepSurnameValid = validateSurname(repSurnameInput, 'surnameFeedback');
-            const isCinValid = validateCin(cinInput, 'cinFeedback');
+            const isCinValid = validateAssociationCin(cinInput, 'cinFeedback');
             const isEmailValid = validateEmail(emailInput, 'emailFeedback');
             const isAssocNameValid = validateAssociationName(assocNameInput, 'associationNameFeedback');
             const isAssocAddressValid = validateAssociationAddress(assocAddressInput, 'associationAddressFeedback');
@@ -248,4 +264,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Update error handling for URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('error')) {
+        const error = urlParams.get('error');
+        let errorMessage = '';
+        
+        switch(error) {
+            case 'invalid_cin':
+                errorMessage = 'Please enter a valid CIN (8 digits or CIN followed by 8 digits).';
+                break;
+            case 'cin_exists':
+                errorMessage = 'This CIN is already registered.';
+                break;
+            case 'database':
+                errorMessage = 'A database error occurred. Please try again later.';
+                break;
+            case 'missing_fields':
+                errorMessage = 'Please fill in all required fields.';
+                break;
+            // Add other error cases as needed
+            default:
+                errorMessage = 'An error occurred during registration.';
+        }
+        
+        // Create and insert error message at the top of the form
+        if (errorMessage) {
+            const form = document.querySelector('#donorRegisterForm, #associationRegisterForm');
+            if (form) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'alert alert-danger mb-4';
+                errorDiv.innerHTML = errorMessage;
+                form.parentNode.insertBefore(errorDiv, form);
+            }
+        }
+    }
 });

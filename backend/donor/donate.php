@@ -72,15 +72,6 @@ try {
     ");
     $stmt->execute([$donor_id, $project_id, $amount, $anonymous]);
     
-    // Update project current amount
-    // (Note: This is redundant due to the trigger but included for clarity)
-    $stmt = $pdo->prepare("
-        UPDATE project 
-        SET current_amount = current_amount + ?
-        WHERE project_id = ?
-    ");
-    $stmt->execute([$amount, $project_id]);
-    
     // If project has reached its goal, update status
     if ($project['current_amount'] + $amount >= $project['goal_amount']) {
         $stmt = $pdo->prepare("

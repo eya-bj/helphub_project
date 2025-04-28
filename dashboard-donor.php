@@ -156,7 +156,7 @@ try {
                             <h3 class="mb-3"><?php echo htmlspecialchars($_SESSION['user_name']); ?></h3>
                             <div class="row">
                                 <div class="col-md-4 mb-2"><i class="fas fa-envelope me-2"></i> <?php echo htmlspecialchars($donor_info['email'] ?? 'Not available'); ?></div>
-                                <div class="col-md-4 mb-2"><i class="fas fa-id-card me-2"></i> CTN: <?php echo htmlspecialchars($donor_info['ctn'] ?? 'Not available'); ?></div>
+                                <div class="col-md-4 mb-2"><i class="fas fa-id-card me-2"></i> CIN: <?php echo htmlspecialchars($donor_info['ctn'] ?? 'Not available'); ?></div>
                                 <div class="col-md-4 mb-2"><i class="fas fa-heart me-2"></i> Supporting <?php echo $projects_count; ?> projects</div>
                             </div>
                             <a href="profile-donor.php" class="btn btn-sm btn-outline-primary mt-2">
@@ -273,13 +273,11 @@ try {
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2023</h5>
+                    <h5><span class="text-primary">Help</span><span class="text-light">Hub</span> © 2025</h5>
                     <p>Connecting hearts and resources for a better world.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
@@ -287,6 +285,7 @@ try {
                         <li class="list-inline-item"><a href="privacy-policy.html" class="text-light">Privacy Policy</a></li>
                         <li class="list-inline-item"><a href="terms-of-use.html" class="text-light">Terms of Use</a></li>
                         <li class="list-inline-item"><a href="contact.html" class="text-light">Contact Us</a></li>
+                        <li class="list-inline-item"><a href="index.php" class="text-light">Home</a></li>
                     </ul>
                 </div>
             </div>
