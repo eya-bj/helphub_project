@@ -28,6 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get database connection
 require_once '../db.php';
 
+// Get POST data - Use $_POST directly for forms with enctype="multipart/form-data"
+// $data = json_decode(file_get_contents('php://input'), true);
+// if (!$data) {
+//     $data = $_POST;
+// }
+// Use $_POST instead of $data below
 
 // Validate required fields
 $required_fields = ['title', 'description', 'category', 'goal_amount', 'start_date', 'end_date'];
@@ -58,7 +64,9 @@ if (!is_numeric($goal_amount) || $goal_amount <= 0) {
     // Redirect back with error
     header('Location: ../../dashboard-association.php?error=invalid_goal#addProjectModal'); // Updated link
     exit;
-
+    // echo json_encode(['error' => 'Goal amount must be a positive number']);
+    // exit;
+}
 
 // Validate dates
 try {
@@ -67,12 +75,18 @@ try {
     $today = new DateTime(); // Consider timezone if necessary
     $today->setTime(0, 0, 0); // Set time to midnight for comparison
 
+    // Optional: Check if start date is not in the past (unless allowed)
+    // if ($start_date < $today) {
+    //     header('Location: ../../dashboard-association.php?error=invalid_start_date_past#addProjectModal'); // Updated link
+    //     exit;
+    // }
 
     if ($end_date < $start_date) {
         // Redirect back with error
         header('Location: ../../dashboard-association.php?error=invalid_end_date#addProjectModal'); // Updated link
         exit;
-
+        // echo json_encode(['error' => 'End date must be after start date']);
+        // exit;
     }
 } catch (Exception $e) {
     // Handle invalid date formats
@@ -81,7 +95,7 @@ try {
 }
 
 try {
-    // Process image upload 
+    // Process image upload if provided
     $image_path = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
@@ -151,7 +165,7 @@ try {
     ]);
 
     // Redirect to dashboard with success message
-    header('Location: ../../dashboard-association.php?success=project_added'); 
+    header('Location: ../../dashboard-association.php?success=project_added'); // Updated link
     exit;
 
 } catch (PDOException $e) {
@@ -160,7 +174,7 @@ try {
     if ($image_path !== null && file_exists('../../' . $image_path)) {
         unlink('../../' . $image_path);
     }
-    header('Location: ../../dashboard-association.php?error=database_error#addProjectModal'); 
+    header('Location: ../../dashboard-association.php?error=database_error#addProjectModal'); // Updated link
     exit;
 }
 ?>

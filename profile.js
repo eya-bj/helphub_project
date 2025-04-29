@@ -5,10 +5,10 @@ function showError(input, feedbackId, show) {
     var feedback = document.getElementById(feedbackId);
     if (show) {
         input.classList.add('is-invalid'); // Red border
-        if (feedback) feedback.style.display = 'block'; 
+        if (feedback) feedback.style.display = 'block'; // Show error message
     } else {
-        input.classList.remove('is-invalid'); 
-        if (feedback) feedback.style.display = 'none'; 
+        input.classList.remove('is-invalid'); // Normal border
+        if (feedback) feedback.style.display = 'none'; // Hide error message
     }
 }
 
@@ -264,12 +264,14 @@ if (donorForm) {
         }
 
         if (!isValid) {
-            event.preventDefault(); 
+            event.preventDefault(); // Prevent submission ONLY if client-side validation fails
+            // alert('Please correct the errors in the form.'); // Optional: General alert
         }
+        // REMOVED success alert - backend handles redirection
     });
 }
 
-// Change Password Form Validation 
+// Change Password Form Validation (used in both profiles)
 if (passwordForm) {
     // Get inputs
     var currentPasswordInput = document.getElementById('currentPassword');
@@ -278,7 +280,7 @@ if (passwordForm) {
 
     // Real-time validation (Keep this for UX)
     currentPasswordInput?.addEventListener('input', function() {
-        if (currentPasswordInput.value == '' && currentPasswordInput.touched) { 
+        if (currentPasswordInput.value == '' && currentPasswordInput.touched) { // Check if touched to avoid error on load
             showError(currentPasswordInput, 'currentPasswordFeedback', true);
         } else {
             showError(currentPasswordInput, 'currentPasswordFeedback', false);
@@ -313,8 +315,9 @@ if (passwordForm) {
         }
     });
 
-    // Form submission validation 
+    // Form submission validation (runs before standard submit)
     passwordForm.addEventListener('submit', function(event) {
+        // event.preventDefault(); // REMOVED to allow standard form submission
         var isValid = true;
 
         // Re-validate all fields on submit
@@ -322,6 +325,7 @@ if (passwordForm) {
             showError(currentPasswordInput, 'currentPasswordFeedback', true);
             isValid = false;
         } else {
+            // No need to re-validate correctness here, backend does that
             showError(currentPasswordInput, 'currentPasswordFeedback', false);
         }
 
@@ -343,12 +347,14 @@ if (passwordForm) {
         }
 
         if (!isValid) {
-             event.preventDefault(); 
+             event.preventDefault(); // Prevent submission ONLY if client-side validation fails
+            // alert('Please correct the errors in the form.'); // Optional: General alert
         }
+         // REMOVED success alert - backend handles redirection
     });
 }
 
-// Delete Account Form Validation 
+// Delete Account Form Validation (used in both profiles)
 if (deleteForm) {
     // Get inputs
     var deleteConfirmInput = document.getElementById('deleteConfirm');

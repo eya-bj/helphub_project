@@ -34,9 +34,10 @@ foreach ($required_fields as $field) {
 // Assign variables AFTER validation
 $name = trim($data['name']);
 $surname = trim($data['surname']);
-$cin = trim($data['ctn']); 
+$cin = trim($data['ctn']); // Keep variable name as 'cin' but still read from the form field 'ctn'
 $pseudo = trim($data['pseudo']);
-$password = $data['password']; 
+$password = $data['password']; // Don't trim password
+$email = trim($data['email']);
 
 // Validate CIN (format: 8 digits only)
 if (!preg_match('/^[0-9]{8}$/', $cin)) {
@@ -98,7 +99,7 @@ try {
     $stmt->execute([$name, $surname, $cin, $pseudo, $hashed_password, $email]);
 
     // Redirect to login page with success message
-    header('Location: ../../index.php?register=success_donor#loginModal'); 
+    header('Location: ../../index.php?register=success_donor#loginModal'); // Updated link
     exit;
 
 } catch (PDOException $e) {

@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once '../db.php'; 
+require_once '../db.php'; // Adjust path as needed
+
 // Check if user is logged in and request is POST
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: ../../index.php?error=unauthorized"); // Changed from index.html
@@ -27,7 +28,7 @@ if ($new_password !== $confirm_password) {
     exit;
 }
 
-// Validate new password format )
+// Validate new password format (≥ 8 chars and ends with $ or #)
 if (strlen($new_password) < 8 || !(substr($new_password, -1) === '$' || substr($new_password, -1) === '#')) {
     header("Location: $profile_page?error=password_format");
     exit;
@@ -45,7 +46,7 @@ try {
     $user = $stmt_fetch->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-       
+        // Should not happen if session is valid
         header("Location: $profile_page?error=user_not_found");
         exit;
     }

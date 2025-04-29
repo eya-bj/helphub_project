@@ -13,7 +13,7 @@ header('Content-Type: application/json');
 // Allow only POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Only POST method is allowed']);
-    exit;
+    exit; // Keep JSON response for non-POST
 }
 
 // Get database connection
@@ -22,7 +22,7 @@ require_once '../db.php';
 // Get POST data directly - removed JSON handling
 $data = $_POST;
 
-// Check for required fields 
+// Check for required fields (keeping this basic validation for security)
 $required_fields = ['name', 'address', 'fiscal_id', 'pseudo', 'password', 'email', 'representative_name', 'representative_surname', 'cin'];
 foreach ($required_fields as $field) {
     if (empty($data[$field])) {
@@ -37,7 +37,7 @@ $name = trim($data['name']);
 $address = trim($data['address']);
 $fiscal_id = trim($data['fiscal_id']);
 $pseudo = trim($data['pseudo']);
-$password = $data['password']; 
+$password = $data['password']; // Don't trim password
 $email = trim($data['email']);
 $rep_name = trim($data['representative_name']);
 $rep_surname = trim($data['representative_surname']);

@@ -64,8 +64,11 @@ try {
     $result = $stmt->fetch();
     
     if ($result['donation_count'] > 0) {
-
-        //  Set status to inactive instead of deleting
+        // Option 1: Don't allow deletion if project has donations
+        // echo json_encode(['error' => 'Cannot delete project with existing donations']);
+        // exit;
+        
+        // Option 2: Set status to inactive instead of deleting
         $stmt = $pdo->prepare("
             UPDATE project
             SET status = 'inactive'
@@ -83,7 +86,7 @@ try {
         exit;
     }
     
-    // Delete project 
+    // Delete project (this will cascade to donations due to foreign key constraints)
     $stmt = $pdo->prepare("
         DELETE FROM project
         WHERE project_id = ?

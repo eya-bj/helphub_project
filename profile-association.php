@@ -52,7 +52,7 @@ try {
 }
 
 // Default logo if none is set
-$logo_display_path = !empty($assoc['logo_path']) ? htmlspecialchars($assoc['logo_path']) : 'assets/default-logo.png'; 
+$logo_display_path = !empty($assoc['logo_path']) ? htmlspecialchars($assoc['logo_path']) : 'assets/default-logo.png'; // Assuming you have a default logo image
 
 ?>
 <!DOCTYPE html>

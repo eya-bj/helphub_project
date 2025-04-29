@@ -6,9 +6,10 @@ function showError(input, feedbackId, show) {
     var feedback = document.getElementById(feedbackId);
     if (show) {
         input.classList.add('is-invalid');
-        if (feedback) feedback.style.display = 'block'; 
+        if (feedback) feedback.style.display = 'block'; // Show feedback message
+    } else {
         input.classList.remove('is-invalid');
-        if (feedback) feedback.style.display = 'none'; 
+        if (feedback) feedback.style.display = 'none'; // Hide feedback message
     }
 }
 
@@ -51,22 +52,22 @@ function validateTermsCheck(input, feedbackId) {
     var isValid = input.checked;
     // Show error differently for checkbox
     var label = input.closest('.form-check').querySelector('.form-check-label');
-    var feedback = document.getElementById(feedbackId); 
+    var feedback = document.getElementById(feedbackId); // Get feedback element
     if (!isValid) {
         input.classList.add('is-invalid');
-        if (label) label.classList.add('text-danger');
-        if (feedback) feedback.style.display = 'block'; 
+        if (label) label.classList.add('text-danger'); // Optionally make label red
+        if (feedback) feedback.style.display = 'block'; // Show feedback
     } else {
         input.classList.remove('is-invalid');
         if (label) label.classList.remove('text-danger');
-        if (feedback) feedback.style.display = 'none';
+        if (feedback) feedback.style.display = 'none'; // Hide feedback
     }
     return isValid;
 }
 
 // Shared password toggle function
 function setupPasswordToggle(passwordInput, toggleButton) {
-    if (!passwordInput || !toggleButton) return; 
+    if (!passwordInput || !toggleButton) return; // Exit if elements not found
 
     toggleButton.addEventListener('click', function() {
         // Toggle the type attribute
@@ -80,7 +81,7 @@ function setupPasswordToggle(passwordInput, toggleButton) {
     });
 }
 
-// Donor-specific validation 
+// Donor-specific validation - renamed function from validateCtn to validateCin
 function validateCin(input, feedbackId) {
     var value = input.value;
     // Accept only 8 digits
@@ -104,7 +105,7 @@ function validateCin(input, feedbackId) {
     return isValid;
 }
 
-// Association-specific validations 
+// Association-specific validations - rename to associationCinValidation to avoid duplicate function
 function validateAssociationCin(input, feedbackId) {
     var value = input.value;
     var isValid = value.length == 8 && !isNaN(value);
@@ -196,31 +197,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const repNameInput = document.getElementById('representative_name');
         const repSurnameInput = document.getElementById('representative_surname');
         const cinInput = document.getElementById('cin');
-        const emailInput = document.getElementById('email'); 
-        const assocNameInput = document.getElementById('name'); 
+        const emailInput = document.getElementById('email'); // Shared ID, ensure it's the correct one
+        const assocNameInput = document.getElementById('name'); // Shared ID
         const assocAddressInput = document.getElementById('address');
         const fiscalIdInput = document.getElementById('fiscal_id');
         const logoInput = document.getElementById('logo');
-        const pseudoInput = document.getElementById('pseudo'); 
-        const passwordInput = document.getElementById('password'); 
+        const pseudoInput = document.getElementById('pseudo'); // Shared ID
+        const passwordInput = document.getElementById('password'); // Shared ID
         const togglePasswordBtn = associationForm.querySelector('.toggle-password'); // Find within form
-        const termsCheck = document.getElementById('termsCheck'); 
+        const termsCheck = document.getElementById('termsCheck'); // Shared ID
 
         // Setup password toggle
         setupPasswordToggle(passwordInput, togglePasswordBtn);
 
         // Add input event listeners
-        repNameInput?.addEventListener('input', () => validateName(repNameInput, 'nameFeedback')); 
-        repSurnameInput?.addEventListener('input', () => validateSurname(repSurnameInput, 'surnameFeedback')); 
+        repNameInput?.addEventListener('input', () => validateName(repNameInput, 'nameFeedback')); // Reusing nameFeedback ID, might need unique IDs
+        repSurnameInput?.addEventListener('input', () => validateSurname(repSurnameInput, 'surnameFeedback')); // Reusing surnameFeedback ID
         cinInput?.addEventListener('input', () => validateAssociationCin(cinInput, 'cinFeedback'));
-        emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback')); 
+        emailInput?.addEventListener('input', () => validateEmail(emailInput, 'emailFeedback')); // Reusing emailFeedback ID
         assocNameInput?.addEventListener('input', () => validateAssociationName(assocNameInput, 'associationNameFeedback'));
         assocAddressInput?.addEventListener('input', () => validateAssociationAddress(assocAddressInput, 'associationAddressFeedback'));
         fiscalIdInput?.addEventListener('input', () => validateFiscalId(fiscalIdInput, 'fiscalIdFeedback'));
-        logoInput?.addEventListener('change', () => validateLogo(logoInput, 'logoFeedback')); 
-        pseudoInput?.addEventListener('input', () => validatePseudo(pseudoInput, 'pseudoFeedback')); 
-        passwordInput?.addEventListener('input', () => validatePassword(passwordInput, 'passwordFeedback')); 
-        termsCheck?.addEventListener('change', () => validateTermsCheck(termsCheck, 'termsCheckFeedback')); 
+        logoInput?.addEventListener('change', () => validateLogo(logoInput, 'logoFeedback')); // Use 'change' for file inputs
+        pseudoInput?.addEventListener('input', () => validatePseudo(pseudoInput, 'pseudoFeedback')); // Reusing pseudoFeedback ID
+        passwordInput?.addEventListener('input', () => validatePassword(passwordInput, 'passwordFeedback')); // Reusing passwordFeedback ID
+        termsCheck?.addEventListener('change', () => validateTermsCheck(termsCheck, 'termsCheckFeedback')); // Reusing termsCheckFeedback ID
 
         associationForm.addEventListener('submit', function(event) {
             // Run all validations
@@ -244,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Also setup password toggles globally if they exist outside forms (like login modal)
     document.querySelectorAll('.toggle-password').forEach(button => {
         // Find the target input using data-target or by proximity
         const targetSelector = button.getAttribute('data-target');
@@ -254,10 +256,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (passwordField) {
-
+            // Check if a listener is already attached by the form-specific setup
+            // This is a simple check; more robust checks might be needed if complexity increases
             if (!passwordField.dataset.toggleListenerAttached) {
                  setupPasswordToggle(passwordField, button);
-                 passwordField.dataset.toggleListenerAttached = 'true'; 
+                 passwordField.dataset.toggleListenerAttached = 'true'; // Mark as attached
             }
         }
     });
@@ -281,6 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'missing_fields':
                 errorMessage = 'Please fill in all required fields.';
                 break;
+            // Add other error cases as needed
             default:
                 errorMessage = 'An error occurred during registration.';
         }

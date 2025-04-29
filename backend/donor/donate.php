@@ -50,7 +50,7 @@ try {
         exit;
     }
     
-    // Check if project is still accepting donations 
+    // Check if project is still accepting donations (not past end date)
     $today = new DateTime();
     $end_date = new DateTime($project['end_date']);
     if ($today > $end_date) {
@@ -62,7 +62,7 @@ try {
     // Check if amount is not more than what's needed to reach the goal
     $remaining = $project['goal_amount'] - $project['current_amount'];
     if ($amount > $remaining) {
-        $amount = $remaining; 
+        $amount = $remaining; // Automatically adjust to remaining amount
     }
     
     // Insert donation record
